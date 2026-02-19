@@ -103,64 +103,240 @@ profai/
 
 ## Database Schema
 
-```
-┌──────────────┐       ┌──────────────┐       ┌──────────────┐
-│    User      │       │  Professor   │       │    Course     │
-├──────────────┤       ├──────────────┤       ├──────────────┤
-│ id           │       │ id           │──1:N──│ id            │
-│ email        │       │ name         │       │ name          │
-│ password     │       │ department   │       │ code          │
-│ name         │       │ university   │       │ professorId   │
-│ university   │       │ createdAt    │       │ createdAt     │
-│ department   │       └──────────────┘       └──────┬───────┘
-│ createdAt    │              │                       │
-└──────┬───────┘              │ 1:N                   │ 1:N
-       │                      │                       │
-       │ 1:N          ┌──────────────────┐    ┌──────────────┐
-       │              │ ProfessorRating  │    │    Exam      │
-       │              ├──────────────────┤    ├──────────────┤
-       └──────────────│ id               │    │ id           │
-              1:N     │ professorId      │    │ courseId      │
-                      │ userId           │    │ examType     │
-                      │ difficultyScore  │    │ year         │
-                      │ fairnessScore    │    │ semester     │
-                      │ comment          │    │ fileUrl      │
-                      │ createdAt        │    │ uploadedById │
-                      └──────────────────┘    │ createdAt    │
-                                              └──────┬───────┘
-                                                     │ 1:1
-                                              ┌──────────────────┐
-                                              │  ExamAnalysis    │
-                                              ├──────────────────┤
-                                              │ id               │
-                                              │ examId           │
-                                              │ questionCount    │
-                                              │ questionTypes    │
-                                              │ topicDistribution│
-                                              │ difficultyScore  │
-                                              │ summary          │
-                                              │ createdAt        │
-                                              └──────────────────┘
-```
+> See the full interactive ER diagram in the [UML Diagrams](#entity-relationship-diagram) section below.
 
 ---
 
 ## UML Diagrams
 
-The UML diagrams for this project are available in the [`ProfAI_UML_Diagrams.drawio`](./ProfAI_UML_Diagrams.drawio) file. You can open it at [app.diagrams.net](https://app.diagrams.net/).
+> Full editable diagrams are also available in [`ProfAI_UML_Diagrams.drawio`](./ProfAI_UML_Diagrams.drawio) — open with [app.diagrams.net](https://app.diagrams.net/)
 
 ### Class Diagram
 
-The class diagram shows the system's models (User, Professor, Course, Exam, ExamAnalysis, ProfessorRating), controllers (Auth, Professor, Course, Exam, Rating), and services (AnalysisService, FileUploadService) along with their attributes, methods, and relationships.
+```mermaid
+classDiagram
+    class User {
+        +Int id
+        +String email
+        +String password
+        +String name
+        +String university
+        +String department
+        +DateTime createdAt
+        +register() void
+        +login() Token
+        +getProfile() User
+    }
+
+    class Professor {
+        +Int id
+        +String name
+        +String department
+        +String university
+        +DateTime createdAt
+        +getCourses() Course[]
+        +getAnalysisSummary() AnalysisSummary
+        +getAverageRating() Float
+    }
+
+    class Course {
+        +Int id
+        +String name
+        +String code
+        +Int professorId
+        +DateTime createdAt
+        +getExams() Exam[]
+        +getProfessor() Professor
+    }
+
+    class Exam {
+        +Int id
+        +Int courseId
+        +ExamType examType
+        +Int year
+        +String semester
+        +String fileUrl
+        +Int uploadedById
+        +DateTime createdAt
+        +upload(file) void
+        +getAnalysis() ExamAnalysis
+    }
+
+    class ExamAnalysis {
+        +Int id
+        +Int examId
+        +Int questionCount
+        +JSON questionTypes
+        +JSON topicDistribution
+        +Float difficultyScore
+        +String summary
+        +DateTime createdAt
+        +analyze() void
+        +generateSummary() String
+    }
+
+    class ProfessorRating {
+        +Int id
+        +Int professorId
+        +Int userId
+        +Int difficultyScore
+        +Int fairnessScore
+        +String comment
+        +DateTime createdAt
+        +create() void
+        +update() void
+    }
+
+    class ExamType {
+        <<enumeration>>
+        MIDTERM
+        FINAL
+        MAKEUP
+    }
+
+    Professor "1" --> "*" Course : has
+    Course "1" --> "*" Exam : contains
+    Exam "1" --> "1" ExamAnalysis : analyzed by
+    Professor "1" --> "*" ProfessorRating : rated by
+    User "1" --> "*" ProfessorRating : gives
+    User "1" --> "*" Exam : uploads
+    Exam --> ExamType : uses
+```
 
 ### Use Case Diagram
 
-The use case diagram defines two actors:
+```mermaid
+flowchart LR
+    subgraph Actors
+        V["🧑 Visitor"]
+        S["🎓 Student (Registered)"]
+    end
 
-- **Visitor** — Can register, login, search/list professors, and view professor details
-- **Student (Registered)** — Can additionally upload exams, rate professors, add new professors, and view their dashboard
+    subgraph ProfAI System
+        subgraph Authentication
+            UC1(Register)
+            UC2(Login)
+        end
 
-Key relationships include `<<include>>` (professor detail includes analysis view) and `<<extend>>` (exam upload triggers analysis).
+        subgraph Professor Management
+            UC3(Search Professor)
+            UC4(List Professors)
+            UC5(View Professor Details)
+            UC6(Add New Professor)
+        end
+
+        subgraph Exam Management
+            UC7(Upload Exam File)
+            UC8(View Exams)
+        end
+
+        subgraph Analysis
+            UC9(View Question Style Analysis)
+            UC10(View Question Type Distribution)
+            UC11(View Topic Distribution)
+            UC12(View Difficulty Score)
+        end
+
+        subgraph Rating
+            UC13(Rate Professor)
+            UC14(View Professor Ratings)
+        end
+
+        UC15(View Dashboard)
+    end
+
+    V --- UC1
+    V --- UC2
+    V --- UC3
+    V --- UC4
+    V --- UC5
+
+    S --- UC6
+    S --- UC7
+    S --- UC8
+    S --- UC13
+    S --- UC14
+    S --- UC15
+
+    S -.->|inherits| V
+
+    UC5 -.->|include| UC9
+    UC5 -.->|include| UC14
+    UC9 -.->|include| UC10
+    UC9 -.->|include| UC11
+    UC9 -.->|include| UC12
+    UC7 -.->|extend| UC9
+```
+
+### Entity Relationship Diagram
+
+```mermaid
+erDiagram
+    USER {
+        int id PK
+        varchar email UK
+        varchar password
+        varchar name
+        varchar university
+        varchar department
+        timestamp createdAt
+    }
+
+    PROFESSOR {
+        int id PK
+        varchar name
+        varchar department
+        varchar university
+        timestamp createdAt
+    }
+
+    COURSE {
+        int id PK
+        varchar name
+        varchar code
+        int professorId FK
+        timestamp createdAt
+    }
+
+    EXAM {
+        int id PK
+        int courseId FK
+        enum examType
+        int year
+        varchar semester
+        varchar fileUrl
+        int uploadedById FK
+        timestamp createdAt
+    }
+
+    EXAM_ANALYSIS {
+        int id PK
+        int examId FK
+        int questionCount
+        json questionTypes
+        json topicDistribution
+        decimal difficultyScore
+        text summary
+        timestamp createdAt
+    }
+
+    PROFESSOR_RATING {
+        int id PK
+        int professorId FK
+        int userId FK
+        int difficultyScore
+        int fairnessScore
+        text comment
+        timestamp createdAt
+    }
+
+    PROFESSOR ||--o{ COURSE : "has"
+    COURSE ||--o{ EXAM : "contains"
+    EXAM ||--o| EXAM_ANALYSIS : "analyzed by"
+    PROFESSOR ||--o{ PROFESSOR_RATING : "rated by"
+    USER ||--o{ PROFESSOR_RATING : "gives"
+    USER ||--o{ EXAM : "uploads"
+```
 
 ---
 
