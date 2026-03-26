@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3001:80"
+    depends_on:
+      - server
+    networks:
+      - profai-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://profai:profai123@db:5432/profai?schema=public
+      - JWT_SECRET=profai-jwt-secret-change-in-production
+      - PORT=5000
+      - CORS_ORIGIN=http://localhost:3001
+    volumes:
+      - uploads:/app/uploads
+    networks:
+      - profai-network
+
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=profai
+      - POSTGRES_PASSWORD=profai123
+      - POSTGRES_DB=profai
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - profai-network
+
+volumes:
+  pgdata:
+  uploads:
+
+networks:
+  profai-network:
+    driver: bridge

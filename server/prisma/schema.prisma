@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ExamType {
+  MIDTERM
+  FINAL
+  MAKEUP
+}
+
+model User {
+  id         String            @id @default(uuid())
+  email      String            @unique
+  password   String
+  name       String
+  university String?
+  department String?
+  createdAt  DateTime          @default(now())
+  exams      Exam[]
+  ratings    ProfessorRating[]
+
+  @@map("users")
+}
+
+model Professor {
+  id         String            @id @default(uuid())
+  name       String
+  department String
+  university String
+  createdAt  DateTime          @default(now())
+  courses    Course[]
+  ratings    ProfessorRating[]
+
+  @@map("professors")
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  name        String
+  code        String
+  professorId String
+  professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  exams       Exam[]
+
+  @@map("courses")
+}
+
+model Exam {
+  id           String        @id @default(uuid())
+  courseId      String
+  course        Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  examType     ExamType
+  year         Int
+  semester     String
+  fileUrl      String
+  uploadedById String
+  uploadedBy   User          @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  createdAt    DateTime      @default(now())
+  analysis     ExamAnalysis?
+
+  @@map("exams")
+}
+
+model ExamAnalysis {
+  id                String   @id @default(uuid())
+  examId            String   @unique
+  exam              Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  questionCount     Int
+  questionTypes     Json
+  topicDistribution Json
+  difficultyScore   Float
+  summary           String
+  createdAt         DateTime @default(now())
+
+  @@map("exam_analyses")
+}
+
+model ProfessorRating {
+  id              String    @id @default(uuid())
+  professorId     String
+  professor       Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  difficultyScore Int
+  fairnessScore   Int
+  comment         String?
+  createdAt       DateTime  @default(now())
+
+  @@map("professor_ratings")
+}

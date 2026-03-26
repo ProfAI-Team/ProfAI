@@ -25,7 +25,11 @@
 - [UML Diagrams](#uml-diagrams)
 - [API Endpoints](#api-endpoints)
 - [Installation](#installation)
+- [CI/CD](#cicd)
+- [Sprint Board](#sprint-board)
+- [Demo](#demo)
 - [Team Members](#team-members)
+- [Project Documents](#project-documents)
 
 ---
 
@@ -109,7 +113,7 @@ profai/
 
 ## UML Diagrams
 
-> Full editable diagrams are also available in [`ProfAI_UML_Diagrams.drawio`](./ProfAI_UML_Diagrams.drawio) — open with [app.diagrams.net](https://app.diagrams.net/)
+> Full editable diagrams are also available in [`ProfAI_UML_Diagrams.drawio`](./docs/ProfAI_UML_Diagrams.drawio) — open with [app.diagrams.net](https://app.diagrams.net/)
 
 ### Class Diagram
 
@@ -395,7 +399,7 @@ cd ProfAI
 docker-compose up -d
 
 # Access the application
-# Frontend: http://localhost:3000
+# Frontend: http://localhost:3001
 # Backend:  http://localhost:5000
 # Database: localhost:5432
 ```
@@ -421,6 +425,38 @@ npm run dev
 
 ---
 
+## CI/CD
+
+This project uses **GitHub Actions** for continuous integration and delivery. The pipeline is defined in [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) and runs automatically on every push to `main` and on all pull requests.
+
+### Pipeline Stages
+
+| Stage | Description | Runs On |
+|-------|-------------|---------|
+| **Backend Lint & Build** | Installs dependencies (`npm ci`) and runs TypeScript compilation (`npm run build`) in the `server/` directory | Node.js 20 |
+| **Frontend Lint & Build** | Installs dependencies (`npm ci`) and runs the production build (`npm run build`) in the `client/` directory | Node.js 20 |
+| **Docker Build Verification** | Builds all Docker images via `docker compose build` to verify they compile correctly | Ubuntu latest |
+
+The backend and frontend checks run in parallel. The Docker build step runs only after both checks pass.
+
+---
+
+## Sprint Board
+
+We manage our project using **Scrum methodology** with Jira. Our board tracks tasks across 4 sprints with story points, priorities, and assignments.
+
+[Jira Board](https://devmeet-app.atlassian.net/jira/software/projects/SCRUM/boards/1)
+
+---
+
+## Demo
+
+A detailed demo plan is available for presenting the ProfAI platform. It includes a step-by-step script, timing guide, pre-demo checklist, backup plan, and Q&A preparation.
+
+See: [`ProfAI_Demo_Plan.md`](./docs/ProfAI_Demo_Plan.md)
+
+---
+
 ## Team Members
 
 | Name | Role | Responsibilities |
@@ -435,9 +471,15 @@ npm run dev
 
 | Document | Description |
 |----------|-------------|
-| [`ProfAI_Project_Plan.xlsx`](./ProfAI_Project_Plan.xlsx) | Project plan with timeline, budget, risk & SWOT analysis |
-| [`ProfAI_UML_Diagrams.drawio`](./ProfAI_UML_Diagrams.drawio) | Class Diagram and Use Case Diagram |
-| [`JIRA_TASK_STRUCTURE.md`](./JIRA_TASK_STRUCTURE.md) | Jira board task structure with 30 tasks across 4 sprints |
+| [`ProfAI_Project_Plan.xlsx`](./docs/ProfAI_Project_Plan.xlsx) | Project plan with timeline, budget, risk & SWOT analysis |
+| [`ProfAI_UML_Diagrams.drawio`](./docs/ProfAI_UML_Diagrams.drawio) | Class Diagram and Use Case Diagram |
+| [`JIRA_TASK_STRUCTURE.md`](./docs/JIRA_TASK_STRUCTURE.md) | Jira board task structure with 30 tasks across 4 sprints |
+| [`ProfAI_Product_Documentation.md`](./docs/ProfAI_Product_Documentation.md) | Product documentation and specifications |
+| [`ProfAI_Risk_Analysis.md`](./docs/ProfAI_Risk_Analysis.md) | Risk analysis, security & implementation roadmap (v1) |
+| [`ProfAI_Risk_Analysis_v2.md`](./docs/ProfAI_Risk_Analysis_v2.md) | Updated risk analysis with development progress (v2) |
+| [`ProfAI_Testing_and_Success_Criteria.md`](./docs/ProfAI_Testing_and_Success_Criteria.md) | Testing strategy and success criteria |
+| [`ProfAI_Demo_Plan.md`](./docs/ProfAI_Demo_Plan.md) | Demo plan with script, timing, and backup procedures |
+| [`.env.example`](./.env.example) | Environment variable template |
 
 ---
 

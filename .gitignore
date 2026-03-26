@@ -1,0 +1,16 @@
+# Dependencies
+node_modules
+
+# Environment files
+.env
+.env.local
+
+# Build output
+dist
+
+# Uploads (keep directory structure)
+uploads/*
+!uploads/.gitkeep
+
+# Logs
+*.log
