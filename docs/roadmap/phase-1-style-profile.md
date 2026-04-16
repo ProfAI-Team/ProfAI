@@ -1,7 +1,7 @@
 # Phase 1 — Hoca-Merkezli Stil Profili 🎯
 
 **Süre:** 1 hafta
-**Statü:** 🎯 Aktif — 9/12 task tamam (~%75)
+**Statü:** 🎯 Aktif — 10/12 task tamam (~%83)
 **Hedef:** Ürünün **gerçek vizyonunu** ortaya çıkar — hoca sayfasını "sınav listesi"nden "stil profili"ne çevir.
 
 ## İlerleme (Task Bazlı)
@@ -17,7 +17,7 @@ Detay: [`../tasks/phase-1-breakdown.md`](../tasks/phase-1-breakdown.md).
 - ✅ **1.7** — `StyleHero` + `MetricsCards` componentleri + `chartColors` helper + skeleton'lar + i18n TR/EN + ProfessorDetailPage preview wire-up
 - ✅ **1.8** — `EvolutionChart` (dual-axis line) + `TopicBadges` (frequency-tinted chips) + skeleton'lar + i18n
 - ✅ **1.9** — ProfessorDetailPage tam rebuild: slim identity hero + style profile block + collapsible per-exam details + rating pill + full skeleton set
-- ⏳ **1.10** — i18n copy iteration + açık key sweep
+- ✅ **1.10** — Hybrid tone guide + paralel agent sweep (44 TR + 38 EN edit, 3 dead key temizliği), her iki locale 164 key eşleşiyor
 - ⏳ **1.11** — Responsive + light/dark cross-breakpoint test
 - ⏳ **1.12** — Phase doc "gerçekleşen" bölümü
 - ⏳ 1.12 — Phase doc "gerçekleşen" bölümü

@@ -1,7 +1,7 @@
 {
   "brand": {
     "name": "ProfAI",
-    "tagline": "Know your professor's exam style"
+    "tagline": "Know how your professor asks."
   },
   "nav": {
     "home": "Home",
@@ -9,12 +9,12 @@
     "upload": "Upload",
     "dashboard": "Dashboard",
     "signIn": "Sign in",
-    "signUp": "Get started free",
+    "signUp": "Sign up",
     "signOut": "Sign out",
     "menu": "Menu"
   },
   "footer": {
-    "tagline": "Decode your professor's question style with AI. Upload past exams, study smarter with intelligent insights.",
+    "tagline": "Upload past exams. See how your professor asks. Study where it counts.",
     "explore": "Explore",
     "account": "Account",
     "professors": "Professors",
@@ -22,7 +22,7 @@
     "myDashboard": "My Dashboard",
     "signIn": "Sign in",
     "signUp": "Sign up",
-    "copyright": "© {{year}} ProfAI · Built for students, by students.",
+    "copyright": "© {{year}} ProfAI · Built by students, for students.",
     "sourceCode": "Source code"
   },
   "theme": {
@@ -38,36 +38,36 @@
     "hero": {
       "title1": "How does your professor",
       "title2": "ask questions?",
-      "subtitle": "Analyze exam patterns, decode question styles, and prepare smarter with AI-powered insights — built for students.",
-      "searchPlaceholder": "Search for a professor by name…",
+      "subtitle": "Upload a past exam. We break down question types, topics, and difficulty — so you study what actually shows up.",
+      "searchPlaceholder": "Search a professor by name…",
       "ctaPrimary": "Upload your first exam",
       "ctaSecondary": "Browse professors"
     },
     "stats": {
       "professors": "Professors",
       "exams": "Exams analyzed",
-      "students": "Students helped"
+      "students": "Active students"
     },
     "popular": {
       "title": "Popular professors",
       "viewAll": "View all"
     },
-    "empty": "No professors yet. Be the first to add one!",
+    "empty": "No professors yet — upload an exam to add the first one.",
     "howItWorks": {
       "title": "How ProfAI works",
-      "subtitle": "Three steps from question marks to clarity.",
+      "subtitle": "Three steps, from a PDF to a study plan.",
       "step1Title": "Upload past exams",
-      "step1Desc": "Drop a PDF, JPG or PNG of any past exam from your professor.",
+      "step1Desc": "Drop a PDF, JPG, or PNG of any exam your professor has given.",
       "step2Title": "Get AI analysis",
-      "step2Desc": "Our AI breaks down question types, topics covered and difficulty.",
+      "step2Desc": "We break down question types, topics, and difficulty — with the numbers.",
       "step3Title": "Study smarter",
-      "step3Desc": "See patterns across semesters and prepare for what's likely to come."
+      "step3Desc": "Spot patterns across semesters and focus where questions actually repeat."
     }
   },
   "auth": {
     "login": {
       "title": "Welcome back",
-      "subtitle": "Sign in to continue your learning journey.",
+      "subtitle": "Sign in to pick up where you left off.",
       "email": "Email",
       "password": "Password",
       "submit": "Sign in",
@@ -77,7 +77,7 @@
     },
     "register": {
       "title": "Join ProfAI",
-      "subtitle": "Free forever. No credit card needed.",
+      "subtitle": "Free for students. Email is all we need.",
       "name": "Full name",
       "email": "Email",
       "password": "Password",
@@ -99,28 +99,28 @@
       "backToList": "Back to all professors",
       "coursesTitle": "Courses ({{count}})",
       "perExamTitle": "Per-exam breakdown",
-      "perExamHint": "{{count}} analyzed exams — question counts, types, topic breakdowns",
-      "contributeExam": "Upload an exam for this professor"
+      "perExamHint": "{{count}} exams analyzed — question counts, types, and topic breakdowns.",
+      "contributeExam": "Add an exam for this professor"
     },
     "style": {
       "title": "Professor's Style",
-      "subtitle": "Derived from {{count}} exam analyses",
+      "subtitle": "Based on {{count}} analyzed exams",
       "summaryLabel": "Summary",
       "questionTypesLabel": "Question type mix",
       "topTopicsLabel": "Most covered topics",
-      "evolutionLabel": "Trend by year",
-      "evolutionSubtitle": "Trend across {{count}} terms",
-      "topTopicsSubtitle": "{{count}} topics · color intensity reflects frequency",
-      "noData": "Not enough data",
-      "staleNote": "A new exam was added — the summary will refresh shortly.",
-      "insufficientTitle": "Style profile not ready yet",
-      "insufficientBody": "This professor needs {{min}} verified exam analyses; currently {{count}}. The profile will be generated automatically as more exams are added.",
+      "evolutionLabel": "Year-over-year trend",
+      "evolutionSubtitle": "Across {{count}} terms",
+      "topTopicsSubtitle": "{{count}} topics · darker means more frequent",
+      "noData": "Not enough data yet",
+      "staleNote": "A new exam just landed — the summary updates in a moment.",
+      "insufficientTitle": "Style profile isn't ready yet",
+      "insufficientBody": "We need {{min}} verified exam analyses to build a style profile — we have {{count}} so far. Add a couple more exams and it generates itself.",
       "metrics": {
         "totalExams": "Analyzed exams",
         "avgDifficulty": "Avg difficulty",
         "avgQuestionCount": "Avg question count",
         "dominantType": "Dominant type",
-        "noDominant": "Mixed"
+        "noDominant": "Balanced mix"
       }
     }
   },
@@ -131,19 +131,19 @@
       "allDepartments": "All departments",
       "allUniversities": "All universities"
     },
-    "empty": "No professors match your filters.",
+    "empty": "No professors match these filters — try loosening one.",
     "card": {
       "courses": "{{count}} course",
       "courses_other": "{{count}} courses",
       "ratings": "{{count}} rating",
       "ratings_other": "{{count}} ratings",
-      "noRatings": "No ratings yet"
+      "noRatings": "Not rated yet"
     },
     "detail": {
-      "noCourses": "No courses yet for this professor.",
+      "noCourses": "No courses listed yet.",
       "addRating": "Rate this professor",
       "ratingsTitle": "Student ratings",
-      "noRatingsYet": "Be the first to rate this professor.",
+      "noRatingsYet": "No ratings yet — be the first.",
       "averageDifficulty": "Avg. difficulty",
       "averageFairness": "Avg. fairness",
       "totalRatings": "Total ratings",
@@ -153,8 +153,8 @@
     }
   },
   "analysis": {
-    "title": "Question style analysis",
-    "questionCount": "Total questions",
+    "title": "Question-style breakdown",
+    "questionCount": "Question count",
     "difficulty": "Difficulty",
     "questionTypes": "Question types",
     "topicDistribution": "Topic distribution",
@@ -168,17 +168,17 @@
   },
   "upload": {
     "title": "Upload an exam",
-    "subtitle": "Help your peers — upload a past exam and get instant AI analysis.",
+    "subtitle": "Share a past exam. Get the breakdown in seconds — your classmates see it too.",
     "selectCourse": "Course",
     "examType": "Exam type",
     "year": "Year",
     "semester": "Semester",
     "fileLabel": "Exam file",
-    "fileHint": "PDF, JPG or PNG · max 10 MB",
-    "drag": "Drag & drop or click to browse",
-    "submit": "Upload & analyze",
-    "loading": "Analyzing…",
-    "success": "Exam uploaded and analyzed successfully!",
+    "fileHint": "PDF, JPG, or PNG · up to 10 MB",
+    "drag": "Drop a file here, or click to browse",
+    "submit": "Upload and analyze",
+    "loading": "Reading the exam…",
+    "success": "Exam uploaded. Analysis is ready.",
     "examTypes": {
       "MIDTERM": "Midterm",
       "FINAL": "Final",
@@ -192,10 +192,9 @@
   },
   "dashboard": {
     "welcome": "Welcome back, {{name}}",
-    "subtitle": "Here's an overview of your activity.",
+    "subtitle": "Here's what you've uploaded and rated.",
     "totalUploads": "Total uploads",
     "ratingsGiven": "Ratings given",
-    "analysesViewed": "Analyses viewed",
     "recentUploads": "Recent uploads",
     "table": {
       "course": "Course",
@@ -204,7 +203,7 @@
       "status": "Status",
       "date": "Date"
     },
-    "empty": "No uploads yet. Start by uploading your first exam!",
+    "empty": "No uploads yet — add your first exam to get started.",
     "emptyCta": "Upload an exam"
   },
   "rating": {
@@ -214,18 +213,16 @@
     "comment": "Comment (optional)",
     "submit": "Submit rating",
     "loading": "Submitting…",
-    "success": "Thanks for your feedback!",
-    "loginRequired": "Sign in to leave a rating."
+    "success": "Thanks — your rating is live.",
+    "loginRequired": "Sign in to rate this professor."
   },
   "common": {
     "loading": "Loading…",
-    "error": "Something went wrong.",
+    "error": "Something went wrong — try again in a moment.",
     "retry": "Try again",
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
-    "back": "Back",
-    "viewMore": "View more",
-    "comingSoon": "Coming soon"
+    "back": "Back"
   }
 }

@@ -1,7 +1,7 @@
 {
   "brand": {
     "name": "ProfAI",
-    "tagline": "Profesörünüzün sınav stilini tanıyın"
+    "tagline": "Hocanın nasıl soru sorduğunu tanı"
   },
   "nav": {
     "home": "Ana Sayfa",
@@ -9,12 +9,12 @@
     "upload": "Yükle",
     "dashboard": "Panel",
     "signIn": "Giriş Yap",
-    "signUp": "Ücretsiz Başla",
+    "signUp": "Üye ol",
     "signOut": "Çıkış Yap",
     "menu": "Menü"
   },
   "footer": {
-    "tagline": "Profesörünüzün soru sorma stilini yapay zeka ile çözümleyin. Geçmiş sınavları yükleyin, akıllı içgörülerle hazırlanın.",
+    "tagline": "Hocanın nasıl soru sorduğunu çöz. Geçmiş sınavları yükle, yapay zekayla kalıbı gör.",
     "explore": "Keşfet",
     "account": "Hesap",
     "professors": "Profesörler",
@@ -36,48 +36,48 @@
   },
   "home": {
     "hero": {
-      "title1": "Profesörünüz nasıl",
+      "title1": "Hocan nasıl",
       "title2": "soru soruyor?",
-      "subtitle": "Sınav kalıplarını analiz edin, soru stillerini çözün ve yapay zeka destekli içgörülerle daha akıllı hazırlanın — öğrenciler için tasarlandı.",
-      "searchPlaceholder": "Profesör adı ile arayın…",
-      "ctaPrimary": "İlk sınavınızı yükleyin",
-      "ctaSecondary": "Profesörlere göz atın"
+      "subtitle": "Geçmiş sınavları yükle, kalıbı gör, ne soracağını tahmin et. Yapay zeka analiz eder, sen akıllı çalışırsın.",
+      "searchPlaceholder": "Hoca adı ara…",
+      "ctaPrimary": "İlk sınavını yükle",
+      "ctaSecondary": "Hocalara göz at"
     },
     "stats": {
-      "professors": "Profesör",
+      "professors": "Hoca",
       "exams": "Analiz Edilen Sınav",
-      "students": "Yardım Edilen Öğrenci"
+      "students": "Daha akıllı çalışan öğrenci"
     },
     "popular": {
       "title": "Popüler profesörler",
       "viewAll": "Tümünü gör"
     },
-    "empty": "Henüz profesör yok. İlk sen ekle!",
+    "empty": "Henüz hoca yok. Sen bir sınav yükle, profil otomatik oluşsun.",
     "howItWorks": {
       "title": "ProfAI nasıl çalışır?",
-      "subtitle": "Soru işaretinden netliğe üç adım.",
+      "subtitle": "Üç adımda hocanın kalıbına.",
       "step1Title": "Geçmiş sınavları yükle",
-      "step1Desc": "Profesörünüze ait herhangi bir geçmiş sınavın PDF, JPG veya PNG'sini yükleyin.",
+      "step1Desc": "Hocanın geçmiş sınavını PDF, JPG veya PNG olarak yükle.",
       "step2Title": "Yapay zeka analizini al",
-      "step2Desc": "Yapay zekamız soru tiplerini, konuları ve zorluğu detaylı çözümler.",
+      "step2Desc": "Soru tipini, konuları ve zorluğu çıkarırız — 30 saniyede.",
       "step3Title": "Daha akıllı çalış",
-      "step3Desc": "Dönem dönem desenleri görün ve gelmesi muhtemel sorulara hazırlanın."
+      "step3Desc": "Dönem dönem kalıbı gör, bu sene neyin geleceğine odaklan."
     }
   },
   "auth": {
     "login": {
-      "title": "Tekrar hoş geldiniz",
-      "subtitle": "Öğrenme yolculuğunuza devam etmek için giriş yapın.",
+      "title": "Tekrar hoş geldin",
+      "subtitle": "Kaldığın yerden devam et.",
       "email": "E-posta",
       "password": "Şifre",
       "submit": "Giriş Yap",
       "loading": "Giriş yapılıyor…",
-      "noAccount": "Hesabınız yok mu?",
-      "signUpLink": "Hemen oluşturun"
+      "noAccount": "Hesabın yok mu?",
+      "signUpLink": "Hemen oluştur"
     },
     "register": {
-      "title": "ProfAI'ye katılın",
-      "subtitle": "Sonsuza kadar ücretsiz. Kredi kartı gerekmez.",
+      "title": "ProfAI'ye katıl",
+      "subtitle": "Ücretsiz. Kredi kartı gerekmez.",
       "name": "Ad Soyad",
       "email": "E-posta",
       "password": "Şifre",
@@ -85,13 +85,13 @@
       "department": "Bölüm",
       "submit": "Hesap Oluştur",
       "loading": "Hesap oluşturuluyor…",
-      "hasAccount": "Zaten hesabınız var mı?",
-      "signInLink": "Giriş yapın"
+      "hasAccount": "Zaten hesabın var mı?",
+      "signInLink": "Giriş yap"
     },
     "errors": {
-      "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
-      "invalidCredentials": "Geçersiz e-posta veya şifre.",
-      "emailExists": "Bu e-posta ile bir hesap zaten mevcut."
+      "generic": "Bir şey ters gitti. Tekrar dener misin?",
+      "invalidCredentials": "E-posta veya şifre yanlış.",
+      "emailExists": "Bu e-posta zaten kayıtlı — giriş yapmayı dener misin?"
     }
   },
   "professor": {
@@ -99,39 +99,39 @@
       "backToList": "Tüm profesörlere dön",
       "coursesTitle": "Dersler ({{count}})",
       "perExamTitle": "Sınav bazlı detaylar",
-      "perExamHint": "{{count}} analiz edilmiş sınav — sayı, tip ve konu dağılımları",
-      "contributeExam": "Bu hoca için sınav yükle"
+      "perExamHint": "{{count}} sınav analiz ettik — soru sayısı, tip ve konu dağılımı",
+      "contributeExam": "Bu hocaya sınav ekle"
     },
     "style": {
       "title": "Hocanın Tarzı",
-      "subtitle": "{{count}} sınav analizinden çıkarıldı",
+      "subtitle": "{{count}} sınav analiz ettik",
       "summaryLabel": "Özet",
       "questionTypesLabel": "Soru tipi dağılımı",
       "topTopicsLabel": "En sık işlenen konular",
       "evolutionLabel": "Yıllara göre evrim",
-      "evolutionSubtitle": "{{count}} dönem verisi üzerinden trend",
-      "topTopicsSubtitle": "{{count}} konu · sıklığa göre renklendirildi",
-      "noData": "Yeterli veri yok",
-      "staleNote": "Yeni sınav eklendi — özet birazdan yenilenecek.",
-      "insufficientTitle": "Henüz stil profili yok",
-      "insufficientBody": "Bu hoca için {{min}} onaylanmış sınav analizi gerekiyor, şu an {{count}} var. Daha fazla sınav eklendikçe profil otomatik oluşacak.",
+      "evolutionSubtitle": "Son {{count}} dönemin trendi",
+      "topTopicsSubtitle": "{{count}} konu · en sık sorulanlar üstte",
+      "noData": "Henüz gösterecek veri yok",
+      "staleNote": "Yeni sınav geldi — özet birkaç dakika içinde güncellenir.",
+      "insufficientTitle": "Stil profili için az daha veri lazım",
+      "insufficientBody": "Bu hoca için en az {{min}} analiz gerekli. Şu an {{count}} var — birkaç sınav daha ekle, profil kendiliğinden çıksın.",
       "metrics": {
         "totalExams": "Analiz edilen sınav",
         "avgDifficulty": "Ort. zorluk",
         "avgQuestionCount": "Ort. soru sayısı",
         "dominantType": "Baskın tip",
-        "noDominant": "Belirsiz"
+        "noDominant": "Karışık"
       }
     }
   },
   "professors": {
     "listTitle": "Profesörler",
-    "search": "Profesör adı ile arayın…",
+    "search": "Hoca adı ara…",
     "filters": {
       "allDepartments": "Tüm bölümler",
       "allUniversities": "Tüm üniversiteler"
     },
-    "empty": "Filtrelerinize uygun profesör bulunamadı.",
+    "empty": "Bu filtrelere uyan hoca yok. Filtreleri gevşet veya arama terimini değiştir.",
     "card": {
       "courses": "{{count}} ders",
       "courses_other": "{{count}} ders",
@@ -140,10 +140,10 @@
       "noRatings": "Henüz oy yok"
     },
     "detail": {
-      "noCourses": "Bu profesör için henüz ders yok.",
-      "addRating": "Bu profesörü değerlendir",
+      "noCourses": "Bu hoca için henüz ders yok.",
+      "addRating": "Bu hocayı değerlendir",
       "ratingsTitle": "Öğrenci değerlendirmeleri",
-      "noRatingsYet": "Bu profesörü ilk değerlendiren sen ol.",
+      "noRatingsYet": "Bu hocayı ilk değerlendiren sen ol.",
       "averageDifficulty": "Ortalama zorluk",
       "averageFairness": "Ortalama adillik",
       "totalRatings": "Toplam değerlendirme",
@@ -153,7 +153,7 @@
     }
   },
   "analysis": {
-    "title": "Soru stili analizi",
+    "title": "Soru tarzı analizi",
     "questionCount": "Toplam soru",
     "difficulty": "Zorluk",
     "questionTypes": "Soru tipleri",
@@ -168,7 +168,7 @@
   },
   "upload": {
     "title": "Sınav yükle",
-    "subtitle": "Arkadaşlarına yardım et — geçmiş sınavı yükle, anında yapay zeka analizini al.",
+    "subtitle": "Geçmiş sınavı yükle, 30 saniyede analizi al. Aynı hocayı alan arkadaşların da faydalanır.",
     "selectCourse": "Ders",
     "examType": "Sınav tipi",
     "year": "Yıl",
@@ -176,9 +176,9 @@
     "fileLabel": "Sınav dosyası",
     "fileHint": "PDF, JPG veya PNG · maks. 10 MB",
     "drag": "Sürükle bırak veya tıkla",
-    "submit": "Yükle ve Analiz Et",
+    "submit": "Yükle ve analiz et",
     "loading": "Analiz ediliyor…",
-    "success": "Sınav yüklendi ve analiz edildi!",
+    "success": "Sınav yüklendi. Analizi görmek için hoca sayfasına git.",
     "examTypes": {
       "MIDTERM": "Vize",
       "FINAL": "Final",
@@ -192,10 +192,9 @@
   },
   "dashboard": {
     "welcome": "Tekrar hoş geldin, {{name}}",
-    "subtitle": "İşte aktivitenin özeti.",
+    "subtitle": "Bugüne kadar neler yaptın?",
     "totalUploads": "Toplam yükleme",
     "ratingsGiven": "Verilen oy",
-    "analysesViewed": "Görüntülenen analiz",
     "recentUploads": "Son yüklemeler",
     "table": {
       "course": "Ders",
@@ -204,28 +203,26 @@
       "status": "Durum",
       "date": "Tarih"
     },
-    "empty": "Henüz yükleme yok. İlk sınavını yükleyerek başla!",
+    "empty": "Henüz yükleme yok. İlk sınavını yükle, hocanın kalıbını gör.",
     "emptyCta": "Sınav yükle"
   },
   "rating": {
-    "title": "Bu profesörü değerlendir",
+    "title": "Bu hocayı değerlendir",
     "difficulty": "Zorluk",
     "fairness": "Adillik",
     "comment": "Yorum (isteğe bağlı)",
     "submit": "Değerlendirmeyi gönder",
     "loading": "Gönderiliyor…",
-    "success": "Geri bildirim için teşekkürler!",
-    "loginRequired": "Değerlendirme yapmak için giriş yapın."
+    "success": "Teşekkürler — değerlendirmen kaydedildi.",
+    "loginRequired": "Değerlendirme için önce giriş yap."
   },
   "common": {
     "loading": "Yükleniyor…",
-    "error": "Bir şeyler ters gitti.",
+    "error": "Bir şey ters gitti.",
     "retry": "Tekrar dene",
     "save": "Kaydet",
     "cancel": "İptal",
     "delete": "Sil",
-    "back": "Geri",
-    "viewMore": "Daha fazla",
-    "comingSoon": "Yakında"
+    "back": "Geri"
   }
 }

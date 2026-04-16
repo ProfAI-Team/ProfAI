@@ -21,8 +21,9 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 
 - **Phase 1 Task 1.7 tamamlandı (2026-04-16)**: `StyleHero` + `MetricsCards` + skeleton'lar + `chartColors.ts` + i18n `professor.style.*` + ProfessorDetailPage preview wire.
 - **Phase 1 Task 1.8 tamamlandı (2026-04-16)**: `EvolutionChart` + `TopicBadges` + skeleton'lar.
-- **Phase 1 Task 1.9 tamamlandı (2026-04-16)**: ProfessorDetailPage tam rebuild. Yeni yapı: back-link → slim identity hero (avatar + ad + bölüm + üni + isteğe bağlı rating pill) → style profile block (MetricsCards → StyleHero → TopicBadges → EvolutionChart) → Courses compact → collapsible `<details>` "Sınav bazlı detaylar" → rating form + listesi. Legacy stats grid kaldırıldı (metrics kartları zaten var). Insufficient_data durumunda auth'luya "sınav yükle" CTA. Loading skeleton tüm blokları içeriyor. i18n: `professor.detail.{backToList, coursesTitle, perExamTitle, perExamHint, contributeExam}` + `professors.detail.ratingsCount` (plural) TR + EN.
-- Sıradaki: Task 1.10 — i18n copy sweep (eski keyler + yeni keylerin tonu tutarlı mı, boş key var mı).
+- **Phase 1 Task 1.9 tamamlandı (2026-04-16)**: ProfessorDetailPage tam rebuild.
+- **Phase 1 Task 1.10 tamamlandı (2026-04-16)**: Hybrid tone guide yazıldı (`docs/operations/copy-tone-guide.md`), iki genel-amaç agent paralel çalıştı — biri TR biri EN için rehber bazlı EDIT/DELETE önerileri üretti. Konsolide edildi: 44 TR + 38 EN revize, 3 dead key (`common.viewMore`, `common.comingSoon`, `dashboard.analysesViewed`) silindi. Öne çıkan temalar: (1) TR'de "siz → sen" ve selective "profesör → hoca" (body/CTA'larda, nav'da formal tutuldu), (2) pasif → aktif fiil, (3) pazarlama klişeleri ("içgörü", "yolculuk", "sonsuza kadar") atıldı, (4) empty/error state'ler her zaman "ne olduğu + ne yapılacağı" formatı. Her iki locale 164 key eşleşiyor.
+- Sıradaki: Task 1.11 — Responsive + light/dark cross-breakpoint test.
 
 ---
 
