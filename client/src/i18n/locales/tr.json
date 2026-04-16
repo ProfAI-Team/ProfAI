@@ -94,6 +94,27 @@
       "emailExists": "Bu e-posta ile bir hesap zaten mevcut."
     }
   },
+  "professor": {
+    "style": {
+      "title": "Hocanın Tarzı",
+      "subtitle": "{{count}} sınav analizinden çıkarıldı",
+      "summaryLabel": "Özet",
+      "questionTypesLabel": "Soru tipi dağılımı",
+      "topTopicsLabel": "En sık işlenen konular",
+      "evolutionLabel": "Yıllara göre evrim",
+      "noData": "Yeterli veri yok",
+      "staleNote": "Yeni sınav eklendi — özet birazdan yenilenecek.",
+      "insufficientTitle": "Henüz stil profili yok",
+      "insufficientBody": "Bu hoca için {{min}} onaylanmış sınav analizi gerekiyor, şu an {{count}} var. Daha fazla sınav eklendikçe profil otomatik oluşacak.",
+      "metrics": {
+        "totalExams": "Analiz edilen sınav",
+        "avgDifficulty": "Ort. zorluk",
+        "avgQuestionCount": "Ort. soru sayısı",
+        "dominantType": "Baskın tip",
+        "noDominant": "Belirsiz"
+      }
+    }
+  },
   "professors": {
     "listTitle": "Profesörler",
     "search": "Profesör adı ile arayın…",

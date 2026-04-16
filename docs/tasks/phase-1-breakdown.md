@@ -15,15 +15,15 @@
 | 1.3 | Gemini style summary prompt + provider call | 4 saat | 1.2 | ✅ Tamam | `ba0ccd9` |
 | 1.4 | `GET /api/professors/:id/style-profile` endpoint | 2 saat | 1.2, 1.3 | ✅ Tamam | `9d9d13f` |
 | 1.5 | Cache invalidasyon hook (examController → isStale) | 1 saat | 1.1 | ✅ Tamam | `4805cde` |
-| 1.6 | Backend unit + integration testler | 3 saat | 1.1-1.5 | ✅ Tamam | bu commit |
-| 1.7 | Frontend: StyleHero + metrics kartları | 4 saat | 1.4 | ⏳ Sıradaki | — |
-| 1.8 | Frontend: EvolutionChart + TopicBadges | 3 saat | 1.7 | Planlı | — |
+| 1.6 | Backend unit + integration testler | 3 saat | 1.1-1.5 | ✅ Tamam | `1d16185` |
+| 1.7 | Frontend: StyleHero + metrics kartları | 4 saat | 1.4 | ✅ Tamam | bu commit |
+| 1.8 | Frontend: EvolutionChart + TopicBadges | 3 saat | 1.7 | ⏳ Sıradaki | — |
 | 1.9 | ProfessorDetailPage tam rebuild + empty/loading state | 4 saat | 1.7, 1.8 | Planlı | — |
 | 1.10 | i18n TR + EN key'leri + copy iteration | 2 saat | 1.9 | Planlı | — |
 | 1.11 | Mobile responsive test + light/dark test | 2 saat | 1.9 | Planlı | — |
 | 1.12 | Dokümantasyon update (phase-1-style-profile "gerçekleşen") | 1 saat | Hepsi | Planlı | — |
 
-**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 6/12 task tamam (~16 saat) — backend Phase 1 işleri bitti, frontend'e geçiyoruz.
+**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 7/12 task tamam (~20 saat).
 
 ---
 
@@ -158,11 +158,12 @@
 
 ---
 
-### 1.7 — Frontend StyleHero + Metrics
+### 1.7 — Frontend StyleHero + Metrics ✅
 
 **Yeni dosyalar:**
-- `client/src/components/StyleHero.tsx`
-- `client/src/components/MetricsCards.tsx`
+- `client/src/components/StyleHero.tsx` (+ `StyleHeroSkeleton`)
+- `client/src/components/MetricsCards.tsx` (+ `MetricsCardsSkeleton`)
+- `client/src/lib/chartColors.ts`
 
 **İş:**
 - Hero layout (aggregate pie + bar yan yana).

@@ -15,7 +15,12 @@ import { useAuth } from '../context/AuthContext';
 import AnalysisCard from '../components/AnalysisCard';
 import RatingForm from '../components/RatingForm';
 import ProfAvatar from '../components/Avatar';
-import { professorService } from '../services/professorService';
+import StyleHero, { StyleHeroSkeleton } from '../components/StyleHero';
+import MetricsCards, { MetricsCardsSkeleton } from '../components/MetricsCards';
+import {
+  professorService,
+  type StyleProfileResponse,
+} from '../services/professorService';
 import { ratingService } from '../services/ratingService';
 import { Professor, ExamAnalysis, ProfessorRating, Course } from '../types';
 import { cn } from '../lib/utils';
@@ -29,6 +34,12 @@ const ProfessorDetailPage: React.FC = () => {
   const [ratings, setRatings] = useState<ProfessorRating[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  // Phase 1 — Task 1.7 preview wiring. Task 1.9 will make the style
+  // profile the page hero and remove the legacy layout below it.
+  const [styleProfile, setStyleProfile] = useState<StyleProfileResponse | null>(
+    null
+  );
+  const [styleLoading, setStyleLoading] = useState(true);
 
   useEffect(() => {
     if (!id) return;
@@ -51,6 +62,28 @@ const ProfessorDetailPage: React.FC = () => {
       }
     })();
   }, [id, t]);
+
+  // Style profile loads independently — it can take longer on cache miss
+  // (Gemini call) without blocking the rest of the page.
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    setStyleLoading(true);
+    professorService
+      .getStyleProfile(id)
+      .then((data) => {
+        if (!cancelled) setStyleProfile(data);
+      })
+      .catch(() => {
+        if (!cancelled) setStyleProfile(null);
+      })
+      .finally(() => {
+        if (!cancelled) setStyleLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
 
   const handleRatingSubmit = async (data: {
     difficulty: number;
@@ -165,6 +198,43 @@ const ProfessorDetailPage: React.FC = () => {
           </div>
         </div>
       </motion.section>
+
+      {/* Style Profile (Phase 1) — lives above the legacy hero-then-list
+          layout until Task 1.9 replaces the page entirely. */}
+      {styleLoading && (
+        <section className="space-y-4">
+          <MetricsCardsSkeleton />
+          <StyleHeroSkeleton />
+        </section>
+      )}
+
+      {!styleLoading && styleProfile?.status === 'ready' && (
+        <section className="space-y-4">
+          <MetricsCards metrics={styleProfile.profile.metrics} />
+          <StyleHero profile={styleProfile.profile} />
+        </section>
+      )}
+
+      {!styleLoading && styleProfile?.status === 'insufficient_data' && (
+        <section className="card-base p-6 sm:p-8">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-warning/10 text-warning flex items-center justify-center shrink-0">
+              <AlertCircle className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="font-display font-semibold text-foreground mb-1">
+                {t('professor.style.insufficientTitle')}
+              </h2>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {t('professor.style.insufficientBody', {
+                  count: styleProfile.examSourceCount,
+                  min: styleProfile.minRequired,
+                })}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Analyses */}
       {analyses.length > 0 && (

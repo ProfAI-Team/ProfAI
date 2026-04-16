@@ -19,7 +19,8 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 
 ## Şu An Üzerinde Çalışılan
 
-- (yok — Phase 1 frontend task'ları henüz başlamadı)
+- **Phase 1 Task 1.7 tamamlandı (2026-04-16)**: `StyleHero` + `MetricsCards` + `StyleHeroSkeleton` + `MetricsCardsSkeleton` + `chartColors.ts` (CSS variable/Recharts interop sorunu için hex palette ayrı). TR + EN i18n key'leri (`professor.style.*`) eklendi. ProfessorDetailPage'e preview wire — eski hero'dan sonra yeni bölüm ekleniyor (Task 1.9 tamamını değiştirecek). Style profile ayrı useEffect'te yükleniyor — Gemini rebuild varsa sayfanın geri kalanını bloklamıyor.
+- Sıradaki: Task 1.8 — `EvolutionChart` (yıllar içi trend) + `TopicBadges` (top 10 chip list).
 
 ---
 

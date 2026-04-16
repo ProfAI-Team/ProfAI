@@ -94,6 +94,27 @@
       "emailExists": "An account with this email already exists."
     }
   },
+  "professor": {
+    "style": {
+      "title": "Professor's Style",
+      "subtitle": "Derived from {{count}} exam analyses",
+      "summaryLabel": "Summary",
+      "questionTypesLabel": "Question type mix",
+      "topTopicsLabel": "Most covered topics",
+      "evolutionLabel": "Trend by year",
+      "noData": "Not enough data",
+      "staleNote": "A new exam was added — the summary will refresh shortly.",
+      "insufficientTitle": "Style profile not ready yet",
+      "insufficientBody": "This professor needs {{min}} verified exam analyses; currently {{count}}. The profile will be generated automatically as more exams are added.",
+      "metrics": {
+        "totalExams": "Analyzed exams",
+        "avgDifficulty": "Avg difficulty",
+        "avgQuestionCount": "Avg question count",
+        "dominantType": "Dominant type",
+        "noDominant": "Mixed"
+      }
+    }
+  },
   "professors": {
     "listTitle": "Professors",
     "search": "Search professors by name…",
