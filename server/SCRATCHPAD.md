@@ -24,8 +24,9 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 - **Phase 1 Task 1.3 tamamlandı (2026-04-16)**: `prompts/style-summary.ts` (v1) + `aiCallTracker.ts` + `geminiProvider.generateStyleSummary`. Smoke: 3.9sn latency (sonraki 1.5sn), 470+151 tokens, $0.000081 projeksiyonu (free tier — gerçek $0). Özet kalitesi good. Fallback: Gemini fail → "fallback-v0" + isStale=true.
 - **AICallLog freeTier flag eklendi (2026-04-16)**: migration `20260416201038_add_ai_call_free_tier_flag`. `GEMINI_FREE_TIER=true` env default. `costUsd` paid-tier projeksiyonu olarak devam ediyor; rapor query'leri ai-pipeline.md'de.
 - **Phase 1 Task 1.4 tamamlandı (2026-04-16)**: `GET /api/professors/:id/style-profile` endpoint.
-- **Phase 1 Task 1.5 tamamlandı (2026-04-16)**: Invalidation hook `examController.uploadExam`'e eklendi (`analysisService` değil — `examAnalysis.create` orada yapılıyor). `invalidateStyleProfile(course.professorId)` try/catch ile çağrılır, telemetry hatası upload'u kırmaz. Smoke `test-invalidation-hook.ts`: fresh profile → yeni Exam+Analysis insert → isStale=true → rebuild → isStale=false + examSourceCount 6→7 + cleanup. End-to-end doğrulandı.
-- Sıradaki: Task 1.6 — Backend unit + integration test altyapısı (Vitest + Supertest).
+- **Phase 1 Task 1.5 tamamlandı (2026-04-16)**: Invalidation hook `examController.uploadExam`'e eklendi.
+- **Phase 1 Task 1.6 tamamlandı (2026-04-16)**: Vitest + Supertest kuruldu. `src/app.ts` index'ten ayrıldı (supertest listen'e ihtiyaç duymasın). `computeAggregation` pure function olarak ayrıldı (DB bağımlılığı yok, test'te mock prisma gerekmez). 7 unit test (aggregation — weighting, evolution, topTopics, edge cases) + 4 integration test (endpoint — 404 / insufficient / ready / cache-hit < 1sn). Integration `DATABASE_URL` yoksa sessiz skip. CI'ye `npm test` step eklendi. Smoke script'ler aynen duruyor (dev dostu).
+- Backend Phase 1 tamam. Sıradaki: Task 1.7 — Frontend `StyleHero` + metrics kartları.
 - Sıradaki: Task 1.4 — `GET /api/professors/:id/style-profile` endpoint.
 
 ---

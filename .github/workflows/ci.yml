@@ -10,7 +10,7 @@ on:
 
 jobs:
   lint-and-test-backend:
-    name: Backend Lint & Build
+    name: Backend Lint, Build & Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -27,9 +27,19 @@ jobs:
         working-directory: server
         run: npm ci
 
+      - name: Prisma client generate
+        working-directory: server
+        run: npx prisma generate
+
       - name: TypeScript build check
         working-directory: server
         run: npm run build
+
+      # Runs unit tests always; integration suites self-skip when
+      # DATABASE_URL is not set (see tests/integration/*).
+      - name: Run tests
+        working-directory: server
+        run: npm test
 
   lint-and-test-frontend:
     name: Frontend Lint & Build

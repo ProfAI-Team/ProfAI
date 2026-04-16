@@ -181,23 +181,15 @@ function round1(value: number): number {
 }
 
 /**
- * Pure aggregation — reads the professor's exams + analyses and computes a
- * StyleProfile-shaped payload. No DB writes, no Gemini calls.
+ * Pure aggregation — given raw exams (with optional analyses) computes a
+ * StyleProfile-shaped payload. No DB, no Gemini. Extracted so unit tests
+ * can exercise the math without a database.
  *
  * Returns null when there are no analyzed exams.
  */
-export async function aggregateFromExams(
-  professorId: string
-): Promise<AggregationResult | null> {
-  const exams = await prisma.exam.findMany({
-    where: { course: { professorId } },
-    select: {
-      id: true,
-      year: true,
-      analysis: true,
-    },
-  });
-
+export function computeAggregation(
+  exams: ExamWithAnalysis[]
+): AggregationResult | null {
   const analyses = exams
     .map((e) => e.analysis)
     .filter((a): a is ExamAnalysis => a !== null);
@@ -220,6 +212,24 @@ export async function aggregateFromExams(
     },
     examSourceCount: analyses.length,
   };
+}
+
+/**
+ * DB-backed wrapper around {@link computeAggregation}. Reads the professor's
+ * exams + analyses and computes a StyleProfile-shaped payload.
+ */
+export async function aggregateFromExams(
+  professorId: string
+): Promise<AggregationResult | null> {
+  const exams = await prisma.exam.findMany({
+    where: { course: { professorId } },
+    select: {
+      id: true,
+      year: true,
+      analysis: true,
+    },
+  });
+  return computeAggregation(exams);
 }
 
 function isRegenerationInFlight(profile: ProfessorStyleProfile): boolean {
