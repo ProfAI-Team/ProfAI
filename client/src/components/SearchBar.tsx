@@ -1,16 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Search } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 interface Props {
   placeholder?: string;
   onSearch: (query: string) => void;
   debounceMs?: number;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
 }
 
 const SearchBar: React.FC<Props> = ({
-  placeholder = 'Search professors...',
+  placeholder,
   onSearch,
   debounceMs = 400,
+  size = 'md',
+  className,
 }) => {
+  const { t } = useTranslation();
   const [value, setValue] = useState('');
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -24,27 +32,28 @@ const SearchBar: React.FC<Props> = ({
     };
   }, [value, debounceMs, onSearch]);
 
+  const sizeClasses = {
+    sm: 'pl-10 pr-4 py-2 text-sm',
+    md: 'pl-11 pr-4 py-2.5 text-sm',
+    lg: 'pl-12 pr-5 py-3.5 text-base',
+  }[size];
+
+  const iconSize = size === 'lg' ? 'w-5 h-5 left-4' : 'w-4 h-4 left-3.5';
+
   return (
-    <div className="relative w-full max-w-xl">
-      <svg
-        className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-        />
-      </svg>
+    <div className={cn('relative w-full max-w-xl', className)}>
+      <Search className={cn('absolute top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none', iconSize)} />
       <input
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder={placeholder}
-        className="w-full pl-12 pr-4 py-3 bg-navy-light border border-accent/30 rounded-xl text-gray-200 placeholder-gray-500 focus:outline-none focus:border-accent-blue/50 focus:ring-1 focus:ring-accent-blue/50 transition-colors"
+        placeholder={placeholder ?? t('professors.search')}
+        className={cn(
+          'w-full bg-card border border-input rounded-xl text-foreground placeholder:text-muted-foreground',
+          'focus:outline-none focus:ring-2 focus:ring-ring/40 focus:border-ring',
+          'shadow-soft transition-all',
+          sizeClasses
+        )}
       />
     </div>
   );

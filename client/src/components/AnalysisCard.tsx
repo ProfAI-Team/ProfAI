@@ -1,4 +1,6 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import {
   PieChart,
   Pie,
@@ -11,110 +13,169 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
+import { FileText, Gauge, ListChecks, BookMarked } from 'lucide-react';
 import { ExamAnalysis } from '../types';
+import { cn } from '../lib/utils';
 
 interface Props {
   analysis: ExamAnalysis;
+  index?: number;
 }
 
-const COLORS = ['#4A90D9', '#00D2FF', '#7C3AED', '#F59E0B', '#10B981', '#EF4444', '#EC4899'];
+// Chart palette — works well in both light and dark themes
+const CHART_COLORS = ['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EC4899', '#F97316'];
 
-const AnalysisCard: React.FC<Props> = ({ analysis }) => {
-  const getDifficultyBadge = (score: number) => {
-    if (score < 4)
-      return { className: 'bg-green-500/20 text-green-400 border-green-500/30', label: 'Easy' };
-    if (score <= 7)
-      return { className: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30', label: 'Medium' };
-    return { className: 'bg-red-500/20 text-red-400 border-red-500/30', label: 'Hard' };
+const QUESTION_TYPE_KEYS: Record<string, string> = {
+  'Multiple Choice': 'analysis.types.multipleChoice',
+  'Classic/Open-ended': 'analysis.types.openEnded',
+  'True/False': 'analysis.types.trueFalse',
+};
+
+const CustomTooltip: React.FC<{ active?: boolean; payload?: any[]; label?: string }> = ({
+  active,
+  payload,
+  label,
+}) => {
+  if (!active || !payload || !payload.length) return null;
+  return (
+    <div className="bg-popover border border-border rounded-lg px-3 py-2 shadow-elevated text-sm">
+      {label && <p className="font-medium text-foreground mb-0.5">{label}</p>}
+      {payload.map((entry, i) => (
+        <p key={i} className="text-muted-foreground">
+          <span style={{ color: entry.color || entry.fill }}>●</span>{' '}
+          <span className="text-foreground font-medium">{entry.value}%</span>
+        </p>
+      ))}
+    </div>
+  );
+};
+
+const AnalysisCard: React.FC<Props> = ({ analysis, index = 0 }) => {
+  const { t } = useTranslation();
+
+  const getDifficulty = (score: number) => {
+    if (score < 4) return { color: 'text-success bg-success/10', label: 'Easy' };
+    if (score <= 7) return { color: 'text-warning bg-warning/10', label: 'Medium' };
+    return { color: 'text-destructive bg-destructive/10', label: 'Hard' };
   };
 
-  const badge = getDifficultyBadge(analysis.difficultyScore);
+  const diff = getDifficulty(analysis.difficultyScore);
+
+  // Translate question type names if known
+  const translatedTypes = analysis.questionTypes.map((q) => ({
+    ...q,
+    displayType: QUESTION_TYPE_KEYS[q.type] ? t(QUESTION_TYPE_KEYS[q.type]) : q.type,
+  }));
 
   return (
-    <div className="bg-navy-light border border-accent/20 rounded-xl p-6">
-      <div className="flex flex-wrap items-center justify-between mb-6 gap-3">
-        <h3 className="text-lg font-semibold text-white">Exam Analysis</h3>
+    <motion.article
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.05 }}
+      className="card-base p-6 sm:p-8"
+    >
+      {/* Header */}
+      <header className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-5 border-b border-border">
         <div className="flex items-center gap-3">
-          <span className="text-sm text-gray-400">
-            {analysis.questionCount} Questions
-          </span>
-          <span className={`text-sm px-3 py-1 rounded-full border ${badge.className}`}>
-            {badge.label} ({analysis.difficultyScore.toFixed(1)}/10)
-          </span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Pie Chart - Question Types */}
-        {analysis.questionTypes && analysis.questionTypes.length > 0 && (
+          <div className="w-10 h-10 rounded-xl bg-primary-soft text-primary flex items-center justify-center">
+            <FileText className="w-5 h-5" />
+          </div>
           <div>
-            <h4 className="text-sm font-medium text-gray-400 mb-3">Question Types</h4>
-            <ResponsiveContainer width="100%" height={250}>
+            <h3 className="font-display font-semibold text-foreground">{t('analysis.title')}</h3>
+            <p className="text-xs text-muted-foreground">
+              {t('analysis.questionCount')}: {analysis.questionCount}
+            </p>
+          </div>
+        </div>
+        <div className={cn('flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium', diff.color)}>
+          <Gauge className="w-3.5 h-3.5" />
+          {analysis.difficultyScore.toFixed(1)}/10
+        </div>
+      </header>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
+        {translatedTypes.length > 0 && (
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <ListChecks className="w-4 h-4 text-muted-foreground" />
+              <h4 className="text-sm font-semibold text-foreground">{t('analysis.questionTypes')}</h4>
+            </div>
+            <ResponsiveContainer width="100%" height={240}>
               <PieChart>
                 <Pie
-                  data={analysis.questionTypes}
+                  data={translatedTypes}
                   dataKey="percentage"
-                  nameKey="type"
+                  nameKey="displayType"
                   cx="50%"
                   cy="50%"
-                  outerRadius={80}
-                  label={({ type, percentage }) => `${type}: ${percentage}%`}
+                  innerRadius={50}
+                  outerRadius={85}
+                  paddingAngle={3}
+                  isAnimationActive
                 >
-                  {analysis.questionTypes.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {translatedTypes.map((_, i) => (
+                    <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} stroke="none" />
                   ))}
                 </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#1A1A2E',
-                    border: '1px solid #0F3460',
-                    borderRadius: '8px',
-                    color: '#fff',
-                  }}
+                <Tooltip content={<CustomTooltip />} />
+                <Legend
+                  iconType="circle"
+                  wrapperStyle={{ fontSize: 12, color: 'hsl(var(--muted-foreground))' }}
                 />
-                <Legend />
               </PieChart>
             </ResponsiveContainer>
           </div>
         )}
 
-        {/* Bar Chart - Topic Distribution */}
         {analysis.topicDistribution && analysis.topicDistribution.length > 0 && (
           <div>
-            <h4 className="text-sm font-medium text-gray-400 mb-3">Topic Distribution</h4>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={analysis.topicDistribution}>
+            <div className="flex items-center gap-2 mb-3">
+              <BookMarked className="w-4 h-4 text-muted-foreground" />
+              <h4 className="text-sm font-semibold text-foreground">{t('analysis.topicDistribution')}</h4>
+            </div>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart
+                data={analysis.topicDistribution}
+                margin={{ top: 5, right: 5, left: -20, bottom: 30 }}
+              >
                 <XAxis
                   dataKey="topic"
-                  tick={{ fill: '#9CA3AF', fontSize: 12 }}
-                  axisLine={{ stroke: '#374151' }}
+                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                  tickLine={{ stroke: 'hsl(var(--border))' }}
+                  angle={-25}
+                  textAnchor="end"
+                  height={60}
+                  interval={0}
                 />
                 <YAxis
-                  tick={{ fill: '#9CA3AF', fontSize: 12 }}
-                  axisLine={{ stroke: '#374151' }}
+                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                  axisLine={{ stroke: 'hsl(var(--border))' }}
+                  tickLine={{ stroke: 'hsl(var(--border))' }}
                 />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#1A1A2E',
-                    border: '1px solid #0F3460',
-                    borderRadius: '8px',
-                    color: '#fff',
-                  }}
-                />
-                <Bar dataKey="frequency" fill="#4A90D9" radius={[4, 4, 0, 0]} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--secondary))' }} />
+                <Bar dataKey="frequency" radius={[6, 6, 0, 0]}>
+                  {analysis.topicDistribution.map((_, i) => (
+                    <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
         )}
       </div>
 
+      {/* Summary */}
       {analysis.summary && (
-        <div className="bg-navy/50 rounded-lg p-4 border border-accent/10">
-          <h4 className="text-sm font-medium text-gray-400 mb-2">Summary</h4>
-          <p className="text-gray-300 text-sm leading-relaxed">{analysis.summary}</p>
+        <div className="rounded-xl bg-secondary/60 border border-border p-4">
+          <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+            {t('analysis.summary')}
+          </h4>
+          <p className="text-sm text-foreground leading-relaxed">{analysis.summary}</p>
         </div>
       )}
-    </div>
+    </motion.article>
   );
 };
 

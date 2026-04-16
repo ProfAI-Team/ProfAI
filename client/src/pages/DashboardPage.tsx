@@ -1,87 +1,212 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
+import {
+  Upload, Star, BarChart3, FileText, ArrowRight, Inbox, Gauge,
+  Calendar,
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import ProfAvatar from '../components/Avatar';
+import { examService } from '../services/examService';
+import { Exam } from '../types';
+import { cn } from '../lib/utils';
 
 const DashboardPage: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
+  const [exams, setExams] = useState<Exam[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    examService
+      .getMine()
+      .then(setExams)
+      .catch(() => setExams([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const totalUploads = exams.length;
+  const totalAnalyses = exams.filter((e) => e.analysis).length;
+  const avgDifficulty =
+    exams.length > 0
+      ? exams.filter((e) => e.analysis).reduce((s, e) => s + (e.analysis?.difficultyScore || 0), 0) /
+        Math.max(1, totalAnalyses)
+      : 0;
 
   const stats = [
-    {
-      label: 'Total Uploads',
-      value: '0',
-      icon: 'M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12',
-      color: 'text-accent-blue',
-    },
-    {
-      label: 'Ratings Given',
-      value: '0',
-      icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z',
-      color: 'text-yellow-400',
-    },
-    {
-      label: 'Analyses Viewed',
-      value: '0',
-      icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
-      color: 'text-green-400',
-    },
+    { key: 'totalUploads', label: t('dashboard.totalUploads'), value: String(totalUploads), icon: Upload, color: 'text-chart-1', bg: 'bg-chart-1/10' },
+    { key: 'analyses', label: 'Analiz tamamlandı', value: String(totalAnalyses), icon: BarChart3, color: 'text-chart-3', bg: 'bg-chart-3/10' },
+    { key: 'avgDifficulty', label: 'Ortalama zorluk', value: avgDifficulty > 0 ? `${avgDifficulty.toFixed(1)}/10` : '—', icon: Gauge, color: 'text-warning', bg: 'bg-warning/10' },
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Welcome */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">
-          Welcome back, <span className="text-accent-cyan">{user?.name}</span>
-        </h1>
-        <p className="text-gray-400 mt-1">Here's an overview of your activity</p>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="flex items-center gap-4 mb-8"
+      >
+        {user && <ProfAvatar name={user.name} size={56} variant="beam" />}
+        <div>
+          <h1 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+            {t('dashboard.welcome', { name: user?.name?.split(' ')[0] || '' })}
+          </h1>
+          <p className="text-muted-foreground mt-1">{t('dashboard.subtitle')}</p>
+        </div>
+      </motion.div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-        {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="bg-navy-light border border-accent/20 rounded-xl p-6 hover:border-accent-blue/30 transition-colors"
-          >
-            <div className="flex items-center gap-4">
-              <svg className={`w-10 h-10 ${stat.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={stat.icon} />
-              </svg>
+        {stats.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <div key={stat.key} className="card-base p-5 flex items-center gap-4">
+              <div className={cn('w-12 h-12 rounded-xl flex items-center justify-center', stat.bg)}>
+                <Icon className={cn('w-6 h-6', stat.color)} />
+              </div>
               <div>
-                <p className="text-2xl font-bold text-white">{stat.value}</p>
-                <p className="text-gray-500 text-sm">{stat.label}</p>
+                <div className="text-2xl font-display font-bold text-foreground">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Recent Uploads */}
-      <div>
-        <h2 className="text-xl font-bold text-white mb-4">Recent Uploads</h2>
-        <div className="bg-navy-light border border-accent/20 rounded-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-accent/20">
-                  <th className="text-left px-6 py-4 text-sm font-medium text-gray-400">Course</th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-gray-400">Type</th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-gray-400">Year</th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-gray-400">Status</th>
-                  <th className="text-left px-6 py-4 text-sm font-medium text-gray-400">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
-                    No uploads yet. Start by uploading your first exam!
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="section-title flex items-center gap-2">
+            <FileText className="w-5 h-5 text-muted-foreground" />
+            {t('dashboard.recentUploads')}
+          </h2>
+          <Link
+            to="/upload"
+            className="text-sm font-medium text-primary hover:opacity-80 flex items-center gap-1.5"
+          >
+            <Upload className="w-4 h-4" />
+            Yeni yükleme
+          </Link>
         </div>
-      </div>
+
+        {loading ? (
+          <div className="card-base p-12 text-center">
+            <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin mx-auto" />
+          </div>
+        ) : exams.length === 0 ? (
+          <div className="card-base p-12 text-center">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-secondary text-muted-foreground mb-3">
+              <Inbox className="w-7 h-7" />
+            </div>
+            <p className="text-foreground font-medium mb-1">{t('dashboard.empty')}</p>
+            <Link
+              to="/upload"
+              className="inline-flex items-center gap-1.5 text-sm text-primary font-medium hover:opacity-80 mt-2"
+            >
+              {t('dashboard.emptyCta')}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {exams.map((exam, i) => (
+              <ExamRow key={exam.id} exam={exam} index={i} />
+            ))}
+          </div>
+        )}
+      </section>
     </div>
+  );
+};
+
+const ExamRow: React.FC<{ exam: Exam; index: number }> = ({ exam, index }) => {
+  const a = exam.analysis;
+  const c = exam.course;
+  const prof = c?.professor;
+
+  const examTypeLabel: Record<string, string> = {
+    MIDTERM: 'Vize',
+    FINAL: 'Final',
+    MAKEUP: 'Bütünleme',
+  };
+
+  const diffColor = a
+    ? a.difficultyScore < 4 ? 'text-success bg-success/10'
+      : a.difficultyScore <= 7 ? 'text-warning bg-warning/10'
+      : 'text-destructive bg-destructive/10'
+    : 'text-muted-foreground bg-secondary';
+
+  const date = new Date(exam.createdAt).toLocaleDateString('tr-TR', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+
+  const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) =>
+    prof ? (
+      <Link to={`/professors/${prof.id}`} className="block">
+        {children}
+      </Link>
+    ) : (
+      <div>{children}</div>
+    );
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.03 }}
+    >
+      <Wrapper>
+        <div className="card-interactive p-4 flex items-center gap-4">
+          <div className="w-10 h-10 rounded-xl bg-primary-soft text-primary flex items-center justify-center shrink-0">
+            <FileText className="w-5 h-5" />
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md bg-secondary text-foreground">
+                {c?.code}
+              </span>
+              <p className="font-medium text-foreground truncate">{c?.name}</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1 text-xs text-muted-foreground">
+              {prof && <span>{prof.name}</span>}
+              <span>·</span>
+              <span>{examTypeLabel[exam.examType] || exam.examType} · {exam.semester} {exam.year}</span>
+              <span className="flex items-center gap-1">
+                <Calendar className="w-3 h-3" />
+                {date}
+              </span>
+            </div>
+          </div>
+
+          {a ? (
+            <div className="hidden sm:flex items-center gap-3 shrink-0">
+              <div className="text-right">
+                <div className="text-xs text-muted-foreground">Soru</div>
+                <div className="text-sm font-semibold text-foreground tabular-nums">
+                  {a.questionCount}
+                </div>
+              </div>
+              <span className={cn('flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium', diffColor)}>
+                <Gauge className="w-3 h-3" />
+                {a.difficultyScore.toFixed(1)}
+              </span>
+            </div>
+          ) : (
+            <span className="text-xs text-muted-foreground">Analiz yok</span>
+          )}
+
+          {prof && (
+            <ArrowRight className="w-4 h-4 text-muted-foreground/50 shrink-0" />
+          )}
+        </div>
+      </Wrapper>
+    </motion.div>
   );
 };
 

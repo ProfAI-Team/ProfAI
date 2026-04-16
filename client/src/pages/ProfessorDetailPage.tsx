@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
+import {
+  GraduationCap,
+  Building2,
+  BookOpen,
+  Star,
+  Scale,
+  FileBarChart2,
+  AlertCircle,
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import AnalysisCard from '../components/AnalysisCard';
 import RatingForm from '../components/RatingForm';
+import ProfAvatar from '../components/Avatar';
 import { professorService } from '../services/professorService';
 import { ratingService } from '../services/ratingService';
 import { Professor, ExamAnalysis, ProfessorRating, Course } from '../types';
+import { cn } from '../lib/utils';
 
 const ProfessorDetailPage: React.FC = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated } = useAuth();
   const [professor, setProfessor] = useState<Professor | null>(null);
@@ -18,7 +32,7 @@ const ProfessorDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (!id) return;
-    const fetchData = async () => {
+    (async () => {
       setLoading(true);
       try {
         const [prof, anal, rats] = await Promise.allSettled([
@@ -26,22 +40,23 @@ const ProfessorDetailPage: React.FC = () => {
           professorService.getAnalysis(id),
           ratingService.getByProfessor(id),
         ]);
-
         if (prof.status === 'fulfilled') setProfessor(prof.value);
-        else setError('Professor not found.');
-
+        else setError(t('common.error'));
         if (anal.status === 'fulfilled') setAnalyses(anal.value);
         if (rats.status === 'fulfilled') setRatings(rats.value);
       } catch {
-        setError('Failed to load professor data.');
+        setError(t('common.error'));
       } finally {
         setLoading(false);
       }
-    };
-    fetchData();
-  }, [id]);
+    })();
+  }, [id, t]);
 
-  const handleRatingSubmit = async (data: { difficulty: number; fairness: number; comment: string }) => {
+  const handleRatingSubmit = async (data: {
+    difficulty: number;
+    fairness: number;
+    comment: string;
+  }) => {
     if (!id) return;
     await ratingService.create({
       professorId: id,
@@ -55,22 +70,28 @@ const ProfessorDetailPage: React.FC = () => {
 
   const avgDifficulty =
     ratings.length > 0
-      ? ratings.reduce((sum, r) => sum + r.difficultyScore, 0) / ratings.length
+      ? ratings.reduce((s, r) => s + r.difficultyScore, 0) / ratings.length
       : 0;
   const avgFairness =
     ratings.length > 0
-      ? ratings.reduce((sum, r) => sum + r.fairnessScore, 0) / ratings.length
+      ? ratings.reduce((s, r) => s + r.fairnessScore, 0) / ratings.length
       : 0;
 
   const courses: Course[] = professor?.courses || [];
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto px-4 py-8">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-accent/20 rounded w-1/3" />
-          <div className="h-5 bg-accent/20 rounded w-1/4" />
-          <div className="h-64 bg-accent/20 rounded-xl" />
+      <div className="max-w-5xl mx-auto px-4 py-10">
+        <div className="space-y-6 animate-pulse">
+          <div className="card-base p-8 flex gap-6">
+            <div className="w-20 h-20 rounded-2xl bg-secondary" />
+            <div className="flex-1 space-y-3">
+              <div className="h-8 bg-secondary rounded w-1/2" />
+              <div className="h-5 bg-secondary rounded w-1/3" />
+              <div className="h-4 bg-secondary rounded w-1/4" />
+            </div>
+          </div>
+          <div className="card-base h-64" />
         </div>
       </div>
     );
@@ -78,49 +99,80 @@ const ProfessorDetailPage: React.FC = () => {
 
   if (error || !professor) {
     return (
-      <div className="max-w-5xl mx-auto px-4 py-16 text-center">
-        <p className="text-red-400 text-lg">{error || 'Professor not found.'}</p>
+      <div className="max-w-3xl mx-auto px-4 py-20">
+        <div className="card-base p-12 text-center">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-destructive/10 text-destructive mb-4">
+            <AlertCircle className="w-7 h-7" />
+          </div>
+          <p className="text-foreground font-medium">{error || t('common.error')}</p>
+          <Link to="/professors" className="btn-secondary mt-4 inline-flex">
+            {t('common.back')}
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-      {/* Header */}
-      <div className="bg-navy-light border border-accent/20 rounded-xl p-6 sm:p-8">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      {/* Hero / Header */}
+      <motion.section
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="card-base p-6 sm:p-8 relative overflow-hidden"
+      >
+        <div className="absolute top-0 right-0 w-72 h-72 bg-primary/[0.05] rounded-full blur-[80px] -z-10" />
         <div className="flex flex-col sm:flex-row items-start gap-6">
-          <div className="w-16 h-16 bg-gradient-to-br from-accent-blue to-accent-cyan rounded-full flex items-center justify-center text-white font-bold text-2xl shrink-0">
-            {professor.name.charAt(0)}
+          <ProfAvatar name={professor.name} size={80} variant="beam" />
+
+          <div className="flex-1 min-w-0">
+            <h1 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+              {professor.name}
+            </h1>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-sm text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <GraduationCap className="w-4 h-4" />
+                {professor.department}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Building2 className="w-4 h-4" />
+                {professor.university}
+              </span>
+            </div>
           </div>
-          <div className="flex-1">
-            <h1 className="text-2xl sm:text-3xl font-bold text-white">{professor.name}</h1>
-            <p className="text-gray-400 mt-1">{professor.department}</p>
-            <p className="text-gray-500 text-sm">{professor.university}</p>
-          </div>
-          <div className="flex gap-4">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-yellow-400">{avgDifficulty.toFixed(1)}</p>
-              <p className="text-xs text-gray-500">Difficulty</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-green-400">{avgFairness.toFixed(1)}</p>
-              <p className="text-xs text-gray-500">Fairness</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-accent-cyan">{ratings.length}</p>
-              <p className="text-xs text-gray-500">Ratings</p>
-            </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-3 sm:gap-5 sm:border-l sm:border-border sm:pl-6">
+            <Stat
+              icon={Star}
+              label={t('professors.detail.averageDifficulty')}
+              value={avgDifficulty > 0 ? avgDifficulty.toFixed(1) : '—'}
+              color="text-warning"
+            />
+            <Stat
+              icon={Scale}
+              label={t('professors.detail.averageFairness')}
+              value={avgFairness > 0 ? avgFairness.toFixed(1) : '—'}
+              color="text-success"
+            />
+            <Stat
+              icon={FileBarChart2}
+              label={t('professors.detail.examCount')}
+              value={String(analyses.length)}
+              color="text-primary"
+            />
           </div>
         </div>
-      </div>
+      </motion.section>
 
-      {/* Analysis */}
+      {/* Analyses */}
       {analyses.length > 0 && (
         <section>
-          <h2 className="text-xl font-bold text-white mb-4">Exam Analysis</h2>
-          <div className="space-y-6">
-            {analyses.map((a) => (
-              <AnalysisCard key={a.id} analysis={a} />
+          <h2 className="section-title mb-4">{t('analysis.title')}</h2>
+          <div className="space-y-5">
+            {analyses.map((a, i) => (
+              <AnalysisCard key={a.id} analysis={a} index={i} />
             ))}
           </div>
         </section>
@@ -129,15 +181,20 @@ const ProfessorDetailPage: React.FC = () => {
       {/* Courses */}
       {courses.length > 0 && (
         <section>
-          <h2 className="text-xl font-bold text-white mb-4">Courses</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <h2 className="section-title mb-4 flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-muted-foreground" />
+            Courses
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {courses.map((course) => (
-              <div
-                key={course.id}
-                className="bg-navy-light border border-accent/20 rounded-xl p-4 hover:border-accent-blue/30 transition-colors"
-              >
-                <h3 className="text-white font-medium">{course.name}</h3>
-                <p className="text-gray-500 text-sm">{course.code}</p>
+              <div key={course.id} className="card-base p-4 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary-soft text-primary flex items-center justify-center font-mono text-xs font-semibold">
+                  {course.code.slice(0, 4)}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-foreground font-medium truncate">{course.name}</p>
+                  <p className="text-xs text-muted-foreground">{course.code}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -145,45 +202,98 @@ const ProfessorDetailPage: React.FC = () => {
       )}
 
       {/* Rating Form */}
-      {isAuthenticated && (
+      {isAuthenticated ? (
         <section>
           <RatingForm onSubmit={handleRatingSubmit} />
         </section>
+      ) : (
+        <div className="card-base p-5 text-center">
+          <p className="text-sm text-muted-foreground">
+            <Link to="/login" className="text-primary font-medium hover:opacity-80">
+              {t('rating.loginRequired')}
+            </Link>
+          </p>
+        </div>
       )}
 
       {/* Existing Ratings */}
       {ratings.length > 0 && (
         <section>
-          <h2 className="text-xl font-bold text-white mb-4">Reviews ({ratings.length})</h2>
-          <div className="space-y-4">
-            {ratings.map((rating) => (
-              <div
+          <h2 className="section-title mb-4">
+            {t('professors.detail.ratingsTitle')}{' '}
+            <span className="text-muted-foreground font-normal text-base">({ratings.length})</span>
+          </h2>
+          <div className="space-y-3">
+            {ratings.map((rating, i) => (
+              <motion.div
                 key={rating.id}
-                className="bg-navy-light border border-accent/20 rounded-xl p-5"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: i * 0.03 }}
+                className="card-base p-5"
               >
-                <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <span className="text-white font-medium text-sm">
+                <div className="flex flex-wrap items-center gap-3 mb-2">
+                  <ProfAvatar name={rating.user?.name || 'A'} size={28} variant="beam" />
+                  <span className="text-sm font-medium text-foreground">
                     {rating.user?.name || 'Anonymous'}
                   </span>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                    Difficulty: {rating.difficultyScore}/5
-                  </span>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/30">
-                    Fairness: {rating.fairnessScore}/5
-                  </span>
-                  <span className="text-gray-600 text-xs ml-auto">
+                  <Chip color="warning" icon={Star} text={`${rating.difficultyScore}/5`} />
+                  <Chip color="success" icon={Scale} text={`${rating.fairnessScore}/5`} />
+                  <span className="text-xs text-muted-foreground ml-auto">
                     {new Date(rating.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 {rating.comment && (
-                  <p className="text-gray-400 text-sm">{rating.comment}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed mt-2">
+                    {rating.comment}
+                  </p>
                 )}
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
       )}
     </div>
+  );
+};
+
+const Stat: React.FC<{
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string;
+  color: string;
+}> = ({ icon: Icon, label, value, color }) => (
+  <div className="text-center">
+    <div className={cn('flex items-center justify-center gap-1', color)}>
+      <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+      <span className="text-xl sm:text-2xl font-display font-bold">{value}</span>
+    </div>
+    <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 leading-tight">
+      {label}
+    </p>
+  </div>
+);
+
+const Chip: React.FC<{
+  color: 'warning' | 'success' | 'primary';
+  icon: React.ComponentType<{ className?: string }>;
+  text: string;
+}> = ({ color, icon: Icon, text }) => {
+  const colors = {
+    warning: 'bg-warning/10 text-warning',
+    success: 'bg-success/10 text-success',
+    primary: 'bg-primary/10 text-primary',
+  };
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium',
+        colors[color]
+      )}
+    >
+      <Icon className="w-3 h-3" />
+      {text}
+    </span>
   );
 };
 

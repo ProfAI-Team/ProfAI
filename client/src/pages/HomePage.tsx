@@ -1,128 +1,233 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
+import {
+  Upload,
+  Sparkles,
+  TrendingUp,
+  ArrowRight,
+  Users,
+  FileText,
+  GraduationCap,
+} from 'lucide-react';
 import SearchBar from '../components/SearchBar';
 import ProfessorCard from '../components/ProfessorCard';
 import { professorService } from '../services/professorService';
 import { Professor } from '../types';
+import { cn } from '../lib/utils';
 
 const HomePage: React.FC = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetch = async () => {
+    let cancelled = false;
+    (async () => {
       try {
         const data = await professorService.getAll();
-        setProfessors(data.slice(0, 6));
+        if (!cancelled) setProfessors(data.slice(0, 6));
       } catch {
-        // API not available yet - that's ok for MVP
+        // ignore
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
+    })();
+    return () => {
+      cancelled = true;
     };
-    fetch();
   }, []);
 
   const handleSearch = useCallback(
     (query: string) => {
-      if (query.trim()) {
-        navigate(`/professors?search=${encodeURIComponent(query)}`);
-      }
+      if (query.trim()) navigate(`/professors?search=${encodeURIComponent(query)}`);
     },
     [navigate]
   );
 
+  const stats = [
+    { key: 'professors', value: '150+', icon: Users, color: 'text-chart-1', bg: 'bg-chart-1/10' },
+    { key: 'exams', value: '1,200+', icon: FileText, color: 'text-chart-3', bg: 'bg-chart-3/10' },
+    { key: 'students', value: '800+', icon: GraduationCap, color: 'text-chart-2', bg: 'bg-chart-2/10' },
+  ];
+
+  const steps = [
+    { key: 'step1', icon: Upload, color: 'bg-chart-1' },
+    { key: 'step2', icon: Sparkles, color: 'bg-chart-5' },
+    { key: 'step3', icon: TrendingUp, color: 'bg-chart-3' },
+  ];
+
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
+    <div>
+      {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-navy via-accent to-navy-light opacity-80" />
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-accent-blue/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-10 right-10 w-96 h-96 bg-accent-cyan/10 rounded-full blur-3xl" />
+        {/* Decorative gradient blobs */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -left-20 w-[36rem] h-[36rem] bg-primary/[0.08] dark:bg-primary/10 rounded-full blur-[120px]" />
+          <div className="absolute -top-20 -right-32 w-[32rem] h-[32rem] bg-chart-2/[0.08] dark:bg-chart-2/10 rounded-full blur-[120px]" />
         </div>
-        <div className="relative max-w-7xl mx-auto px-4 py-24 sm:py-32 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            How does your professor
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 sm:pt-28 sm:pb-24 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-soft text-primary text-xs font-semibold mb-6 border border-primary/15"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            AI-powered exam analysis
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.05] mb-6"
+          >
+            {t('home.hero.title1')}
             <br />
-            <span className="bg-gradient-to-r from-accent-blue to-accent-cyan bg-clip-text text-transparent">
-              ask questions?
-            </span>
-          </h1>
-          <p className="text-gray-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10">
-            Analyze exam patterns, understand question styles, and prepare smarter
-            with AI-powered insights.
-          </p>
-          <div className="flex justify-center">
+            <span className="text-gradient">{t('home.hero.title2')}</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-10"
+          >
+            {t('home.hero.subtitle')}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="flex justify-center mb-6"
+          >
             <SearchBar
-              placeholder="Search for a professor..."
+              size="lg"
+              placeholder={t('home.hero.searchPlaceholder')}
               onSearch={handleSearch}
             />
+          </motion.div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link to="/upload" className="btn-primary">
+              <Upload className="w-4 h-4" />
+              {t('home.hero.ctaPrimary')}
+            </Link>
+            <Link to="/professors" className="btn-secondary">
+              {t('home.hero.ctaSecondary')}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="max-w-7xl mx-auto px-4 -mt-8 relative z-10">
+      {/* Stats */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-2">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {[
-            { label: 'Professors', value: '150+', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z' },
-            { label: 'Exams Analyzed', value: '1,200+', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
-            { label: 'AI Analyses', value: '800+', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-navy-light border border-accent/20 rounded-xl p-6 text-center hover:border-accent-blue/30 transition-colors"
-            >
-              <svg className="w-8 h-8 mx-auto text-accent-blue mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={stat.icon} />
-              </svg>
-              <p className="text-2xl font-bold text-white">{stat.value}</p>
-              <p className="text-gray-400 text-sm mt-1">{stat.label}</p>
-            </div>
-          ))}
+          {stats.map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <div
+                key={stat.key}
+                className="card-base p-5 flex items-center gap-4"
+              >
+                <div className={cn('w-12 h-12 rounded-xl flex items-center justify-center', stat.bg)}>
+                  <Icon className={cn('w-6 h-6', stat.color)} />
+                </div>
+                <div>
+                  <div className="text-2xl font-display font-bold text-foreground">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {t(`home.stats.${stat.key}`)}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
+        <div className="text-center mb-12">
+          <h2 className="section-title text-3xl sm:text-4xl mb-3">
+            {t('home.howItWorks.title')}
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            {t('home.howItWorks.subtitle')}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 relative">
+          {steps.map((step, i) => {
+            const Icon = step.icon;
+            return (
+              <div
+                key={step.key}
+                className="card-base p-6 relative"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className={cn('w-11 h-11 rounded-xl text-white flex items-center justify-center', step.color)}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <span className="text-xs font-mono font-semibold text-muted-foreground/60">
+                    0{i + 1}
+                  </span>
+                </div>
+                <h3 className="font-display font-semibold text-foreground text-lg mb-1.5">
+                  {t(`home.howItWorks.${step.key}Title`)}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {t(`home.howItWorks.${step.key}Desc`)}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </section>
 
       {/* Popular Professors */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-white">Popular Professors</h2>
-          <button
-            onClick={() => navigate('/professors')}
-            className="text-accent-blue hover:text-accent-cyan text-sm font-medium transition-colors"
+          <h2 className="section-title">{t('home.popular.title')}</h2>
+          <Link
+            to="/professors"
+            className="text-sm font-medium text-primary hover:opacity-80 transition-opacity flex items-center gap-1.5"
           >
-            View All &rarr;
-          </button>
+            {t('home.popular.viewAll')}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-navy-light border border-accent/20 rounded-xl p-6 animate-pulse">
+              <div key={i} className="card-base p-5 animate-pulse">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-accent/20 rounded-full" />
-                  <div className="flex gap-2">
-                    <div className="w-16 h-6 bg-accent/20 rounded-full" />
-                    <div className="w-16 h-6 bg-accent/20 rounded-full" />
-                  </div>
+                  <div className="w-12 h-12 bg-secondary rounded-full" />
+                  <div className="w-8 h-8 bg-secondary rounded-lg" />
                 </div>
-                <div className="h-5 bg-accent/20 rounded w-3/4 mb-2" />
-                <div className="h-4 bg-accent/20 rounded w-1/2 mb-1" />
-                <div className="h-3 bg-accent/20 rounded w-1/3" />
+                <div className="h-5 bg-secondary rounded w-3/4 mb-2" />
+                <div className="h-4 bg-secondary rounded w-1/2 mb-1" />
+                <div className="h-3 bg-secondary rounded w-1/3 mt-4 pt-3" />
               </div>
             ))}
           </div>
         ) : professors.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {professors.map((prof) => (
-              <ProfessorCard key={prof.id} professor={prof} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {professors.map((prof, i) => (
+              <ProfessorCard key={prof.id} professor={prof} index={i} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500">No professors found yet. Be the first to add one!</p>
+          <div className="card-base p-12 text-center">
+            <p className="text-muted-foreground">{t('home.empty')}</p>
           </div>
         )}
       </section>

@@ -1,0 +1,199 @@
+{
+  "brand": {
+    "name": "ProfAI",
+    "tagline": "Profesörünüzün sınav stilini tanıyın"
+  },
+  "nav": {
+    "home": "Ana Sayfa",
+    "professors": "Profesörler",
+    "upload": "Yükle",
+    "dashboard": "Panel",
+    "signIn": "Giriş Yap",
+    "signUp": "Ücretsiz Başla",
+    "signOut": "Çıkış Yap",
+    "menu": "Menü"
+  },
+  "footer": {
+    "tagline": "Profesörünüzün soru sorma stilini yapay zeka ile çözümleyin. Geçmiş sınavları yükleyin, akıllı içgörülerle hazırlanın.",
+    "explore": "Keşfet",
+    "account": "Hesap",
+    "professors": "Profesörler",
+    "uploadExam": "Sınav Yükle",
+    "myDashboard": "Panelim",
+    "signIn": "Giriş Yap",
+    "signUp": "Üye Ol",
+    "copyright": "© {{year}} ProfAI · Öğrenciler için, öğrenciler tarafından.",
+    "sourceCode": "Kaynak kod"
+  },
+  "theme": {
+    "switchToDark": "Koyu temaya geç",
+    "switchToLight": "Açık temaya geç"
+  },
+  "language": {
+    "label": "Dil",
+    "english": "English",
+    "turkish": "Türkçe"
+  },
+  "home": {
+    "hero": {
+      "title1": "Profesörünüz nasıl",
+      "title2": "soru soruyor?",
+      "subtitle": "Sınav kalıplarını analiz edin, soru stillerini çözün ve yapay zeka destekli içgörülerle daha akıllı hazırlanın — öğrenciler için tasarlandı.",
+      "searchPlaceholder": "Profesör adı ile arayın…",
+      "ctaPrimary": "İlk sınavınızı yükleyin",
+      "ctaSecondary": "Profesörlere göz atın"
+    },
+    "stats": {
+      "professors": "Profesör",
+      "exams": "Analiz Edilen Sınav",
+      "students": "Yardım Edilen Öğrenci"
+    },
+    "popular": {
+      "title": "Popüler profesörler",
+      "viewAll": "Tümünü gör"
+    },
+    "empty": "Henüz profesör yok. İlk sen ekle!",
+    "howItWorks": {
+      "title": "ProfAI nasıl çalışır?",
+      "subtitle": "Soru işaretinden netliğe üç adım.",
+      "step1Title": "Geçmiş sınavları yükle",
+      "step1Desc": "Profesörünüze ait herhangi bir geçmiş sınavın PDF, JPG veya PNG'sini yükleyin.",
+      "step2Title": "Yapay zeka analizini al",
+      "step2Desc": "Yapay zekamız soru tiplerini, konuları ve zorluğu detaylı çözümler.",
+      "step3Title": "Daha akıllı çalış",
+      "step3Desc": "Dönem dönem desenleri görün ve gelmesi muhtemel sorulara hazırlanın."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Tekrar hoş geldiniz",
+      "subtitle": "Öğrenme yolculuğunuza devam etmek için giriş yapın.",
+      "email": "E-posta",
+      "password": "Şifre",
+      "submit": "Giriş Yap",
+      "loading": "Giriş yapılıyor…",
+      "noAccount": "Hesabınız yok mu?",
+      "signUpLink": "Hemen oluşturun"
+    },
+    "register": {
+      "title": "ProfAI'ye katılın",
+      "subtitle": "Sonsuza kadar ücretsiz. Kredi kartı gerekmez.",
+      "name": "Ad Soyad",
+      "email": "E-posta",
+      "password": "Şifre",
+      "university": "Üniversite",
+      "department": "Bölüm",
+      "submit": "Hesap Oluştur",
+      "loading": "Hesap oluşturuluyor…",
+      "hasAccount": "Zaten hesabınız var mı?",
+      "signInLink": "Giriş yapın"
+    },
+    "errors": {
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+      "invalidCredentials": "Geçersiz e-posta veya şifre.",
+      "emailExists": "Bu e-posta ile bir hesap zaten mevcut."
+    }
+  },
+  "professors": {
+    "listTitle": "Profesörler",
+    "search": "Profesör adı ile arayın…",
+    "filters": {
+      "allDepartments": "Tüm bölümler",
+      "allUniversities": "Tüm üniversiteler"
+    },
+    "empty": "Filtrelerinize uygun profesör bulunamadı.",
+    "card": {
+      "courses": "{{count}} ders",
+      "courses_other": "{{count}} ders",
+      "ratings": "{{count}} oy",
+      "ratings_other": "{{count}} oy",
+      "noRatings": "Henüz oy yok"
+    },
+    "detail": {
+      "noCourses": "Bu profesör için henüz ders yok.",
+      "addRating": "Bu profesörü değerlendir",
+      "ratingsTitle": "Öğrenci değerlendirmeleri",
+      "noRatingsYet": "Bu profesörü ilk değerlendiren sen ol.",
+      "averageDifficulty": "Ortalama zorluk",
+      "averageFairness": "Ortalama adillik",
+      "totalRatings": "Toplam değerlendirme",
+      "examCount": "Analiz edilen sınav"
+    }
+  },
+  "analysis": {
+    "title": "Soru stili analizi",
+    "questionCount": "Toplam soru",
+    "difficulty": "Zorluk",
+    "questionTypes": "Soru tipleri",
+    "topicDistribution": "Konu dağılımı",
+    "summary": "Özet",
+    "examLabel": "{{type}} · {{semester}} {{year}}",
+    "types": {
+      "multipleChoice": "Çoktan seçmeli",
+      "openEnded": "Klasik / Açık uçlu",
+      "trueFalse": "Doğru / Yanlış"
+    }
+  },
+  "upload": {
+    "title": "Sınav yükle",
+    "subtitle": "Arkadaşlarına yardım et — geçmiş sınavı yükle, anında yapay zeka analizini al.",
+    "selectCourse": "Ders",
+    "examType": "Sınav tipi",
+    "year": "Yıl",
+    "semester": "Dönem",
+    "fileLabel": "Sınav dosyası",
+    "fileHint": "PDF, JPG veya PNG · maks. 10 MB",
+    "drag": "Sürükle bırak veya tıkla",
+    "submit": "Yükle ve Analiz Et",
+    "loading": "Analiz ediliyor…",
+    "success": "Sınav yüklendi ve analiz edildi!",
+    "examTypes": {
+      "MIDTERM": "Vize",
+      "FINAL": "Final",
+      "MAKEUP": "Bütünleme"
+    },
+    "semesters": {
+      "fall": "Güz",
+      "spring": "Bahar",
+      "summer": "Yaz"
+    }
+  },
+  "dashboard": {
+    "welcome": "Tekrar hoş geldin, {{name}}",
+    "subtitle": "İşte aktivitenin özeti.",
+    "totalUploads": "Toplam yükleme",
+    "ratingsGiven": "Verilen oy",
+    "analysesViewed": "Görüntülenen analiz",
+    "recentUploads": "Son yüklemeler",
+    "table": {
+      "course": "Ders",
+      "type": "Tip",
+      "year": "Yıl",
+      "status": "Durum",
+      "date": "Tarih"
+    },
+    "empty": "Henüz yükleme yok. İlk sınavını yükleyerek başla!",
+    "emptyCta": "Sınav yükle"
+  },
+  "rating": {
+    "title": "Bu profesörü değerlendir",
+    "difficulty": "Zorluk",
+    "fairness": "Adillik",
+    "comment": "Yorum (isteğe bağlı)",
+    "submit": "Değerlendirmeyi gönder",
+    "loading": "Gönderiliyor…",
+    "success": "Geri bildirim için teşekkürler!",
+    "loginRequired": "Değerlendirme yapmak için giriş yapın."
+  },
+  "common": {
+    "loading": "Yükleniyor…",
+    "error": "Bir şeyler ters gitti.",
+    "retry": "Tekrar dene",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "delete": "Sil",
+    "back": "Geri",
+    "viewMore": "Daha fazla",
+    "comingSoon": "Yakında"
+  }
+}

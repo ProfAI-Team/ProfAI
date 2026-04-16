@@ -26,4 +26,9 @@ export const examService = {
     const res = await api.get(`/exams/course/${courseId}`);
     return res.data.exams || [];
   },
+
+  async getMine(): Promise<Exam[]> {
+    const res = await api.get('/exams/mine');
+    return res.data.exams || [];
+  },
 };

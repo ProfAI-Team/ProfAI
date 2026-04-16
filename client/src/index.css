@@ -3,47 +3,167 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Light theme — Edu-Premium */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 262 83% 58%;          /* vibrant violet */
+    --primary-foreground: 0 0% 100%;
+    --primary-soft: 262 100% 96%;
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 220 14% 96%;
+    --accent-foreground: 222 47% 11%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262 83% 58%;
+
+    --radius: 0.75rem;
+
+    /* Chart palette — distinctive but harmonious */
+    --chart-1: 262 83% 58%;   /* violet */
+    --chart-2: 192 91% 47%;   /* cyan */
+    --chart-3: 142 71% 45%;   /* emerald */
+    --chart-4: 38 92% 50%;    /* amber */
+    --chart-5: 340 82% 60%;   /* pink */
+    --chart-6: 24 95% 53%;    /* orange */
+  }
+
+  .dark {
+    /* Dark theme — Edu-Premium */
+    --background: 224 47% 5%;
+    --foreground: 210 20% 98%;
+
+    --card: 224 40% 8%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 224 40% 8%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 263 90% 70%;          /* brighter violet for dark */
+    --primary-foreground: 224 47% 5%;
+    --primary-soft: 263 50% 18%;
+
+    --secondary: 222 30% 14%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 222 30% 14%;
+    --muted-foreground: 220 10% 65%;
+
+    --accent: 222 30% 14%;
+    --accent-foreground: 210 20% 98%;
+
+    --success: 142 65% 55%;
+    --success-foreground: 224 47% 5%;
+
+    --warning: 38 90% 60%;
+    --warning-foreground: 224 47% 5%;
+
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 222 25% 18%;
+    --input: 222 25% 18%;
+    --ring: 263 90% 70%;
+
+    --chart-1: 263 90% 70%;
+    --chart-2: 192 95% 60%;
+    --chart-3: 142 65% 55%;
+    --chart-4: 38 95% 65%;
+    --chart-5: 340 85% 70%;
+    --chart-6: 24 95% 65%;
+  }
+
   * {
+    @apply border-border;
     box-sizing: border-box;
   }
 
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    @apply bg-navy-dark text-gray-100 antialiased;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-      Oxygen, Ubuntu, Cantarell, sans-serif;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
+    height: 10px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-navy-dark;
+    @apply bg-transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-accent/40 rounded-full;
+    @apply bg-border rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-accent/60;
+    @apply bg-muted-foreground/30;
   }
 
   select option {
-    @apply bg-navy text-gray-200;
+    @apply bg-popover text-popover-foreground;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply px-6 py-2.5 bg-gradient-to-r from-accent-blue to-accent-cyan text-white font-medium rounded-lg hover:opacity-90 transition-opacity;
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-medium rounded-lg shadow-soft hover:opacity-90 active:scale-[0.98] transition-all;
   }
 
-  .card {
-    @apply bg-navy-light border border-accent/20 rounded-xl p-6 hover:border-accent-blue/30 transition-colors;
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-secondary text-secondary-foreground font-medium rounded-lg hover:bg-secondary/80 active:scale-[0.98] transition-all;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-all;
+  }
+
+  .card-base {
+    @apply bg-card text-card-foreground border border-border rounded-2xl shadow-soft transition-shadow;
+  }
+
+  .card-interactive {
+    @apply card-base hover:shadow-elevated hover:border-primary/30 transition-all duration-200;
   }
 
   .input-field {
-    @apply w-full bg-navy border border-accent/30 rounded-lg px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-accent-blue/50 focus:ring-1 focus:ring-accent-blue/50 transition-colors;
+    @apply w-full bg-background border border-input rounded-lg px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 focus:border-ring transition-all;
+  }
+
+  .section-title {
+    @apply text-2xl font-display font-bold text-foreground tracking-tight;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-chart-2;
   }
 }

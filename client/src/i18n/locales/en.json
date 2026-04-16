@@ -1,0 +1,199 @@
+{
+  "brand": {
+    "name": "ProfAI",
+    "tagline": "Know your professor's exam style"
+  },
+  "nav": {
+    "home": "Home",
+    "professors": "Professors",
+    "upload": "Upload",
+    "dashboard": "Dashboard",
+    "signIn": "Sign in",
+    "signUp": "Get started free",
+    "signOut": "Sign out",
+    "menu": "Menu"
+  },
+  "footer": {
+    "tagline": "Decode your professor's question style with AI. Upload past exams, study smarter with intelligent insights.",
+    "explore": "Explore",
+    "account": "Account",
+    "professors": "Professors",
+    "uploadExam": "Upload Exam",
+    "myDashboard": "My Dashboard",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "copyright": "© {{year}} ProfAI · Built for students, by students.",
+    "sourceCode": "Source code"
+  },
+  "theme": {
+    "switchToDark": "Switch to dark mode",
+    "switchToLight": "Switch to light mode"
+  },
+  "language": {
+    "label": "Language",
+    "english": "English",
+    "turkish": "Türkçe"
+  },
+  "home": {
+    "hero": {
+      "title1": "How does your professor",
+      "title2": "ask questions?",
+      "subtitle": "Analyze exam patterns, decode question styles, and prepare smarter with AI-powered insights — built for students.",
+      "searchPlaceholder": "Search for a professor by name…",
+      "ctaPrimary": "Upload your first exam",
+      "ctaSecondary": "Browse professors"
+    },
+    "stats": {
+      "professors": "Professors",
+      "exams": "Exams analyzed",
+      "students": "Students helped"
+    },
+    "popular": {
+      "title": "Popular professors",
+      "viewAll": "View all"
+    },
+    "empty": "No professors yet. Be the first to add one!",
+    "howItWorks": {
+      "title": "How ProfAI works",
+      "subtitle": "Three steps from question marks to clarity.",
+      "step1Title": "Upload past exams",
+      "step1Desc": "Drop a PDF, JPG or PNG of any past exam from your professor.",
+      "step2Title": "Get AI analysis",
+      "step2Desc": "Our AI breaks down question types, topics covered and difficulty.",
+      "step3Title": "Study smarter",
+      "step3Desc": "See patterns across semesters and prepare for what's likely to come."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue your learning journey.",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "loading": "Signing in…",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Create one"
+    },
+    "register": {
+      "title": "Join ProfAI",
+      "subtitle": "Free forever. No credit card needed.",
+      "name": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "university": "University",
+      "department": "Department",
+      "submit": "Create account",
+      "loading": "Creating account…",
+      "hasAccount": "Already have an account?",
+      "signInLink": "Sign in"
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "invalidCredentials": "Invalid email or password.",
+      "emailExists": "An account with this email already exists."
+    }
+  },
+  "professors": {
+    "listTitle": "Professors",
+    "search": "Search professors by name…",
+    "filters": {
+      "allDepartments": "All departments",
+      "allUniversities": "All universities"
+    },
+    "empty": "No professors match your filters.",
+    "card": {
+      "courses": "{{count}} course",
+      "courses_other": "{{count}} courses",
+      "ratings": "{{count}} rating",
+      "ratings_other": "{{count}} ratings",
+      "noRatings": "No ratings yet"
+    },
+    "detail": {
+      "noCourses": "No courses yet for this professor.",
+      "addRating": "Rate this professor",
+      "ratingsTitle": "Student ratings",
+      "noRatingsYet": "Be the first to rate this professor.",
+      "averageDifficulty": "Avg. difficulty",
+      "averageFairness": "Avg. fairness",
+      "totalRatings": "Total ratings",
+      "examCount": "Exams analyzed"
+    }
+  },
+  "analysis": {
+    "title": "Question style analysis",
+    "questionCount": "Total questions",
+    "difficulty": "Difficulty",
+    "questionTypes": "Question types",
+    "topicDistribution": "Topic distribution",
+    "summary": "Summary",
+    "examLabel": "{{type}} · {{semester}} {{year}}",
+    "types": {
+      "multipleChoice": "Multiple choice",
+      "openEnded": "Open-ended",
+      "trueFalse": "True/False"
+    }
+  },
+  "upload": {
+    "title": "Upload an exam",
+    "subtitle": "Help your peers — upload a past exam and get instant AI analysis.",
+    "selectCourse": "Course",
+    "examType": "Exam type",
+    "year": "Year",
+    "semester": "Semester",
+    "fileLabel": "Exam file",
+    "fileHint": "PDF, JPG or PNG · max 10 MB",
+    "drag": "Drag & drop or click to browse",
+    "submit": "Upload & analyze",
+    "loading": "Analyzing…",
+    "success": "Exam uploaded and analyzed successfully!",
+    "examTypes": {
+      "MIDTERM": "Midterm",
+      "FINAL": "Final",
+      "MAKEUP": "Make-up"
+    },
+    "semesters": {
+      "fall": "Fall",
+      "spring": "Spring",
+      "summer": "Summer"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {{name}}",
+    "subtitle": "Here's an overview of your activity.",
+    "totalUploads": "Total uploads",
+    "ratingsGiven": "Ratings given",
+    "analysesViewed": "Analyses viewed",
+    "recentUploads": "Recent uploads",
+    "table": {
+      "course": "Course",
+      "type": "Type",
+      "year": "Year",
+      "status": "Status",
+      "date": "Date"
+    },
+    "empty": "No uploads yet. Start by uploading your first exam!",
+    "emptyCta": "Upload an exam"
+  },
+  "rating": {
+    "title": "Rate this professor",
+    "difficulty": "Difficulty",
+    "fairness": "Fairness",
+    "comment": "Comment (optional)",
+    "submit": "Submit rating",
+    "loading": "Submitting…",
+    "success": "Thanks for your feedback!",
+    "loginRequired": "Sign in to leave a rating."
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong.",
+    "retry": "Try again",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "back": "Back",
+    "viewMore": "View more",
+    "comingSoon": "Coming soon"
+  }
+}

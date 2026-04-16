@@ -2,8 +2,15 @@ import api from './api';
 import { Course } from '../types';
 
 export const courseService = {
-  async getAll(): Promise<Course[]> {
-    const res = await api.get('/courses');
+  async getAll(params?: {
+    search?: string;
+    university?: string;
+    professorId?: string;
+    limit?: number;
+  }): Promise<Course[]> {
+    const res = await api.get('/courses', {
+      params: { limit: 50, ...params },
+    });
     return res.data.courses || [];
   },
 

@@ -60,8 +60,8 @@ export const uploadExam = async (req: Request, res: Response): Promise<void> => 
       },
     });
 
-    // Run analysis (mock)
-    const analysisResult = await analyzeExam(fileUrl);
+    // Run analysis (Gemini, with mock fallback on error)
+    const analysisResult = await analyzeExam(req.file.path, req.file.mimetype);
 
     const analysis = await prisma.examAnalysis.create({
       data: {
@@ -83,6 +83,36 @@ export const uploadExam = async (req: Request, res: Response): Promise<void> => 
     });
   } catch (error) {
     console.error("Upload exam error:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+export const getMyExams = async (req: Request, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ error: "Not authenticated." });
+      return;
+    }
+
+    const exams = await prisma.exam.findMany({
+      where: { uploadedById: req.user.id },
+      include: {
+        analysis: true,
+        course: {
+          include: {
+            professor: {
+              select: { id: true, name: true, department: true, university: true },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    });
+
+    res.json({ exams });
+  } catch (error) {
+    console.error("Get my exams error:", error);
     res.status(500).json({ error: "Internal server error." });
   }
 };

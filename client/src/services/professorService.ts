@@ -24,9 +24,63 @@ export const professorService = {
     search?: string;
     department?: string;
     university?: string;
+    limit?: number;
+    page?: number;
   }): Promise<Professor[]> {
-    const res = await api.get('/professors', { params });
+    const res = await api.get('/professors', {
+      params: { limit: 100, ...params },
+    });
     return res.data.professors || [];
+  },
+
+  async getPaged(params?: {
+    search?: string;
+    department?: string;
+    university?: string;
+    city?: string;
+    sort?: string;
+    limit?: number;
+    page?: number;
+  }): Promise<{ professors: Professor[]; total: number; page: number; totalPages: number }> {
+    const res = await api.get('/professors', {
+      params: { limit: 30, ...params },
+    });
+    const { professors = [], pagination = {} } = res.data;
+    return {
+      professors,
+      total: pagination.total || professors.length,
+      page: pagination.page || 1,
+      totalPages: pagination.totalPages || 1,
+    };
+  },
+
+  async getFilterOptions(): Promise<{
+    universities: Array<{ name: string; count: number; city: string | null }>;
+    departments: Array<{ name: string; count: number }>;
+    cities: Array<{ name: string; count: number }>;
+  }> {
+    const res = await api.get('/professors/filters');
+    // Backward compat: old API returned plain string arrays
+    const normalize = (arr: any[]) =>
+      arr.map((item) => (typeof item === 'string' ? { name: item, count: 0 } : item));
+    return {
+      universities: normalize(res.data.universities || []),
+      departments: normalize(res.data.departments || []),
+      cities: res.data.cities || [],
+    };
+  },
+
+  async getDiscovery(university?: string): Promise<{
+    topRated: Professor[];
+    byUserUni: Professor[];
+  }> {
+    const res = await api.get('/professors/discovery', {
+      params: university ? { university } : undefined,
+    });
+    return {
+      topRated: res.data.topRated || [],
+      byUserUni: res.data.byUserUni || [],
+    };
   },
 
   async getById(id: string): Promise<Professor> {

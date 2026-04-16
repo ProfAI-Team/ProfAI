@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -14,9 +15,10 @@ import DashboardPage from './pages/DashboardPage';
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="min-h-screen flex flex-col bg-navy-dark">
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <div className="min-h-screen flex flex-col bg-background text-foreground">
           <Navbar />
           <main className="flex-1">
             <Routes>
@@ -43,10 +45,11 @@ const App: React.FC = () => {
               />
             </Routes>
           </main>
-          <Footer />
-        </div>
-      </Router>
-    </AuthProvider>
+            <Footer />
+          </div>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 };
 

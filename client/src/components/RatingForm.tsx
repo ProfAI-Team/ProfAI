@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
+import { Star, CheckCircle2, AlertCircle } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 interface Props {
   onSubmit: (data: { difficulty: number; fairness: number; comment: string }) => Promise<void>;
 }
 
 const RatingForm: React.FC<Props> = ({ onSubmit }) => {
+  const { t } = useTranslation();
   const [difficulty, setDifficulty] = useState(3);
   const [fairness, setFairness] = useState(3);
   const [comment, setComment] = useState('');
@@ -12,18 +17,9 @@ const RatingForm: React.FC<Props> = ({ onSubmit }) => {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const validate = (): boolean => {
-    const errs: Record<string, string> = {};
-    if (comment.trim().length < 10) {
-      errs.comment = 'Comment must be at least 10 characters';
-    }
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
+    setErrors({});
 
     setSubmitting(true);
     try {
@@ -34,88 +30,95 @@ const RatingForm: React.FC<Props> = ({ onSubmit }) => {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch {
-      setErrors({ form: 'Failed to submit rating. Please try again.' });
+      setErrors({ form: t('common.error') });
     } finally {
       setSubmitting(false);
     }
   };
 
+  const StarRating: React.FC<{
+    label: string;
+    value: number;
+    onChange: (v: number) => void;
+  }> = ({ label, value, onChange }) => (
+    <div>
+      <label className="block text-sm font-medium text-foreground mb-2">
+        {label}{' '}
+        <span className="text-muted-foreground font-normal text-xs">{value}/5</span>
+      </label>
+      <div className="flex items-center gap-1.5">
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button
+            key={n}
+            type="button"
+            onClick={() => onChange(n)}
+            className="p-1.5 rounded-md hover:bg-secondary transition-colors group"
+            aria-label={`${label} ${n}/5`}
+          >
+            <Star
+              className={cn(
+                'w-6 h-6 transition-all',
+                n <= value
+                  ? 'text-warning fill-warning'
+                  : 'text-muted-foreground/40 group-hover:text-warning'
+              )}
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
-    <form onSubmit={handleSubmit} className="bg-navy-light border border-accent/20 rounded-xl p-6">
-      <h3 className="text-lg font-semibold text-white mb-4">Rate This Professor</h3>
+    <form onSubmit={handleSubmit} className="card-base p-6">
+      <h3 className="font-display text-lg font-semibold text-foreground mb-5">
+        {t('rating.title')}
+      </h3>
 
       {success && (
-        <div className="mb-4 p-3 bg-green-500/20 border border-green-500/30 rounded-lg text-green-400 text-sm">
-          Rating submitted successfully!
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-4 flex items-center gap-2 p-3 rounded-lg bg-success/10 border border-success/20 text-success text-sm"
+        >
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
+          {t('rating.success')}
+        </motion.div>
       )}
 
       {errors.form && (
-        <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
+        <div className="mb-4 flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+          <AlertCircle className="w-4 h-4 shrink-0" />
           {errors.form}
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-2">
-            Difficulty: {difficulty}/5
-          </label>
-          <input
-            type="range"
-            min={1}
-            max={5}
-            step={1}
-            value={difficulty}
-            onChange={(e) => setDifficulty(Number(e.target.value))}
-            className="w-full accent-accent-blue"
-          />
-          <div className="flex justify-between text-xs text-gray-500 mt-1">
-            <span>Easy</span>
-            <span>Hard</span>
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-2">
-            Fairness: {fairness}/5
-          </label>
-          <input
-            type="range"
-            min={1}
-            max={5}
-            step={1}
-            value={fairness}
-            onChange={(e) => setFairness(Number(e.target.value))}
-            className="w-full accent-accent-blue"
-          />
-          <div className="flex justify-between text-xs text-gray-500 mt-1">
-            <span>Unfair</span>
-            <span>Very Fair</span>
-          </div>
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+        <StarRating label={t('rating.difficulty')} value={difficulty} onChange={setDifficulty} />
+        <StarRating label={t('rating.fairness')} value={fairness} onChange={setFairness} />
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-400 mb-2">Comment</label>
+      <div className="mb-5">
+        <label className="block text-sm font-medium text-foreground mb-2">
+          {t('rating.comment')}
+        </label>
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          placeholder="Share your experience with this professor's exams..."
-          rows={4}
-          className="w-full bg-navy border border-accent/30 rounded-lg px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-accent-blue/50 focus:ring-1 focus:ring-accent-blue/50 resize-none transition-colors"
+          rows={3}
+          className={cn(
+            'w-full input-field resize-none',
+            errors.comment && 'border-destructive focus:ring-destructive/40'
+          )}
         />
-        {errors.comment && (
-          <p className="text-red-400 text-xs mt-1">{errors.comment}</p>
-        )}
       </div>
 
       <button
         type="submit"
         disabled={submitting}
-        className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-accent-blue to-accent-cyan text-white font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        className="btn-primary disabled:opacity-50 disabled:pointer-events-none"
       >
-        {submitting ? 'Submitting...' : 'Submit Rating'}
+        {submitting ? t('rating.loading') : t('rating.submit')}
       </button>
     </form>
   );

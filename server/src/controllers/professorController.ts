@@ -1,36 +1,89 @@
 import { Request, Response } from "express";
 import prisma from "../lib/prisma";
+import { TURKISH_UNIVERSITIES } from "../data/turkish-universities";
+
+// University → city lookup table (from data file)
+const UNIVERSITY_TO_CITY = new Map<string, string>(
+  TURKISH_UNIVERSITIES.map((u) => [u.name, u.city])
+);
+
+function buildWhere(params: {
+  search?: string;
+  department?: string;
+  university?: string;
+  city?: string;
+}) {
+  const where: any = {};
+  const andClauses: any[] = [];
+
+  if (params.search) {
+    andClauses.push({
+      OR: [
+        { name: { contains: params.search, mode: "insensitive" } },
+        { department: { contains: params.search, mode: "insensitive" } },
+        { university: { contains: params.search, mode: "insensitive" } },
+      ],
+    });
+  }
+  if (params.department) {
+    andClauses.push({ department: { contains: params.department, mode: "insensitive" } });
+  }
+  if (params.university) {
+    andClauses.push({ university: { contains: params.university, mode: "insensitive" } });
+  }
+  if (params.city) {
+    // Filter by city via university lookup — find all uni names in that city
+    const unisInCity = TURKISH_UNIVERSITIES.filter((u) => u.city === params.city).map(
+      (u) => u.name
+    );
+    if (unisInCity.length > 0) {
+      andClauses.push({ university: { in: unisInCity } });
+    } else {
+      // No universities in this city → no results
+      andClauses.push({ university: "__never_match__" });
+    }
+  }
+
+  if (andClauses.length > 0) where.AND = andClauses;
+  return where;
+}
+
+function getOrderBy(sort?: string): any {
+  switch (sort) {
+    case "ratings-desc":
+      return [{ ratings: { _count: "desc" } }, { name: "asc" }];
+    case "courses-desc":
+      return [{ courses: { _count: "desc" } }, { name: "asc" }];
+    case "name-desc":
+      return { name: "desc" };
+    case "name-asc":
+    default:
+      return { name: "asc" };
+  }
+}
 
 export const listProfessors = async (req: Request, res: Response): Promise<void> => {
   try {
     const search = req.query.search as string | undefined;
     const department = req.query.department as string | undefined;
     const university = req.query.university as string | undefined;
+    const city = req.query.city as string | undefined;
+    const sort = req.query.sort as string | undefined;
     const page = req.query.page as string | undefined;
     const limit = req.query.limit as string | undefined;
 
     const pageNum = Math.max(1, parseInt(page || "1", 10) || 1);
-    const limitNum = Math.min(50, Math.max(1, parseInt(limit || "10", 10) || 10));
+    const limitNum = Math.min(200, Math.max(1, parseInt(limit || "20", 10) || 20));
     const skip = (pageNum - 1) * limitNum;
 
-    const where: any = {};
-
-    if (search) {
-      where.name = { contains: search, mode: "insensitive" };
-    }
-    if (department) {
-      where.department = { contains: department, mode: "insensitive" };
-    }
-    if (university) {
-      where.university = { contains: university, mode: "insensitive" };
-    }
+    const where = buildWhere({ search, department, university, city });
 
     const [professors, total] = await Promise.all([
       prisma.professor.findMany({
         where,
         skip,
         take: limitNum,
-        orderBy: { name: "asc" },
+        orderBy: getOrderBy(sort),
         include: {
           _count: { select: { courses: true, ratings: true } },
         },
@@ -49,6 +102,81 @@ export const listProfessors = async (req: Request, res: Response): Promise<void>
     });
   } catch (error) {
     console.error("List professors error:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+export const getDiscovery = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userUniversity = req.query.university as string | undefined;
+
+    const [topRated, byUserUni] = await Promise.all([
+      prisma.professor.findMany({
+        take: 12,
+        orderBy: [{ ratings: { _count: "desc" } }],
+        include: { _count: { select: { courses: true, ratings: true } } },
+      }),
+      userUniversity
+        ? prisma.professor.findMany({
+            where: { university: userUniversity },
+            take: 12,
+            orderBy: [{ ratings: { _count: "desc" } }],
+            include: { _count: { select: { courses: true, ratings: true } } },
+          })
+        : Promise.resolve([]),
+    ]);
+
+    res.json({
+      topRated,
+      byUserUni,
+    });
+  } catch (error) {
+    console.error("Get discovery error:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+export const getFilterOptions = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    // Aggregate counts per university and department in single queries
+    const [uniGroups, deptGroups] = await Promise.all([
+      prisma.professor.groupBy({
+        by: ["university"],
+        _count: { _all: true },
+        orderBy: { university: "asc" },
+      }),
+      prisma.professor.groupBy({
+        by: ["department"],
+        _count: { _all: true },
+        orderBy: { department: "asc" },
+      }),
+    ]);
+
+    const universities = uniGroups.map((g) => ({
+      name: g.university,
+      count: g._count._all,
+      city: UNIVERSITY_TO_CITY.get(g.university) || null,
+    }));
+
+    const departments = deptGroups.map((g) => ({
+      name: g.department,
+      count: g._count._all,
+    }));
+
+    // Compute city counts (sum profs across unis in same city)
+    const cityCountsMap = new Map<string, number>();
+    for (const u of universities) {
+      if (u.city) {
+        cityCountsMap.set(u.city, (cityCountsMap.get(u.city) || 0) + u.count);
+      }
+    }
+    const cities = Array.from(cityCountsMap.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+
+    res.json({ universities, departments, cities });
+  } catch (error) {
+    console.error("Get filter options error:", error);
     res.status(500).json({ error: "Internal server error." });
   }
 };

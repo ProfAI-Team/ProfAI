@@ -5,16 +5,46 @@ export const listCourses = async (req: Request, res: Response): Promise<void> =>
   try {
     const page = req.query.page as string | undefined;
     const limit = req.query.limit as string | undefined;
+    const search = (req.query.search as string | undefined)?.trim();
+    const university = (req.query.university as string | undefined)?.trim();
+    const professorId = (req.query.professorId as string | undefined)?.trim();
 
     const pageNum = Math.max(1, parseInt(page || "1", 10) || 1);
-    const limitNum = Math.min(50, Math.max(1, parseInt(limit || "10", 10) || 10));
+    const limitNum = Math.min(200, Math.max(1, parseInt(limit || "20", 10) || 20));
     const skip = (pageNum - 1) * limitNum;
+
+    const where: any = {};
+
+    if (professorId) {
+      where.professorId = professorId;
+    }
+
+    if (university) {
+      where.professor = { university: { contains: university, mode: "insensitive" } };
+    }
+
+    if (search) {
+      // Search across course name, code, professor name, and university
+      where.OR = [
+        { name: { contains: search, mode: "insensitive" } },
+        { code: { contains: search, mode: "insensitive" } },
+        { professor: { name: { contains: search, mode: "insensitive" } } },
+        { professor: { university: { contains: search, mode: "insensitive" } } },
+        { professor: { department: { contains: search, mode: "insensitive" } } },
+      ];
+      // If we have both search and university filter, combine them properly
+      if (university) {
+        where.AND = [{ professor: { university: { contains: university, mode: "insensitive" } } }];
+        delete where.professor;
+      }
+    }
 
     const [courses, total] = await Promise.all([
       prisma.course.findMany({
+        where,
         skip,
         take: limitNum,
-        orderBy: { name: "asc" },
+        orderBy: [{ professor: { university: "asc" } }, { code: "asc" }],
         include: {
           professor: {
             select: { id: true, name: true, department: true, university: true },
@@ -22,7 +52,7 @@ export const listCourses = async (req: Request, res: Response): Promise<void> =>
           _count: { select: { exams: true } },
         },
       }),
-      prisma.course.count(),
+      prisma.course.count({ where }),
     ]);
 
     res.json({
