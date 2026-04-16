@@ -84,6 +84,19 @@ cd server && npm run seed    # ~30 sn; 200 üni, 4500 hoca, ~17K sınav
 **Portlar:** Frontend `:3001`, Backend `:5000`, Postgres `:5432`.
 **Demo kullanıcı:** `erdemacar1@stu.aydin.edu.tr` / `password123`.
 
+**Host prerequisites:** Node ≥ 20 + npx, Docker Compose. Önerilen: `nvm install --lts`.
+Claude Code'u `nvm`'in PATH'e eklendiği bir shell'den başlat (`.zshrc`/`.bashrc` nvm source satırlarıyla yüklenir).
+
+## MCP Servers
+
+Proje kök `.mcp.json` dosyasında kayıtlı:
+
+| MCP | Komut | Ne için |
+|-----|-------|---------|
+| `playwright` | `npx @playwright/mcp@latest` | Tarayıcı otomasyonu — responsive + theme visual smoke, demo screenshot, frontend regression |
+
+`.mcp.json` commit'lenir; her geliştirici kendi makinesinde `npx` PATH'ini sağlar. İlk kullanımda browser binary'leri indirir (`~/.cache/ms-playwright/`). Yeni MCP eklenirken `--scope project` ile proje-kapsamında tut, absolute path yazma (portable kal).
+
 ---
 
 ## Bağlam Yükleme Stratejisi
