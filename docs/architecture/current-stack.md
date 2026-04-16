@@ -105,7 +105,7 @@ Evrim planı: [`data-model-evolution.md`](./data-model-evolution.md).
 - `POST /api/auth/login` — login → JWT
 
 ### Professors
-- `GET /api/professors` — list + filter (`q`, `university`, `city`, `department`, `sort`, `page`, `limit`)
+- `GET /api/professors` — list + filter (`search`, `university`, `city`, `department`, `sort`, `page`, `limit`)
 - `GET /api/professors/:id` — detail
 - `GET /api/professors/filters` — faceted counts + cities
 - `GET /api/professors/discovery?university=X` — topRated + byUserUni

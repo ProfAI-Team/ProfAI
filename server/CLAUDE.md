@@ -95,9 +95,9 @@ const model = getGeminiModel()   // GEMINI_MODEL env ile seçilir
 - **Prefix:** Tüm endpoint `/api/...`.
 - **Auth:** Corumalı endpoint'lerde `authMiddleware` → `req.user = { userId, email }`.
 - **Response shape:** Success `{ data: ... }`, error `{ error: { code, message } }`. (Tutarlılaştırılmalı — şu an karışık.)
-- **Pagination:** `?page=1&limit=20`, max `limit=200`. Response `{ data, pagination: { page, limit, total } }`.
-- **Search:** `?q=term` — name + dept + university'de arar (case-insensitive).
-- **Filter:** `?city=Istanbul&university=...&sort=rating_desc`.
+- **Pagination:** `?page=1&limit=20`, max `limit=200`. Response `{ professors: [...], pagination: { page, limit, total, totalPages } }`.
+- **Search:** `?search=term` — name + dept + university'de arar (case-insensitive). Frontend URL state'te `?q=` kullanılır, `professorService.ts` içinde `search` olarak API'ye gider.
+- **Filter:** `?city=Istanbul&university=...&department=...&sort=name-asc`.
 - **Error codes (öneri):** `VALIDATION_FAILED`, `UNAUTHORIZED`, `NOT_FOUND`, `AI_UNAVAILABLE`, `RATE_LIMITED`, `INTERNAL`.
 
 Detaylı endpoint listesi: [`../docs/architecture/current-stack.md`](../docs/architecture/current-stack.md).
