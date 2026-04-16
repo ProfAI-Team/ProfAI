@@ -110,6 +110,11 @@ Session başında hangi dokümana bakmalı:
 4. **UI değişiklikleri light + dark + TR + EN'de test edilir** (browser'da aç, i18n switch, theme toggle).
 5. **Risk ve KPI senkron:** Yeni özellik eklenirken [`docs/operations/risks.md`](./docs/operations/risks.md) ve [`docs/operations/kpis.md`](./docs/operations/kpis.md) güncellenir.
 6. **Plan → onay → yap.** Büyük değişiklikleri önce kısa bir plan olarak sun.
+7. **Progress tracking zorunlu:** Her task bittiğinde **aynı commit'te** veya hemen sonrasında:
+   - [`docs/tasks/phase-N-breakdown.md`](./docs/tasks/) tablosunda task'ı ✅ işaretle ve commit hash'ini ekle.
+   - [`docs/roadmap/phase-N-*.md`](./docs/roadmap/) içindeki acceptance criteria checkbox'larını ilgili kısımlarda tik'le.
+   - Faz tamam olduğunda `docs/roadmap/README.md`'deki durum tablosunu güncelle ("🎯 Aktif" → "✅ Tamamlandı").
+   - Bu, "kaldığım yer neresi?" sorusunu her session başı bir bakışta cevaplar.
 
 ---
 

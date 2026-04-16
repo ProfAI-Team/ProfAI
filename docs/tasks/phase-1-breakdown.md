@@ -8,28 +8,28 @@
 
 ## Öncelik Sırası (Sprint Order)
 
-| # | Task | Tahmini | Bağımlılık |
-|---|------|---------|------------|
-| 1.1 | Prisma schema + migration (ProfessorStyleProfile + AICallLog + AIFeedback) | 2 saat | — |
-| 1.2 | Style aggregation servisi (Gemini hariç, saf TS) | 4 saat | 1.1 |
-| 1.3 | Gemini style summary prompt + provider call | 4 saat | 1.2 |
-| 1.4 | `GET /api/professors/:id/style-profile` endpoint | 2 saat | 1.2, 1.3 |
-| 1.5 | Cache invalidasyon hook (analysisService → isStale) | 1 saat | 1.1 |
-| 1.6 | Backend unit + integration testler | 3 saat | 1.1-1.5 |
-| 1.7 | Frontend: StyleHero + metrics kartları | 4 saat | 1.4 |
-| 1.8 | Frontend: EvolutionChart + TopicBadges | 3 saat | 1.7 |
-| 1.9 | ProfessorDetailPage tam rebuild + empty/loading state | 4 saat | 1.7, 1.8 |
-| 1.10 | i18n TR + EN key'leri + copy iteration | 2 saat | 1.9 |
-| 1.11 | Mobile responsive test + light/dark test | 2 saat | 1.9 |
-| 1.12 | Dokümantasyon update (phase-1-style-profile "gerçekleşen") | 1 saat | Hepsi |
+| # | Task | Tahmini | Bağımlılık | Durum | Commit |
+|---|------|---------|------------|-------|--------|
+| 1.1 | Prisma schema + migration (ProfessorStyleProfile + AICallLog + AIFeedback) | 2 saat | — | ✅ Tamam | `3aed21b` |
+| 1.2 | Style aggregation servisi (Gemini hariç, saf TS) | 4 saat | 1.1 | ✅ Tamam | `846e4fe` |
+| 1.3 | Gemini style summary prompt + provider call | 4 saat | 1.2 | ⏳ Sıradaki | — |
+| 1.4 | `GET /api/professors/:id/style-profile` endpoint | 2 saat | 1.2, 1.3 | Planlı | — |
+| 1.5 | Cache invalidasyon hook (analysisService → isStale) | 1 saat | 1.1 | Planlı | — |
+| 1.6 | Backend unit + integration testler | 3 saat | 1.1-1.5 | Planlı | — |
+| 1.7 | Frontend: StyleHero + metrics kartları | 4 saat | 1.4 | Planlı | — |
+| 1.8 | Frontend: EvolutionChart + TopicBadges | 3 saat | 1.7 | Planlı | — |
+| 1.9 | ProfessorDetailPage tam rebuild + empty/loading state | 4 saat | 1.7, 1.8 | Planlı | — |
+| 1.10 | i18n TR + EN key'leri + copy iteration | 2 saat | 1.9 | Planlı | — |
+| 1.11 | Mobile responsive test + light/dark test | 2 saat | 1.9 | Planlı | — |
+| 1.12 | Dokümantasyon update (phase-1-style-profile "gerçekleşen") | 1 saat | Hepsi | Planlı | — |
 
-**Toplam:** ~32 saat çalışma süresi (5 tam iş günü).
+**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 2/12 task tamam (~6 saat).
 
 ---
 
 ## Detaylı Task'lar
 
-### 1.1 — Prisma Schema + Migration
+### 1.1 — Prisma Schema + Migration ✅ `3aed21b`
 
 **Dosyalar:**
 - `server/prisma/schema.prisma` (üç yeni model ekle)
@@ -47,7 +47,7 @@
 
 ---
 
-### 1.2 — Style Aggregation Servisi
+### 1.2 — Style Aggregation Servisi ✅ `846e4fe`
 
 **Yeni dosya:**
 - `server/src/services/professorStyleService.ts`
