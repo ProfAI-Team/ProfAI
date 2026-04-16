@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Prisma } from "@prisma/client";
 import prisma from "../lib/prisma";
 import { analyzeExam } from "../services/analysisService";
+import { invalidateStyleProfile } from "../services/professorStyleService";
 
 export const uploadExam = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -73,6 +74,18 @@ export const uploadExam = async (req: Request, res: Response): Promise<void> => 
         summary: analysisResult.summary,
       },
     });
+
+    // Invalidate the professor's cached style profile — next visit will
+    // rebuild it with this new exam in the aggregation. Swallow errors so a
+    // telemetry hiccup never breaks the upload response.
+    try {
+      await invalidateStyleProfile(course.professorId);
+    } catch (err) {
+      console.error(
+        "[uploadExam] invalidateStyleProfile failed:",
+        err instanceof Error ? err.message : err
+      );
+    }
 
     res.status(201).json({
       message: "Exam uploaded and analyzed successfully.",

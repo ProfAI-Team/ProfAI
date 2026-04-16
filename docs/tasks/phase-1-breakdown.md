@@ -13,9 +13,9 @@
 | 1.1 | Prisma schema + migration (ProfessorStyleProfile + AICallLog + AIFeedback) | 2 saat | — | ✅ Tamam | `3aed21b` |
 | 1.2 | Style aggregation servisi (Gemini hariç, saf TS) | 4 saat | 1.1 | ✅ Tamam | `846e4fe` |
 | 1.3 | Gemini style summary prompt + provider call | 4 saat | 1.2 | ✅ Tamam | `ba0ccd9` |
-| 1.4 | `GET /api/professors/:id/style-profile` endpoint | 2 saat | 1.2, 1.3 | ✅ Tamam | bu commit |
-| 1.5 | Cache invalidasyon hook (analysisService → isStale) | 1 saat | 1.1 | ⏳ Sıradaki | — |
-| 1.6 | Backend unit + integration testler | 3 saat | 1.1-1.5 | Planlı | — |
+| 1.4 | `GET /api/professors/:id/style-profile` endpoint | 2 saat | 1.2, 1.3 | ✅ Tamam | `9d9d13f` |
+| 1.5 | Cache invalidasyon hook (examController → isStale) | 1 saat | 1.1 | ✅ Tamam | bu commit |
+| 1.6 | Backend unit + integration testler | 3 saat | 1.1-1.5 | ⏳ Sıradaki | — |
 | 1.7 | Frontend: StyleHero + metrics kartları | 4 saat | 1.4 | Planlı | — |
 | 1.8 | Frontend: EvolutionChart + TopicBadges | 3 saat | 1.7 | Planlı | — |
 | 1.9 | ProfessorDetailPage tam rebuild + empty/loading state | 4 saat | 1.7, 1.8 | Planlı | — |
@@ -23,7 +23,7 @@
 | 1.11 | Mobile responsive test + light/dark test | 2 saat | 1.9 | Planlı | — |
 | 1.12 | Dokümantasyon update (phase-1-style-profile "gerçekleşen") | 1 saat | Hepsi | Planlı | — |
 
-**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 4/12 task tamam (~12 saat).
+**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 5/12 task tamam (~13 saat).
 
 ---
 
@@ -123,10 +123,12 @@
 
 ---
 
-### 1.5 — Cache Invalidasyon Hook
+### 1.5 — Cache Invalidasyon Hook ✅
+
+**Not:** Breakdown başta `analysisService.ts` diyordu ama `analysisService.analyzeExam` sadece Gemini çağrısı yapıp sonuç döndürüyor; `prisma.examAnalysis.create` ise `examController.uploadExam` içinde. Bu yüzden hook orada — istenen davranış aynı.
 
 **Değişen dosya:**
-- `server/src/services/analysisService.ts`
+- `server/src/controllers/examController.ts`
 
 **İş:**
 - Exam analiz kaydedildikten sonra hocanın `ProfessorStyleProfile.isStale = true`.
