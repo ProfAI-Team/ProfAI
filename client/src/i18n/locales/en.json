@@ -36,6 +36,7 @@
   },
   "home": {
     "hero": {
+      "badge": "AI-powered exam analysis",
       "title1": "How does your professor",
       "title2": "ask questions?",
       "subtitle": "Upload a past exam. We break down question types, topics, and difficulty — so you study what actually shows up.",
@@ -100,6 +101,8 @@
       "coursesTitle": "Courses ({{count}})",
       "perExamTitle": "Per-exam breakdown",
       "perExamHint": "{{count}} exams analyzed — question counts, types, and topic breakdowns.",
+      "fallbackAggregateTitle": "Combined exam analysis",
+      "fallbackAggregateHint": "Aggregated summary from the analyses we have",
       "contributeExam": "Add an exam for this professor"
     },
     "style": {

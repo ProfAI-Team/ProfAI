@@ -22,8 +22,9 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 - **Phase 1 Task 1.7 tamamlandı (2026-04-16)**: `StyleHero` + `MetricsCards` + skeleton'lar + `chartColors.ts` + i18n `professor.style.*` + ProfessorDetailPage preview wire.
 - **Phase 1 Task 1.8 tamamlandı (2026-04-16)**: `EvolutionChart` + `TopicBadges` + skeleton'lar.
 - **Phase 1 Task 1.9 tamamlandı (2026-04-16)**: ProfessorDetailPage tam rebuild.
-- **Phase 1 Task 1.10 tamamlandı (2026-04-16)**: Hybrid tone guide yazıldı (`docs/operations/copy-tone-guide.md`), iki genel-amaç agent paralel çalıştı — biri TR biri EN için rehber bazlı EDIT/DELETE önerileri üretti. Konsolide edildi: 44 TR + 38 EN revize, 3 dead key (`common.viewMore`, `common.comingSoon`, `dashboard.analysesViewed`) silindi. Öne çıkan temalar: (1) TR'de "siz → sen" ve selective "profesör → hoca" (body/CTA'larda, nav'da formal tutuldu), (2) pasif → aktif fiil, (3) pazarlama klişeleri ("içgörü", "yolculuk", "sonsuza kadar") atıldı, (4) empty/error state'ler her zaman "ne olduğu + ne yapılacağı" formatı. Her iki locale 164 key eşleşiyor.
-- Sıradaki: Task 1.11 — Responsive + light/dark cross-breakpoint test.
+- **Phase 1 Task 1.10 tamamlandı (2026-04-16)**: Hybrid tone guide + paralel agent sweep.
+- **Phase 1 Task 1.11 tamamlandı (2026-04-17)**: Playwright MCP ile visual smoke — home + professor detail (Zehra ready / Peri insufficient) × (390 mobile / 1440 desktop) × (light / dark). Üç bug yakalandı + fix: (1) `client/index.html` title "siz" formundaydı → "Hocanın nasıl soru sorduğunu tanı". (2) Home hero rozeti hardcoded "AI-powered exam analysis" → `home.hero.badge` i18n key'ine bağlandı (TR: "Yapay zeka destekli sınav analizi"). (3) Legacy "Sınav bazlı detaylar" collapsible stil profili ready iken yanlış sayı (1) gösteriyordu → `ready` durumda gizlenir, sadece `insufficient_data` fallback olarak "Birleşik sınav analizi" başlığıyla çıkar.
+- Sıradaki: Task 1.12 — Phase doc "gerçekleşen" bölümü + faz kapanışı.
 
 ---
 

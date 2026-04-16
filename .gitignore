@@ -14,3 +14,9 @@ uploads/*
 
 # Logs
 *.log
+
+# Playwright MCP artifacts (local visual-smoke traces + ad-hoc screenshots)
+.playwright-mcp/
+*.png
+!client/public/**/*.png
+!server/public/**/*.png

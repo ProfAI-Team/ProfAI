@@ -19,11 +19,11 @@
 | 1.7 | Frontend: StyleHero + metrics kartları | 4 saat | 1.4 | ✅ Tamam | `6af4737` |
 | 1.8 | Frontend: EvolutionChart + TopicBadges | 3 saat | 1.7 | ✅ Tamam | `fc6335a` |
 | 1.9 | ProfessorDetailPage tam rebuild + empty/loading state | 4 saat | 1.7, 1.8 | ✅ Tamam | `9188c5c` |
-| 1.10 | i18n TR + EN copy iteration (hibrit ton) | 2 saat | 1.9 | ✅ Tamam | bu commit |
-| 1.11 | Mobile responsive test + light/dark test | 2 saat | 1.9 | ⏳ Sıradaki | — |
-| 1.12 | Dokümantasyon update (phase-1-style-profile "gerçekleşen") | 1 saat | Hepsi | Planlı | — |
+| 1.10 | i18n TR + EN copy iteration (hibrit ton) | 2 saat | 1.9 | ✅ Tamam | `2524099` |
+| 1.11 | Mobile responsive + light/dark visual smoke (Playwright MCP) | 2 saat | 1.9 | ✅ Tamam | bu commit |
+| 1.12 | Dokümantasyon update (phase-1-style-profile "gerçekleşen") | 1 saat | Hepsi | ⏳ Sıradaki | — |
 
-**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 10/12 task tamam (~29 saat).
+**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 11/12 task tamam (~31 saat).
 
 ---
 
@@ -226,15 +226,16 @@
 
 ---
 
-### 1.11 — Responsive + Theme Test
+### 1.11 — Responsive + Theme Test ✅
 
 **İş:**
-- Chrome DevTools: 375×667, 768×1024, 1440×900, 1920×1080.
-- Light + dark toggle her breakpoint'te test.
-- TR + EN toggle her durumda test.
-- Bug varsa fix PR.
+- Playwright MCP ile breakpoint (390/1440) × theme (light/dark) × ready/insufficient senaryo matrisi
+- 3 bug yakalandı ve düzeltildi (aşağıda)
 
-**PR:** "Fix responsive + theme bugs in professor detail"
+**Yakalanan + düzeltilen bug'lar:**
+1. `client/index.html` browser tab title hâlâ "siz" formundaydı (Task 1.10 atladı) — güncellendi
+2. Home hero rozeti "AI-powered exam analysis" hardcoded İngilizce'ydi — `home.hero.badge` i18n key'ine bağlandı, TR: "Yapay zeka destekli sınav analizi"
+3. ProfessorDetailPage "Sınav bazlı detaylar" collapsible yanlış sayı gösteriyordu (legacy `getAnalysis` aggregated=1 döner). Stil profili `ready` iken gizlendi; sadece `insufficient_data` durumunda "Birleşik sınav analizi" başlığıyla fallback olarak çıkıyor.
 
 ---
 

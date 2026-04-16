@@ -283,8 +283,10 @@ const ProfessorDetailPage: React.FC = () => {
         </section>
       )}
 
-      {/* Per-exam analyses — collapsed by default, detail view for power users */}
-      {analyses.length > 0 && (
+      {/* Legacy aggregated analysis card — only shown as fallback when the
+          Phase 1 style profile can't be built (insufficient_data). When the
+          profile is ready, the style block above already covers this data. */}
+      {analyses.length > 0 && styleProfile?.status === 'insufficient_data' && (
         <section>
           <details className="group card-base overflow-hidden">
             <summary className="list-none cursor-pointer p-5 sm:p-6 flex items-center gap-3 select-none hover:bg-secondary/40 transition-colors">
@@ -293,10 +295,10 @@ const ProfessorDetailPage: React.FC = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="font-display font-semibold text-foreground">
-                  {t('professor.detail.perExamTitle')}
+                  {t('professor.detail.fallbackAggregateTitle')}
                 </h2>
                 <p className="text-xs text-muted-foreground">
-                  {t('professor.detail.perExamHint', { count: analyses.length })}
+                  {t('professor.detail.fallbackAggregateHint')}
                 </p>
               </div>
               <ChevronDown className="w-5 h-5 text-muted-foreground shrink-0 transition-transform group-open:rotate-180" />

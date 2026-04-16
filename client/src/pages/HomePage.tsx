@@ -77,7 +77,7 @@ const HomePage: React.FC = () => {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-soft text-primary text-xs font-semibold mb-6 border border-primary/15"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            AI-powered exam analysis
+            {t('home.hero.badge')}
           </motion.div>
 
           <motion.h1

@@ -36,6 +36,7 @@
   },
   "home": {
     "hero": {
+      "badge": "Yapay zeka destekli sınav analizi",
       "title1": "Hocan nasıl",
       "title2": "soru soruyor?",
       "subtitle": "Geçmiş sınavları yükle, kalıbı gör, ne soracağını tahmin et. Yapay zeka analiz eder, sen akıllı çalışırsın.",
@@ -100,6 +101,8 @@
       "coursesTitle": "Dersler ({{count}})",
       "perExamTitle": "Sınav bazlı detaylar",
       "perExamHint": "{{count}} sınav analiz ettik — soru sayısı, tip ve konu dağılımı",
+      "fallbackAggregateTitle": "Birleşik sınav analizi",
+      "fallbackAggregateHint": "Mevcut analizlerden toplanan özet",
       "contributeExam": "Bu hocaya sınav ekle"
     },
     "style": {
