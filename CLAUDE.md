@@ -60,6 +60,7 @@ Detay mimari: [`docs/architecture/current-stack.md`](./docs/architecture/current
 - **Dil:** Dosya/değişken/yorum **İngilizce**; kullanıcıya görünen metin **Türkçe** (i18n key'leri İngilizce).
 - **Commit:** İngilizce, imperative ("Add style profile endpoint"). `main` branch üzerinde ilerle; özellik dalı PR ile.
 - **Commit trailer — ASLA Claude etiketi:** `Co-Authored-By: Claude`, `Generated with Claude Code`, `🤖` emoji veya benzeri hiçbir AI attribution **yazılmaz**. Commit + PR body tamamen insan üslubunda.
+- **Push yetkisi:** Normal `git push origin <branch>` için onay beklemeden push'la. `--force`, dal silme, veya `main` dışı farklı bir dala push ayrıca onay gerektirir.
 - **Formatlama:** Prettier default; Tailwind class sırasını normalize et.
 - **Secrets:** Asla commit etme. Root `.env` (Gemini) + `server/.env` (DB, JWT) — ikisi de gitignored.
 - **Dosya isimlendirme:** Yeni plan dokümanları `kebab-case.md`. Eski `ProfAI_*.md` dosyaları `docs/_archive/` altında.
