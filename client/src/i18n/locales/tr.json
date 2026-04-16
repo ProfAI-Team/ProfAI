@@ -102,6 +102,8 @@
       "questionTypesLabel": "Soru tipi dağılımı",
       "topTopicsLabel": "En sık işlenen konular",
       "evolutionLabel": "Yıllara göre evrim",
+      "evolutionSubtitle": "{{count}} dönem verisi üzerinden trend",
+      "topTopicsSubtitle": "{{count}} konu · sıklığa göre renklendirildi",
       "noData": "Yeterli veri yok",
       "staleNote": "Yeni sınav eklendi — özet birazdan yenilenecek.",
       "insufficientTitle": "Henüz stil profili yok",

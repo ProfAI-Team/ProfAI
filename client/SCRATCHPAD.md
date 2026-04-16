@@ -19,8 +19,9 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 
 ## Şu An Üzerinde Çalışılan
 
-- **Phase 1 Task 1.7 tamamlandı (2026-04-16)**: `StyleHero` + `MetricsCards` + `StyleHeroSkeleton` + `MetricsCardsSkeleton` + `chartColors.ts` (CSS variable/Recharts interop sorunu için hex palette ayrı). TR + EN i18n key'leri (`professor.style.*`) eklendi. ProfessorDetailPage'e preview wire — eski hero'dan sonra yeni bölüm ekleniyor (Task 1.9 tamamını değiştirecek). Style profile ayrı useEffect'te yükleniyor — Gemini rebuild varsa sayfanın geri kalanını bloklamıyor.
-- Sıradaki: Task 1.8 — `EvolutionChart` (yıllar içi trend) + `TopicBadges` (top 10 chip list).
+- **Phase 1 Task 1.7 tamamlandı (2026-04-16)**: `StyleHero` + `MetricsCards` + skeleton'lar + `chartColors.ts` + i18n `professor.style.*` + ProfessorDetailPage preview wire.
+- **Phase 1 Task 1.8 tamamlandı (2026-04-16)**: `EvolutionChart` (dual-axis LineChart — sol %, sağ 0-10 zorluk; `<2 yıl` data null render) + `TopicBadges` (frequency-tint chip list, %20+ solid primary, %10-20 soft, <%10 secondary). Preview'a ProfessorDetailPage eklendi. Zehra Tan ile 3 yıllık trend görülüyor (2022→2024→2026: MC artıyor, zorluk düşüyor).
+- Sıradaki: Task 1.9 — ProfessorDetailPage tam rebuild (stil profili üste, legacy analiz listesi optional collapsible alta, empty/loading state polish).
 
 ---
 

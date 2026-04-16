@@ -102,6 +102,8 @@
       "questionTypesLabel": "Question type mix",
       "topTopicsLabel": "Most covered topics",
       "evolutionLabel": "Trend by year",
+      "evolutionSubtitle": "Trend across {{count}} terms",
+      "topTopicsSubtitle": "{{count}} topics · color intensity reflects frequency",
       "noData": "Not enough data",
       "staleNote": "A new exam was added — the summary will refresh shortly.",
       "insufficientTitle": "Style profile not ready yet",

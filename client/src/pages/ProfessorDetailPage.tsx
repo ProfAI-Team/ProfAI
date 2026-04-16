@@ -17,6 +17,8 @@ import RatingForm from '../components/RatingForm';
 import ProfAvatar from '../components/Avatar';
 import StyleHero, { StyleHeroSkeleton } from '../components/StyleHero';
 import MetricsCards, { MetricsCardsSkeleton } from '../components/MetricsCards';
+import EvolutionChart from '../components/EvolutionChart';
+import TopicBadges from '../components/TopicBadges';
 import {
   professorService,
   type StyleProfileResponse,
@@ -212,6 +214,8 @@ const ProfessorDetailPage: React.FC = () => {
         <section className="space-y-4">
           <MetricsCards metrics={styleProfile.profile.metrics} />
           <StyleHero profile={styleProfile.profile} />
+          <TopicBadges topics={styleProfile.profile.topTopics} />
+          <EvolutionChart evolution={styleProfile.profile.evolution} />
         </section>
       )}
 

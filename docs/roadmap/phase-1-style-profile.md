@@ -1,7 +1,7 @@
 # Phase 1 — Hoca-Merkezli Stil Profili 🎯
 
 **Süre:** 1 hafta
-**Statü:** 🎯 Aktif — 7/12 task tamam (~%58)
+**Statü:** 🎯 Aktif — 8/12 task tamam (~%67)
 **Hedef:** Ürünün **gerçek vizyonunu** ortaya çıkar — hoca sayfasını "sınav listesi"nden "stil profili"ne çevir.
 
 ## İlerleme (Task Bazlı)
@@ -15,8 +15,9 @@ Detay: [`../tasks/phase-1-breakdown.md`](../tasks/phase-1-breakdown.md).
 - ✅ **1.5** — Cache invalidasyon hook (`examController` → `invalidateStyleProfile`)
 - ✅ **1.6** — Vitest + Supertest altyapısı, 7 unit + 4 integration test, CI entegrasyonu
 - ✅ **1.7** — `StyleHero` + `MetricsCards` componentleri + `chartColors` helper + skeleton'lar + i18n TR/EN + ProfessorDetailPage preview wire-up
-- ⏳ **1.8** — `EvolutionChart` + `TopicBadges`
-- ⏳ **1.9-1.11** — ProfessorDetailPage rebuild, i18n refinement, responsive/theme pass
+- ✅ **1.8** — `EvolutionChart` (dual-axis line) + `TopicBadges` (frequency-tinted chips) + skeleton'lar + i18n
+- ⏳ **1.9** — ProfessorDetailPage rebuild (preview'i üste taşı, legacy'i kaldır, empty/loading state polish)
+- ⏳ **1.10-1.11** — i18n copy refinement, responsive/theme pass
 - ⏳ 1.12 — Phase doc "gerçekleşen" bölümü
 
 ---
