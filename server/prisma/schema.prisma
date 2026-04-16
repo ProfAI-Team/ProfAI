@@ -23,18 +23,21 @@ model User {
   createdAt  DateTime          @default(now())
   exams      Exam[]
   ratings    ProfessorRating[]
+  aiCallLogs AICallLog[]
+  aiFeedback AIFeedback[]
 
   @@map("users")
 }
 
 model Professor {
-  id         String            @id @default(uuid())
-  name       String
-  department String
-  university String
-  createdAt  DateTime          @default(now())
-  courses    Course[]
-  ratings    ProfessorRating[]
+  id           String                 @id @default(uuid())
+  name         String
+  department   String
+  university   String
+  createdAt    DateTime               @default(now())
+  courses      Course[]
+  ratings      ProfessorRating[]
+  styleProfile ProfessorStyleProfile?
 
   @@map("professors")
 }
@@ -93,4 +96,76 @@ model ProfessorRating {
   createdAt       DateTime  @default(now())
 
   @@map("professor_ratings")
+}
+
+// Phase 1 — Aggregated, cached style profile per professor.
+// Populated lazily on first visit, invalidated when a new exam is analyzed.
+model ProfessorStyleProfile {
+  id          String    @id @default(uuid())
+  professorId String    @unique
+  professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
+
+  aggregatedData Json // { questionTypes, topicDistribution, difficulty }
+  geminiSummary  String @db.Text
+  topTopics      Json // [{ topic, frequency }]
+  evolution      Json // [{ year, questionTypes, difficulty }]
+  metrics        Json // { totalExams, avgDifficulty, avgQuestionCount, dominantType }
+
+  examSourceCount Int
+  geminiVersion   String
+  isStale         Boolean @default(false)
+
+  // Concurrency guard for lazy regeneration — set when a build starts, cleared on completion.
+  regenerationStartedAt DateTime?
+
+  generatedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isStale])
+  @@map("professor_style_profiles")
+}
+
+// Phase 1 — Telemetry for every AI provider call (Gemini, Claude, …).
+// Used for cost tracking, quality monitoring, and cache-hit analysis.
+model AICallLog {
+  id           String  @id @default(uuid())
+  userId       String?
+  user         User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  feature      String // "analyze-exam" | "style-summary" | "study-pack" | ...
+  provider     String // "gemini" | "claude" | ...
+  model        String // e.g. "gemini-2.5-flash-lite"
+  inputTokens  Int
+  outputTokens Int
+  costUsd      Float
+  latencyMs    Int
+  cacheHit     Boolean @default(false)
+  success      Boolean
+  errorCode    String?
+
+  createdAt DateTime @default(now())
+
+  feedback AIFeedback[]
+
+  @@index([userId])
+  @@index([feature])
+  @@index([createdAt])
+  @@map("ai_call_logs")
+}
+
+// Phase 1 — User-facing feedback on AI outputs (thumbs up / down / neutral).
+model AIFeedback {
+  id      String     @id @default(uuid())
+  userId  String
+  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  callId  String?
+  call    AICallLog? @relation(fields: [callId], references: [id], onDelete: SetNull)
+  feature String
+  rating  Int // -1 | 0 | 1
+  comment String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([feature])
+  @@map("ai_feedback")
 }

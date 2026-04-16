@@ -19,7 +19,7 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 ## Şu An Üzerinde Çalışılan
 
-- (yok — Phase 1 backend task'ları henüz başlamadı)
+- **Phase 1 Task 1.1 tamamlandı (2026-04-16)**: `ProfessorStyleProfile`, `AICallLog`, `AIFeedback` modelleri schema'ya eklendi; migration `20260416195008_phase_1_style_profile` uygulandı; DB'de 3 yeni tablo boş, mevcut veri (4500 prof, 17K exam, 11 user) intact. Sıradaki: Task 1.2 — `professorStyleService.ts` aggregation logic.
 
 ---
 
@@ -50,6 +50,7 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 - JWT refresh token yok — Phase 5 kapsamında.
 - CORS dev'de açık, production'da sıkılaştır.
 - Multer dosya temizlik job'u yok — `uploads/` klasörü zamanla şişer.
+- **Docker dev workflow**: `docker-compose.yml` server source'u volume olarak mount etmiyor, build'e baked. Prisma migrate çalıştırmak için `docker compose cp` ile schema'yı container'a atıp inner run + migration'ı geri çekmek gerekti. Phase 1 içinde `server/`'a bind mount eklemek (`./server:/app` + `node_modules` override) değerlendir — hot reload + migrate workflow profesyonelleşir. Task 1.1'de bu workaround ile ilerlendi.
 
 ---
 
