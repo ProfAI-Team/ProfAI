@@ -95,6 +95,13 @@
     }
   },
   "professor": {
+    "detail": {
+      "backToList": "Tüm profesörlere dön",
+      "coursesTitle": "Dersler ({{count}})",
+      "perExamTitle": "Sınav bazlı detaylar",
+      "perExamHint": "{{count}} analiz edilmiş sınav — sayı, tip ve konu dağılımları",
+      "contributeExam": "Bu hoca için sınav yükle"
+    },
     "style": {
       "title": "Hocanın Tarzı",
       "subtitle": "{{count}} sınav analizinden çıkarıldı",
@@ -140,6 +147,8 @@
       "averageDifficulty": "Ortalama zorluk",
       "averageFairness": "Ortalama adillik",
       "totalRatings": "Toplam değerlendirme",
+      "ratingsCount": "{{count}} oy",
+      "ratingsCount_other": "{{count}} oy",
       "examCount": "Analiz edilen sınav"
     }
   },

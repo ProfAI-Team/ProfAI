@@ -95,6 +95,13 @@
     }
   },
   "professor": {
+    "detail": {
+      "backToList": "Back to all professors",
+      "coursesTitle": "Courses ({{count}})",
+      "perExamTitle": "Per-exam breakdown",
+      "perExamHint": "{{count}} analyzed exams — question counts, types, topic breakdowns",
+      "contributeExam": "Upload an exam for this professor"
+    },
     "style": {
       "title": "Professor's Style",
       "subtitle": "Derived from {{count}} exam analyses",
@@ -140,6 +147,8 @@
       "averageDifficulty": "Avg. difficulty",
       "averageFairness": "Avg. fairness",
       "totalRatings": "Total ratings",
+      "ratingsCount": "{{count}} rating",
+      "ratingsCount_other": "{{count}} ratings",
       "examCount": "Exams analyzed"
     }
   },

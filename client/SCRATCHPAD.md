@@ -20,8 +20,9 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 ## Şu An Üzerinde Çalışılan
 
 - **Phase 1 Task 1.7 tamamlandı (2026-04-16)**: `StyleHero` + `MetricsCards` + skeleton'lar + `chartColors.ts` + i18n `professor.style.*` + ProfessorDetailPage preview wire.
-- **Phase 1 Task 1.8 tamamlandı (2026-04-16)**: `EvolutionChart` (dual-axis LineChart — sol %, sağ 0-10 zorluk; `<2 yıl` data null render) + `TopicBadges` (frequency-tint chip list, %20+ solid primary, %10-20 soft, <%10 secondary). Preview'a ProfessorDetailPage eklendi. Zehra Tan ile 3 yıllık trend görülüyor (2022→2024→2026: MC artıyor, zorluk düşüyor).
-- Sıradaki: Task 1.9 — ProfessorDetailPage tam rebuild (stil profili üste, legacy analiz listesi optional collapsible alta, empty/loading state polish).
+- **Phase 1 Task 1.8 tamamlandı (2026-04-16)**: `EvolutionChart` + `TopicBadges` + skeleton'lar.
+- **Phase 1 Task 1.9 tamamlandı (2026-04-16)**: ProfessorDetailPage tam rebuild. Yeni yapı: back-link → slim identity hero (avatar + ad + bölüm + üni + isteğe bağlı rating pill) → style profile block (MetricsCards → StyleHero → TopicBadges → EvolutionChart) → Courses compact → collapsible `<details>` "Sınav bazlı detaylar" → rating form + listesi. Legacy stats grid kaldırıldı (metrics kartları zaten var). Insufficient_data durumunda auth'luya "sınav yükle" CTA. Loading skeleton tüm blokları içeriyor. i18n: `professor.detail.{backToList, coursesTitle, perExamTitle, perExamHint, contributeExam}` + `professors.detail.ratingsCount` (plural) TR + EN.
+- Sıradaki: Task 1.10 — i18n copy sweep (eski keyler + yeni keylerin tonu tutarlı mı, boş key var mı).
 
 ---
 

@@ -8,8 +8,10 @@ import {
   BookOpen,
   Star,
   Scale,
-  FileBarChart2,
   AlertCircle,
+  ChevronLeft,
+  ChevronDown,
+  FileText,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import AnalysisCard from '../components/AnalysisCard';
@@ -17,8 +19,8 @@ import RatingForm from '../components/RatingForm';
 import ProfAvatar from '../components/Avatar';
 import StyleHero, { StyleHeroSkeleton } from '../components/StyleHero';
 import MetricsCards, { MetricsCardsSkeleton } from '../components/MetricsCards';
-import EvolutionChart from '../components/EvolutionChart';
-import TopicBadges from '../components/TopicBadges';
+import EvolutionChart, { EvolutionChartSkeleton } from '../components/EvolutionChart';
+import TopicBadges, { TopicBadgesSkeleton } from '../components/TopicBadges';
 import {
   professorService,
   type StyleProfileResponse,
@@ -36,8 +38,6 @@ const ProfessorDetailPage: React.FC = () => {
   const [ratings, setRatings] = useState<ProfessorRating[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  // Phase 1 — Task 1.7 preview wiring. Task 1.9 will make the style
-  // profile the page hero and remove the legacy layout below it.
   const [styleProfile, setStyleProfile] = useState<StyleProfileResponse | null>(
     null
   );
@@ -65,8 +65,8 @@ const ProfessorDetailPage: React.FC = () => {
     })();
   }, [id, t]);
 
-  // Style profile loads independently — it can take longer on cache miss
-  // (Gemini call) without blocking the rest of the page.
+  // Style profile loads independently so a cold Gemini rebuild doesn't
+  // block the hero + ratings on the rest of the page.
   useEffect(() => {
     if (!id) return;
     let cancelled = false;
@@ -116,18 +116,19 @@ const ProfessorDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto px-4 py-10">
-        <div className="space-y-6 animate-pulse">
-          <div className="card-base p-8 flex gap-6">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <div className="card-base p-6 sm:p-8 animate-pulse">
+          <div className="flex gap-6">
             <div className="w-20 h-20 rounded-2xl bg-secondary" />
             <div className="flex-1 space-y-3">
-              <div className="h-8 bg-secondary rounded w-1/2" />
-              <div className="h-5 bg-secondary rounded w-1/3" />
-              <div className="h-4 bg-secondary rounded w-1/4" />
+              <div className="h-8 w-1/2 bg-secondary rounded" />
+              <div className="h-4 w-1/3 bg-secondary rounded" />
+              <div className="h-3 w-1/4 bg-secondary rounded" />
             </div>
           </div>
-          <div className="card-base h-64" />
         </div>
+        <MetricsCardsSkeleton />
+        <StyleHeroSkeleton />
       </div>
     );
   }
@@ -149,8 +150,17 @@ const ProfessorDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      {/* Hero / Header */}
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {/* Back link */}
+      <Link
+        to="/professors"
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ChevronLeft className="w-4 h-4" />
+        {t('professor.detail.backToList')}
+      </Link>
+
+      {/* Identity hero — slim, no stats (metrics come from the style profile block) */}
       <motion.section
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -158,9 +168,8 @@ const ProfessorDetailPage: React.FC = () => {
         className="card-base p-6 sm:p-8 relative overflow-hidden"
       >
         <div className="absolute top-0 right-0 w-72 h-72 bg-primary/[0.05] rounded-full blur-[80px] -z-10" />
-        <div className="flex flex-col sm:flex-row items-start gap-6">
+        <div className="flex flex-col sm:flex-row items-start gap-5">
           <ProfAvatar name={professor.name} size={80} variant="beam" />
-
           <div className="flex-1 min-w-0">
             <h1 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
               {professor.name}
@@ -175,38 +184,36 @@ const ProfessorDetailPage: React.FC = () => {
                 {professor.university}
               </span>
             </div>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-3 sm:gap-5 sm:border-l sm:border-border sm:pl-6">
-            <Stat
-              icon={Star}
-              label={t('professors.detail.averageDifficulty')}
-              value={avgDifficulty > 0 ? avgDifficulty.toFixed(1) : '—'}
-              color="text-warning"
-            />
-            <Stat
-              icon={Scale}
-              label={t('professors.detail.averageFairness')}
-              value={avgFairness > 0 ? avgFairness.toFixed(1) : '—'}
-              color="text-success"
-            />
-            <Stat
-              icon={FileBarChart2}
-              label={t('professors.detail.examCount')}
-              value={String(analyses.length)}
-              color="text-primary"
-            />
+            {ratings.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mt-4">
+                <Pill color="warning" icon={Star}>
+                  {avgDifficulty.toFixed(1)}/5 ·{' '}
+                  <span className="text-muted-foreground font-normal">
+                    {t('professors.detail.averageDifficulty').toLowerCase()}
+                  </span>
+                </Pill>
+                <Pill color="success" icon={Scale}>
+                  {avgFairness.toFixed(1)}/5 ·{' '}
+                  <span className="text-muted-foreground font-normal">
+                    {t('professors.detail.averageFairness').toLowerCase()}
+                  </span>
+                </Pill>
+                <span className="text-xs text-muted-foreground">
+                  · {t('professors.detail.ratingsCount', { count: ratings.length })}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </motion.section>
 
-      {/* Style Profile (Phase 1) — lives above the legacy hero-then-list
-          layout until Task 1.9 replaces the page entirely. */}
+      {/* Style Profile — the main event */}
       {styleLoading && (
         <section className="space-y-4">
           <MetricsCardsSkeleton />
           <StyleHeroSkeleton />
+          <TopicBadgesSkeleton />
+          <EvolutionChartSkeleton />
         </section>
       )}
 
@@ -235,38 +242,39 @@ const ProfessorDetailPage: React.FC = () => {
                   min: styleProfile.minRequired,
                 })}
               </p>
+              {isAuthenticated && (
+                <Link
+                  to="/upload"
+                  className="btn-primary mt-4 inline-flex text-sm"
+                >
+                  {t('professor.detail.contributeExam')}
+                </Link>
+              )}
             </div>
           </div>
         </section>
       )}
 
-      {/* Analyses */}
-      {analyses.length > 0 && (
-        <section>
-          <h2 className="section-title mb-4">{t('analysis.title')}</h2>
-          <div className="space-y-5">
-            {analyses.map((a, i) => (
-              <AnalysisCard key={a.id} analysis={a} index={i} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Courses */}
+      {/* Courses — compact reference */}
       {courses.length > 0 && (
         <section>
-          <h2 className="section-title mb-4 flex items-center gap-2">
+          <h2 className="section-title mb-3 text-lg flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-muted-foreground" />
-            Courses
+            {t('professor.detail.coursesTitle', { count: courses.length })}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {courses.map((course) => (
-              <div key={course.id} className="card-base p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary-soft text-primary flex items-center justify-center font-mono text-xs font-semibold">
+              <div
+                key={course.id}
+                className="card-base p-4 flex items-center gap-3"
+              >
+                <div className="w-10 h-10 rounded-lg bg-primary-soft text-primary flex items-center justify-center font-mono text-xs font-semibold shrink-0">
                   {course.code.slice(0, 4)}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-foreground font-medium truncate">{course.name}</p>
+                  <p className="text-foreground font-medium truncate">
+                    {course.name}
+                  </p>
                   <p className="text-xs text-muted-foreground">{course.code}</p>
                 </div>
               </div>
@@ -275,7 +283,34 @@ const ProfessorDetailPage: React.FC = () => {
         </section>
       )}
 
-      {/* Rating Form */}
+      {/* Per-exam analyses — collapsed by default, detail view for power users */}
+      {analyses.length > 0 && (
+        <section>
+          <details className="group card-base overflow-hidden">
+            <summary className="list-none cursor-pointer p-5 sm:p-6 flex items-center gap-3 select-none hover:bg-secondary/40 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-primary-soft text-primary flex items-center justify-center shrink-0">
+                <FileText className="w-5 h-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className="font-display font-semibold text-foreground">
+                  {t('professor.detail.perExamTitle')}
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  {t('professor.detail.perExamHint', { count: analyses.length })}
+                </p>
+              </div>
+              <ChevronDown className="w-5 h-5 text-muted-foreground shrink-0 transition-transform group-open:rotate-180" />
+            </summary>
+            <div className="border-t border-border p-5 sm:p-6 space-y-5">
+              {analyses.map((a, i) => (
+                <AnalysisCard key={a.id} analysis={a} index={i} />
+              ))}
+            </div>
+          </details>
+        </section>
+      )}
+
+      {/* Rating form */}
       {isAuthenticated ? (
         <section>
           <RatingForm onSubmit={handleRatingSubmit} />
@@ -290,12 +325,14 @@ const ProfessorDetailPage: React.FC = () => {
         </div>
       )}
 
-      {/* Existing Ratings */}
+      {/* Student ratings */}
       {ratings.length > 0 && (
         <section>
-          <h2 className="section-title mb-4">
+          <h2 className="section-title mb-4 text-lg">
             {t('professors.detail.ratingsTitle')}{' '}
-            <span className="text-muted-foreground font-normal text-base">({ratings.length})</span>
+            <span className="text-muted-foreground font-normal text-base">
+              ({ratings.length})
+            </span>
           </h2>
           <div className="space-y-3">
             {ratings.map((rating, i) => (
@@ -307,12 +344,20 @@ const ProfessorDetailPage: React.FC = () => {
                 className="card-base p-5"
               >
                 <div className="flex flex-wrap items-center gap-3 mb-2">
-                  <ProfAvatar name={rating.user?.name || 'A'} size={28} variant="beam" />
+                  <ProfAvatar
+                    name={rating.user?.name || 'A'}
+                    size={28}
+                    variant="beam"
+                  />
                   <span className="text-sm font-medium text-foreground">
                     {rating.user?.name || 'Anonymous'}
                   </span>
-                  <Chip color="warning" icon={Star} text={`${rating.difficultyScore}/5`} />
-                  <Chip color="success" icon={Scale} text={`${rating.fairnessScore}/5`} />
+                  <Pill color="warning" icon={Star}>
+                    {rating.difficultyScore}/5
+                  </Pill>
+                  <Pill color="success" icon={Scale}>
+                    {rating.fairnessScore}/5
+                  </Pill>
                   <span className="text-xs text-muted-foreground ml-auto">
                     {new Date(rating.createdAt).toLocaleDateString()}
                   </span>
@@ -331,28 +376,13 @@ const ProfessorDetailPage: React.FC = () => {
   );
 };
 
-const Stat: React.FC<{
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  value: string;
-  color: string;
-}> = ({ icon: Icon, label, value, color }) => (
-  <div className="text-center">
-    <div className={cn('flex items-center justify-center gap-1', color)}>
-      <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-      <span className="text-xl sm:text-2xl font-display font-bold">{value}</span>
-    </div>
-    <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 leading-tight">
-      {label}
-    </p>
-  </div>
-);
-
-const Chip: React.FC<{
+interface PillProps {
   color: 'warning' | 'success' | 'primary';
   icon: React.ComponentType<{ className?: string }>;
-  text: string;
-}> = ({ color, icon: Icon, text }) => {
+  children: React.ReactNode;
+}
+
+const Pill: React.FC<PillProps> = ({ color, icon: Icon, children }) => {
   const colors = {
     warning: 'bg-warning/10 text-warning',
     success: 'bg-success/10 text-success',
@@ -361,12 +391,12 @@ const Chip: React.FC<{
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium',
+        'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium',
         colors[color]
       )}
     >
       <Icon className="w-3 h-3" />
-      {text}
+      {children}
     </span>
   );
 };

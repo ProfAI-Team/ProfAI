@@ -17,13 +17,13 @@
 | 1.5 | Cache invalidasyon hook (examController → isStale) | 1 saat | 1.1 | ✅ Tamam | `4805cde` |
 | 1.6 | Backend unit + integration testler | 3 saat | 1.1-1.5 | ✅ Tamam | `1d16185` |
 | 1.7 | Frontend: StyleHero + metrics kartları | 4 saat | 1.4 | ✅ Tamam | `6af4737` |
-| 1.8 | Frontend: EvolutionChart + TopicBadges | 3 saat | 1.7 | ✅ Tamam | bu commit |
-| 1.9 | ProfessorDetailPage tam rebuild + empty/loading state | 4 saat | 1.7, 1.8 | ⏳ Sıradaki | — |
-| 1.10 | i18n TR + EN key'leri + copy iteration | 2 saat | 1.9 | Planlı | — |
+| 1.8 | Frontend: EvolutionChart + TopicBadges | 3 saat | 1.7 | ✅ Tamam | `fc6335a` |
+| 1.9 | ProfessorDetailPage tam rebuild + empty/loading state | 4 saat | 1.7, 1.8 | ✅ Tamam | bu commit |
+| 1.10 | i18n TR + EN key'leri + copy iteration | 2 saat | 1.9 | ⏳ Sıradaki | — |
 | 1.11 | Mobile responsive test + light/dark test | 2 saat | 1.9 | Planlı | — |
 | 1.12 | Dokümantasyon update (phase-1-style-profile "gerçekleşen") | 1 saat | Hepsi | Planlı | — |
 
-**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 8/12 task tamam (~23 saat).
+**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 9/12 task tamam (~27 saat).
 
 ---
 
@@ -193,7 +193,7 @@
 
 ---
 
-### 1.9 — ProfessorDetailPage Rebuild
+### 1.9 — ProfessorDetailPage Rebuild ✅
 
 **Değişen dosya:**
 - `client/src/pages/ProfessorDetailPage.tsx`
