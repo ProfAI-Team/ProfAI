@@ -2,9 +2,11 @@
   "mcpServers": {
     "playwright": {
       "type": "stdio",
-      "command": "npx",
+      "command": "bash",
       "args": [
-        "@playwright/mcp@latest"
+        "-c",
+        "export NVM_DIR=\"$HOME/.nvm\"; . \"$NVM_DIR/nvm.sh\" >/dev/null 2>&1; exec npx -y @playwright/mcp@latest \"$@\"",
+        "--"
       ],
       "env": {}
     }

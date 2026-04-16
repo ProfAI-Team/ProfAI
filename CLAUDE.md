@@ -95,7 +95,7 @@ Proje kök `.mcp.json` dosyasında kayıtlı:
 |-----|-------|---------|
 | `playwright` | `npx @playwright/mcp@latest` | Tarayıcı otomasyonu — responsive + theme visual smoke, demo screenshot, frontend regression |
 
-`.mcp.json` commit'lenir; her geliştirici kendi makinesinde `npx` PATH'ini sağlar. İlk kullanımda browser binary'leri indirir (`~/.cache/ms-playwright/`). Yeni MCP eklenirken `--scope project` ile proje-kapsamında tut, absolute path yazma (portable kal).
+`.mcp.json` commit'lenir; `command: bash -c 'source nvm.sh; exec npx …'` sarmalayıcısı Claude Code'un non-login bash subshell'inde nvm'i dinamik yükler — sabit Node yolu commit'lenmez, her dev makinesinde çalışır (nvm `~/.nvm`'de şart). İlk kullanımda browser binary'leri indirir (`~/.cache/ms-playwright/`). Yeni MCP eklenirken `--scope project` ile proje-kapsamında tut, absolute path yazma (portable kal).
 
 ---
 
