@@ -1,7 +1,7 @@
 # Phase 1 — Hoca-Merkezli Stil Profili 🎯
 
 **Süre:** 1 hafta
-**Statü:** 🎯 Aktif — 2/12 task tamam (~%17)
+**Statü:** 🎯 Aktif — 3/12 task tamam (~%25)
 **Hedef:** Ürünün **gerçek vizyonunu** ortaya çıkar — hoca sayfasını "sınav listesi"nden "stil profili"ne çevir.
 
 ## İlerleme (Task Bazlı)
@@ -10,8 +10,8 @@ Detay: [`../tasks/phase-1-breakdown.md`](../tasks/phase-1-breakdown.md).
 
 - ✅ **1.1** — Prisma schema + migration (`ProfessorStyleProfile`, `AICallLog`, `AIFeedback`) · commit `3aed21b`
 - ✅ **1.2** — Aggregation servisi (`professorStyleService.ts`) · commit `846e4fe`
-- ⏳ **1.3** — Gemini style summary prompt + call
-- ⏳ 1.4 — `GET /api/professors/:id/style-profile` endpoint
+- ✅ **1.3** — Gemini style summary prompt + call + `AICallLog` tracking
+- ⏳ **1.4** — `GET /api/professors/:id/style-profile` endpoint
 - ⏳ 1.5 — Cache invalidasyon hook
 - ⏳ 1.6 — Backend testler
 - ⏳ 1.7-1.11 — Frontend (StyleHero, EvolutionChart, ProfessorDetailPage rebuild, i18n, responsive)

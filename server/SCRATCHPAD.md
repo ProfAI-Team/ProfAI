@@ -20,8 +20,9 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 ## Şu An Üzerinde Çalışılan
 
 - **Phase 1 Task 1.1 tamamlandı (2026-04-16)**: 3 model + migration + FK'lar.
-- **Phase 1 Task 1.2 tamamlandı (2026-04-16)**: `professorStyleService.ts` — `aggregateFromExams`, `getOrBuildStyleProfile`, `invalidateStyleProfile`. Gemini summary placeholder (`stub-v0`), Task 1.3'te doldurulacak. Concurrency: `regenerationStartedAt` 5dk TTL'li advisory lock. `test-style-service.ts` smoke script — Zehra Tan (6 exam) aggregate, cache hit, invalidate/rebuild, Peri Güneş (1 exam) insufficient_data case — hepsi geçti.
-- Sıradaki: Task 1.3 — Gemini style summary prompt + real call entegrasyonu.
+- **Phase 1 Task 1.2 tamamlandı (2026-04-16)**: `professorStyleService.ts` aggregation + cache + concurrency lock.
+- **Phase 1 Task 1.3 tamamlandı (2026-04-16)**: `prompts/style-summary.ts` (v1) + `aiCallTracker.ts` + `geminiProvider.generateStyleSummary`. Smoke: 3.9sn latency, 470+151 tokens, $0.000081 cost. Özet kalitesi good — hoca adı kullanmadan 4 cümle, pratik tavsiye. `AICallLog` insert çalışıyor. Fallback: Gemini fail → persist "fallback-v0" + isStale=true (retry next request).
+- Sıradaki: Task 1.4 — `GET /api/professors/:id/style-profile` endpoint.
 
 ---
 

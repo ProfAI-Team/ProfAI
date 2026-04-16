@@ -1,6 +1,11 @@
 import fs from "fs/promises";
 import { GoogleGenAI, Type } from "@google/genai";
 import type { AnalysisResult } from "../analysisService";
+import {
+  buildStyleSummaryPrompt,
+  type StyleSummaryInput,
+} from "../../prompts/style-summary";
+import { recordAICall } from "./aiCallTracker";
 
 const DEFAULT_MODEL = "gemini-2.5-flash";
 
@@ -215,4 +220,88 @@ function normalizeTopicDistribution(
     result[it.topic] = Math.round(it.percentage * scale);
   }
   return result;
+}
+
+export interface GenerateStyleSummaryOptions {
+  userId?: string | null;
+}
+
+export interface GenerateStyleSummaryResult {
+  text: string;
+  model: string;
+}
+
+/**
+ * Generates the human-readable "Hocanın Tarzı" summary from aggregated
+ * exam data. Uses plain-text output (no structured schema) to keep the
+ * result natural. Logs every attempt to AICallLog for cost + quality
+ * telemetry.
+ */
+export async function generateStyleSummary(
+  input: StyleSummaryInput,
+  options: GenerateStyleSummaryOptions = {}
+): Promise<GenerateStyleSummaryResult> {
+  const client = getClient();
+  const model = process.env.GEMINI_MODEL || DEFAULT_MODEL;
+  const { systemInstruction, userPrompt } = buildStyleSummaryPrompt(input);
+
+  const startedAt = Date.now();
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await client.models.generateContent({
+        model,
+        contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+        config: {
+          systemInstruction,
+          temperature: 0.4,
+          responseMimeType: "text/plain",
+        },
+      });
+
+      const text = response.text?.trim();
+      if (!text) throw new Error("Gemini returned empty style summary");
+
+      const usage = response.usageMetadata;
+      await recordAICall({
+        userId: options.userId,
+        feature: "style-summary",
+        provider: "gemini",
+        model,
+        inputTokens: usage?.promptTokenCount ?? 0,
+        outputTokens: usage?.candidatesTokenCount ?? 0,
+        latencyMs: Date.now() - startedAt,
+        success: true,
+      });
+
+      return { text, model };
+    } catch (error) {
+      lastError = error;
+      if (attempt === MAX_RETRIES || !isRetryable(error)) {
+        await recordAICall({
+          userId: options.userId,
+          feature: "style-summary",
+          provider: "gemini",
+          model,
+          inputTokens: 0,
+          outputTokens: 0,
+          latencyMs: Date.now() - startedAt,
+          success: false,
+          errorCode: error instanceof Error ? error.message.slice(0, 100) : "unknown",
+        });
+        throw error;
+      }
+      const backoffMs = 1000 * Math.pow(2, attempt);
+      console.warn(
+        `[geminiProvider:style-summary] Attempt ${attempt + 1} failed (retryable), waiting ${backoffMs}ms:`,
+        error instanceof Error ? error.message.slice(0, 120) : error
+      );
+      await sleep(backoffMs);
+    }
+  }
+
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("Gemini style summary failed after retries");
 }

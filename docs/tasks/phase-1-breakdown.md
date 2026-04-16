@@ -12,8 +12,8 @@
 |---|------|---------|------------|-------|--------|
 | 1.1 | Prisma schema + migration (ProfessorStyleProfile + AICallLog + AIFeedback) | 2 saat | — | ✅ Tamam | `3aed21b` |
 | 1.2 | Style aggregation servisi (Gemini hariç, saf TS) | 4 saat | 1.1 | ✅ Tamam | `846e4fe` |
-| 1.3 | Gemini style summary prompt + provider call | 4 saat | 1.2 | ⏳ Sıradaki | — |
-| 1.4 | `GET /api/professors/:id/style-profile` endpoint | 2 saat | 1.2, 1.3 | Planlı | — |
+| 1.3 | Gemini style summary prompt + provider call | 4 saat | 1.2 | ✅ Tamam | bu commit |
+| 1.4 | `GET /api/professors/:id/style-profile` endpoint | 2 saat | 1.2, 1.3 | ⏳ Sıradaki | — |
 | 1.5 | Cache invalidasyon hook (analysisService → isStale) | 1 saat | 1.1 | Planlı | — |
 | 1.6 | Backend unit + integration testler | 3 saat | 1.1-1.5 | Planlı | — |
 | 1.7 | Frontend: StyleHero + metrics kartları | 4 saat | 1.4 | Planlı | — |
@@ -23,7 +23,7 @@
 | 1.11 | Mobile responsive test + light/dark test | 2 saat | 1.9 | Planlı | — |
 | 1.12 | Dokümantasyon update (phase-1-style-profile "gerçekleşen") | 1 saat | Hepsi | Planlı | — |
 
-**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 2/12 task tamam (~6 saat).
+**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 3/12 task tamam (~10 saat).
 
 ---
 
@@ -71,7 +71,7 @@
 
 ---
 
-### 1.3 — Gemini Style Summary
+### 1.3 — Gemini Style Summary ✅
 
 **Yeni dosya:**
 - `server/src/prompts/style-summary.ts`

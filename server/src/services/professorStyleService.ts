@@ -1,6 +1,8 @@
 import type { ExamAnalysis, ProfessorStyleProfile } from "@prisma/client";
 
 import prisma from "../lib/prisma";
+import { generateStyleSummary } from "./llm/geminiProvider";
+import { STYLE_SUMMARY_VERSION } from "../prompts/style-summary";
 
 // ExamAnalysis JSON shapes (authored on write via analysisService).
 // Keys are preserved as-is across the codebase.
@@ -58,10 +60,11 @@ const TOP_TOPIC_LIMIT = 10;
 // If a regeneration flag is older than this, treat it as abandoned and retry.
 const REGENERATION_STALE_AFTER_MS = 5 * 60 * 1000; // 5 minutes
 
-// Placeholder value used when the profile is built before the Gemini summary
-// stage has been implemented (Task 1.3 will replace this).
-const GEMINI_SUMMARY_PLACEHOLDER = "[pending-generation]";
-const GEMINI_VERSION_PLACEHOLDER = "stub-v0";
+// Fallback copy when Gemini fails — the profile still persists so the UI
+// has data to render; isStale remains true so the next request retries.
+const FALLBACK_SUMMARY =
+  "Hoca tarzı özeti şu an üretilemedi. Biraz sonra tekrar denenecek.";
+const FALLBACK_VERSION = "fallback-v0";
 
 type ExamWithAnalysis = {
   id: string;
@@ -246,39 +249,57 @@ async function buildAndPersist(
   professorId: string,
   result: AggregationResult
 ): Promise<ProfessorStyleProfile> {
-  // Task 1.3 will replace these with a real Gemini call + version tag.
-  const summary = GEMINI_SUMMARY_PLACEHOLDER;
-  const version = GEMINI_VERSION_PLACEHOLDER;
+  let summary: string;
+  let version: string;
+  let isStale: boolean;
 
-  const profile = await prisma.professorStyleProfile.upsert({
+  if (!process.env.GEMINI_API_KEY) {
+    console.warn(
+      "[professorStyleService] GEMINI_API_KEY not set — using fallback summary."
+    );
+    summary = FALLBACK_SUMMARY;
+    version = FALLBACK_VERSION;
+    isStale = true; // retry next request
+  } else {
+    try {
+      const generated = await generateStyleSummary({
+        aggregated: result.aggregated,
+        topTopics: result.topTopics,
+        evolution: result.evolution,
+        metrics: result.metrics,
+      });
+      summary = generated.text;
+      version = `${STYLE_SUMMARY_VERSION}:${generated.model}`;
+      isStale = false;
+    } catch (error) {
+      console.error(
+        "[professorStyleService] Gemini summary failed, persisting fallback:",
+        error instanceof Error ? error.message : error
+      );
+      summary = FALLBACK_SUMMARY;
+      version = FALLBACK_VERSION;
+      isStale = true; // UI can show fallback text; next call will retry
+    }
+  }
+
+  const data = {
+    aggregatedData: result.aggregated as object,
+    geminiSummary: summary,
+    topTopics: result.topTopics as object,
+    evolution: result.evolution as object,
+    metrics: result.metrics as object,
+    examSourceCount: result.examSourceCount,
+    geminiVersion: version,
+    isStale,
+    regenerationStartedAt: null,
+    generatedAt: new Date(),
+  };
+
+  return prisma.professorStyleProfile.upsert({
     where: { professorId },
-    create: {
-      professorId,
-      aggregatedData: result.aggregated as object,
-      geminiSummary: summary,
-      topTopics: result.topTopics as object,
-      evolution: result.evolution as object,
-      metrics: result.metrics as object,
-      examSourceCount: result.examSourceCount,
-      geminiVersion: version,
-      isStale: false,
-      regenerationStartedAt: null,
-      generatedAt: new Date(),
-    },
-    update: {
-      aggregatedData: result.aggregated as object,
-      geminiSummary: summary,
-      topTopics: result.topTopics as object,
-      evolution: result.evolution as object,
-      metrics: result.metrics as object,
-      examSourceCount: result.examSourceCount,
-      geminiVersion: version,
-      isStale: false,
-      regenerationStartedAt: null,
-      generatedAt: new Date(),
-    },
+    create: { professorId, ...data },
+    update: data,
   });
-  return profile;
 }
 
 /**

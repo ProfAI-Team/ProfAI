@@ -32,11 +32,27 @@ async function main() {
   const second = await getOrBuildStyleProfile(prof.id);
   console.log(`took ${Date.now() - t2}ms; status=${second.status}`);
 
-  console.log(`\n── invalidate + rebuild ──`);
+  console.log(`\n── invalidate + rebuild (Gemini call) ──`);
   await invalidateStyleProfile(prof.id);
   const t3 = Date.now();
   const third = await getOrBuildStyleProfile(prof.id);
   console.log(`took ${Date.now() - t3}ms; status=${third.status}`);
+  if (third.status === "ready") {
+    console.log(`version=${third.profile.geminiVersion}`);
+    console.log(`isStale=${third.profile.isStale}`);
+    console.log(`summary:\n${third.profile.geminiSummary}`);
+  }
+
+  console.log(`\n── AICallLog — recent 3 entries ──`);
+  const logs = await prisma.aICallLog.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 3,
+  });
+  for (const l of logs) {
+    console.log(
+      `  ${l.createdAt.toISOString()} · ${l.feature} · ${l.success ? "✓" : "✗"} · ${l.latencyMs}ms · in=${l.inputTokens} out=${l.outputTokens} · $${l.costUsd}`
+    );
+  }
 
   console.log(`\n── insufficient data case (1-exam professor: Peri Güneş) ──`);
   const peri = await prisma.professor.findFirst({
