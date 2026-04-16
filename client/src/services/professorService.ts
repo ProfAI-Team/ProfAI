@@ -108,4 +108,69 @@ export const professorService = {
     if (!res.data.analysis) return [];
     return [transformAnalysis(res.data.analysis)];
   },
+
+  async getStyleProfile(id: string): Promise<StyleProfileResponse> {
+    const res = await api.get(`/professors/${id}/style-profile`);
+    return res.data;
+  },
 };
+
+// Shape of GET /api/professors/:id/style-profile — Phase 1.
+export interface StyleProfileProfessor {
+  id: string;
+  name: string;
+  department: string;
+  university: string;
+}
+
+export interface StyleProfileTopTopic {
+  topic: string;
+  frequency: number;
+}
+
+export interface StyleProfileEvolutionPoint {
+  year: number;
+  questionTypes: {
+    'Multiple Choice': number;
+    'Classic/Open-ended': number;
+    'True/False': number;
+  };
+  difficulty: number;
+  examCount: number;
+}
+
+export interface StyleProfileMetrics {
+  totalExams: number;
+  avgDifficulty: number;
+  avgQuestionCount: number;
+  dominantType: 'Multiple Choice' | 'Classic/Open-ended' | 'True/False' | null;
+}
+
+export interface StyleProfileReady {
+  status: 'ready';
+  professor: StyleProfileProfessor;
+  profile: {
+    aggregated: {
+      questionTypes: StyleProfileEvolutionPoint['questionTypes'];
+      topicDistribution: Record<string, number>;
+      difficulty: number;
+    };
+    topTopics: StyleProfileTopTopic[];
+    evolution: StyleProfileEvolutionPoint[];
+    metrics: StyleProfileMetrics;
+    styleSummary: string;
+    examSourceCount: number;
+    isStale: boolean;
+    geminiVersion: string;
+    generatedAt: string;
+  };
+}
+
+export interface StyleProfileInsufficient {
+  status: 'insufficient_data';
+  professor: StyleProfileProfessor;
+  examSourceCount: number;
+  minRequired: number;
+}
+
+export type StyleProfileResponse = StyleProfileReady | StyleProfileInsufficient;

@@ -4,6 +4,7 @@ import {
   getProfessor,
   createProfessor,
   getProfessorAnalysis,
+  getStyleProfile,
   getFilterOptions,
   getDiscovery,
 } from "../controllers/professorController";
@@ -17,5 +18,6 @@ router.get("/discovery", getDiscovery);
 router.get("/:id", getProfessor);
 router.post("/", authenticate, createProfessor);
 router.get("/:id/analysis", getProfessorAnalysis);
+router.get("/:id/style-profile", getStyleProfile);
 
 export default router;

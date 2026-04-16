@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import prisma from "../lib/prisma";
 import { TURKISH_UNIVERSITIES } from "../data/turkish-universities";
+import { getOrBuildStyleProfile } from "../services/professorStyleService";
 
 // University → city lookup table (from data file)
 const UNIVERSITY_TO_CITY = new Map<string, string>(
@@ -355,6 +356,63 @@ export const getProfessorAnalysis = async (req: Request, res: Response): Promise
     });
   } catch (error) {
     console.error("Get professor analysis error:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+// Phase 1 — Style profile endpoint.
+// Responses:
+//   200 { status: "ready", professor, profile, generatedAt }
+//   200 { status: "insufficient_data", professor, examSourceCount, minRequired }
+//   404 { error: "Professor not found." }
+//   500 { error: "Internal server error." }
+export const getStyleProfile = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const id = req.params.id as string;
+
+    const professor = await prisma.professor.findUnique({
+      where: { id },
+      select: { id: true, name: true, department: true, university: true },
+    });
+
+    if (!professor) {
+      res.status(404).json({ error: "Professor not found." });
+      return;
+    }
+
+    const result = await getOrBuildStyleProfile(id);
+
+    if (result.status === "insufficient_data") {
+      res.json({
+        status: "insufficient_data",
+        professor,
+        examSourceCount: result.examSourceCount,
+        minRequired: 3,
+      });
+      return;
+    }
+
+    const p = result.profile;
+    res.json({
+      status: "ready",
+      professor,
+      profile: {
+        aggregated: p.aggregatedData,
+        topTopics: p.topTopics,
+        evolution: p.evolution,
+        metrics: p.metrics,
+        styleSummary: p.geminiSummary,
+        examSourceCount: p.examSourceCount,
+        isStale: p.isStale,
+        geminiVersion: p.geminiVersion,
+        generatedAt: p.generatedAt.toISOString(),
+      },
+    });
+  } catch (error) {
+    console.error("Get style profile error:", error);
     res.status(500).json({ error: "Internal server error." });
   }
 };

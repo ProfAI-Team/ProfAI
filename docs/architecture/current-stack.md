@@ -109,7 +109,8 @@ Evrim planı: [`data-model-evolution.md`](./data-model-evolution.md).
 - `GET /api/professors/:id` — detail
 - `GET /api/professors/filters` — faceted counts + cities
 - `GET /api/professors/discovery?university=X` — topRated + byUserUni
-- `GET /api/professors/:id/analysis` — aggregate exam analysis (Phase 1'de `/style-profile`'a evrilir)
+- `GET /api/professors/:id/analysis` — legacy aggregate exam analysis (kept for backward compat)
+- `GET /api/professors/:id/style-profile` — **Phase 1** cached style profile (Gemini summary + aggregated metrics). Returns `{ status: "ready" | "insufficient_data", professor, profile? }`.
 
 ### Courses
 - `GET /api/courses` — filter (`search`, `university`, `professorId`)
