@@ -136,7 +136,13 @@ model AICallLog {
   model        String // e.g. "gemini-2.5-flash-lite"
   inputTokens  Int
   outputTokens Int
+  // Estimated cost at *paid-tier* pricing; always populated for capacity
+  // planning. When `freeTier` is true the call was not actually billed.
   costUsd      Float
+  // True if the call ran on Google AI Studio free-tier quota (no billing).
+  // Lets us run `SUM(costUsd) WHERE freeTier = false` for real spend and
+  // `SUM(costUsd) WHERE freeTier = true` as a "would-cost-if-paid" projection.
+  freeTier     Boolean @default(true)
   latencyMs    Int
   cacheHit     Boolean @default(false)
   success      Boolean

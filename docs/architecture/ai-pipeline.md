@@ -139,24 +139,27 @@ export const styleSummaryPrompt = {
 
 ## Cost Tracking
 
-### `AICallLog` Tablosu (Phase 1'de ekle)
+ProfAI şu anda **Google AI Studio free tier**'da çalışıyor (15 req/dk, 1500 req/gün, 0 fatura). `AICallLog.costUsd` kolonu **her zaman paid-tier fiyatlandırmasına göre hesaplanır** — `freeTier=true` satırlar "eğer paid'e geçseydik bu ay ne olurdu?" projeksiyonu, `freeTier=false` satırlar gerçek harcama.
+
+### `AICallLog` Tablosu (Phase 1'de eklendi, commit `3aed21b` + `add_ai_call_free_tier_flag`)
 
 ```prisma
 model AICallLog {
-  id            String   @id @default(uuid())
-  userId        String?
-  feature       String   // "analyze-exam" | "style-summary" | ...
-  provider      String   // "gemini" | "claude"
-  model         String   // "gemini-2.5-flash-lite"
-  inputTokens   Int
-  outputTokens  Int
-  costUsd       Float
-  latencyMs     Int
-  cacheHit      Boolean  @default(false)
-  success       Boolean
-  errorCode     String?
+  id           String   @id @default(uuid())
+  userId       String?
+  feature      String   // "analyze-exam" | "style-summary" | ...
+  provider     String   // "gemini" | "claude"
+  model        String   // "gemini-2.5-flash-lite"
+  inputTokens  Int
+  outputTokens Int
+  costUsd      Float    // paid-tier pricing tahmini, her zaman dolu
+  freeTier     Boolean  @default(true)  // gerçekte ödendi mi?
+  latencyMs    Int
+  cacheHit     Boolean  @default(false)
+  success      Boolean
+  errorCode    String?
 
-  createdAt     DateTime @default(now())
+  createdAt    DateTime @default(now())
 
   @@index([userId])
   @@index([feature])
@@ -164,11 +167,35 @@ model AICallLog {
 }
 ```
 
+### `GEMINI_FREE_TIER` Env Flag
+
+- Default: `true` (AI Studio free tier kullanılıyor).
+- Paid (Google Cloud) billing'e geçilirse: `GEMINI_FREE_TIER=false` → yeni kayıtlar `freeTier=false` alır, gerçek fatura akışı.
+- Migration yok — sadece env toggle.
+
+### Rapor Örnekleri
+
+```sql
+-- Gerçek harcama (paid tier kullanılırsa):
+SELECT SUM("costUsd") FROM ai_call_logs WHERE "freeTier" = false;
+
+-- "Paid'e geçsek bu ay ne olurdu" projeksiyonu:
+SELECT feature, SUM("costUsd") AS projected_cost
+FROM ai_call_logs WHERE "freeTier" = true
+GROUP BY feature ORDER BY projected_cost DESC;
+
+-- Rate-limit riski (free tier quota'ya yakınlık):
+SELECT DATE_TRUNC('day', "createdAt") AS day, COUNT(*) AS calls
+FROM ai_call_logs WHERE "freeTier" = true
+GROUP BY day ORDER BY day DESC LIMIT 30;
+```
+
 ### Dashboard (Phase 4'te)
 
-- Daily cost breakdown by feature
-- Top 10 users by cost
-- Cost per conversion (cohort analysis)
+- Daily cost breakdown by feature (projected vs. actual)
+- Top 10 users by token consumption
+- Free tier quota heatmap (günlük call adedi)
+- Cost per conversion (cohort analysis — paid tier döneminde)
 
 ### Cost Budgets (hedefler)
 

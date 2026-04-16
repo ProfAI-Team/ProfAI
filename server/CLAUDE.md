@@ -84,6 +84,7 @@ const model = getGeminiModel()   // GEMINI_MODEL env ile seçilir
 
 - **Model:** `gemini-2.5-flash-lite` (stabil; `gemini-2.5-flash` 503 verebiliyor).
 - **API key:** Root `.env` (`GEMINI_API_KEY`) → dotenv root'tan okur.
+- **Tier:** Google AI Studio **free tier** (15 req/dk, 1500 req/gün) — Phase 0-3 ölçeğinde yeter. `GEMINI_FREE_TIER=true` flag'i `AICallLog.freeTier` kolonuna yazılır. Paid tier'a geçilirse flag'i `false` yap; `costUsd` tahminleri zaten populate ediliyor.
 - **Structured output:** `responseMimeType: "application/json"` + `responseSchema` kullan. Detay: [`../docs/architecture/ai-pipeline.md`](../docs/architecture/ai-pipeline.md).
 - **Her yeni AI endpoint için:** input validation → cache check → Gemini call → response parse → log. Retry/fallback Phase 1+ ile ekleniyor.
 - **Cost hedefi:** ortalama $0.05/analiz. Her call loglanır (faz 1+ `AICallLog` tablosu).

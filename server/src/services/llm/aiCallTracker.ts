@@ -32,8 +32,21 @@ export interface RecordCallParams {
   errorCode?: string | null;
 }
 
+// True unless the operator explicitly opts into paid-tier billing.
+// Default is true because our Google AI Studio key runs on free quota.
+function isFreeTier(): boolean {
+  const val = process.env.GEMINI_FREE_TIER;
+  if (val === undefined) return true;
+  return val.toLowerCase() !== "false";
+}
+
 // Fire-and-forget-style logger; failures are swallowed so telemetry
 // never breaks the feature itself.
+//
+// Note on `costUsd`: always populated using the pricing table — even on
+// free tier — so we can project "what would this month cost at paid
+// pricing?". The `freeTier` flag on the row disambiguates real spend from
+// hypothetical projection at query time.
 export async function recordAICall(params: RecordCallParams): Promise<void> {
   try {
     const costUsd = params.success
@@ -49,6 +62,7 @@ export async function recordAICall(params: RecordCallParams): Promise<void> {
         inputTokens: params.inputTokens,
         outputTokens: params.outputTokens,
         costUsd,
+        freeTier: isFreeTier(),
         latencyMs: params.latencyMs,
         cacheHit: params.cacheHit ?? false,
         success: params.success,

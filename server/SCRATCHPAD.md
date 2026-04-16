@@ -21,7 +21,8 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 - **Phase 1 Task 1.1 tamamlandı (2026-04-16)**: 3 model + migration + FK'lar.
 - **Phase 1 Task 1.2 tamamlandı (2026-04-16)**: `professorStyleService.ts` aggregation + cache + concurrency lock.
-- **Phase 1 Task 1.3 tamamlandı (2026-04-16)**: `prompts/style-summary.ts` (v1) + `aiCallTracker.ts` + `geminiProvider.generateStyleSummary`. Smoke: 3.9sn latency, 470+151 tokens, $0.000081 cost. Özet kalitesi good — hoca adı kullanmadan 4 cümle, pratik tavsiye. `AICallLog` insert çalışıyor. Fallback: Gemini fail → persist "fallback-v0" + isStale=true (retry next request).
+- **Phase 1 Task 1.3 tamamlandı (2026-04-16)**: `prompts/style-summary.ts` (v1) + `aiCallTracker.ts` + `geminiProvider.generateStyleSummary`. Smoke: 3.9sn latency (sonraki 1.5sn), 470+151 tokens, $0.000081 projeksiyonu (free tier — gerçek $0). Özet kalitesi good. Fallback: Gemini fail → "fallback-v0" + isStale=true.
+- **AICallLog freeTier flag eklendi (2026-04-16)**: migration `20260416201038_add_ai_call_free_tier_flag`. `GEMINI_FREE_TIER=true` env default. `costUsd` paid-tier projeksiyonu olarak devam ediyor; rapor query'leri ai-pipeline.md'de.
 - Sıradaki: Task 1.4 — `GET /api/professors/:id/style-profile` endpoint.
 
 ---

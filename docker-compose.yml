@@ -24,7 +24,8 @@ services:
       - PORT=5000
       - CORS_ORIGIN=http://localhost:3001
       - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.5-flash}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.5-flash-lite}
+      - GEMINI_FREE_TIER=${GEMINI_FREE_TIER:-true}
     volumes:
       - uploads:/app/uploads
     networks:

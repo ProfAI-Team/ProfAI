@@ -46,7 +46,7 @@ model ProfessorStyleProfile {
   @@index([isStale])
 }
 
-model AICallLog {   // Cost tracking eklenir
+model AICallLog {   // Cost tracking + free-tier flag
   id           String   @id @default(uuid())
   userId       String?
   feature      String
@@ -54,7 +54,8 @@ model AICallLog {   // Cost tracking eklenir
   model        String
   inputTokens  Int
   outputTokens Int
-  costUsd      Float
+  costUsd      Float    // paid-tier tahmini, her zaman populate
+  freeTier     Boolean  @default(true)
   latencyMs    Int
   cacheHit     Boolean  @default(false)
   success      Boolean
