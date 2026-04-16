@@ -20,10 +20,10 @@
 | 1.8 | Frontend: EvolutionChart + TopicBadges | 3 saat | 1.7 | ✅ Tamam | `fc6335a` |
 | 1.9 | ProfessorDetailPage tam rebuild + empty/loading state | 4 saat | 1.7, 1.8 | ✅ Tamam | `9188c5c` |
 | 1.10 | i18n TR + EN copy iteration (hibrit ton) | 2 saat | 1.9 | ✅ Tamam | `2524099` |
-| 1.11 | Mobile responsive + light/dark visual smoke (Playwright MCP) | 2 saat | 1.9 | ✅ Tamam | bu commit |
-| 1.12 | Dokümantasyon update (phase-1-style-profile "gerçekleşen") | 1 saat | Hepsi | ⏳ Sıradaki | — |
+| 1.11 | Mobile responsive + light/dark visual smoke (Playwright MCP) | 2 saat | 1.9 | ✅ Tamam | `2d07597` |
+| 1.12 | Dokümantasyon kapanışı + scratchpad archive + roadmap README güncelle | 1 saat | Hepsi | ✅ Tamam | bu commit |
 
-**Toplam:** ~32 saat çalışma süresi (5 tam iş günü). **İlerleme:** 11/12 task tamam (~31 saat).
+**Toplam:** ~32 saat çalışma süresi (tahmin) · ~9 saat (gerçek tek-oturum). **İlerleme:** ✅ **12/12 task tamam — Phase 1 kapandı.**
 
 ---
 

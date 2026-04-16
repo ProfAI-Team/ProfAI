@@ -5,6 +5,7 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 > Kök / cross-cutting notlar → [`../SCRATCHPAD.md`](../SCRATCHPAD.md)
 > Frontend notları → [`../client/SCRATCHPAD.md`](../client/SCRATCHPAD.md)
 > Genel backend rehberi → [`./CLAUDE.md`](./CLAUDE.md)
+> Faz 1 arşivi: [`../docs/_archive/scratchpad-server-2026-04-17.md`](../docs/_archive/scratchpad-server-2026-04-17.md)
 
 ---
 
@@ -19,63 +20,49 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 ## Şu An Üzerinde Çalışılan
 
-- **Phase 1 Task 1.1 tamamlandı (2026-04-16)**: 3 model + migration + FK'lar.
-- **Phase 1 Task 1.2 tamamlandı (2026-04-16)**: `professorStyleService.ts` aggregation + cache + concurrency lock.
-- **Phase 1 Task 1.3 tamamlandı (2026-04-16)**: `prompts/style-summary.ts` (v1) + `aiCallTracker.ts` + `geminiProvider.generateStyleSummary`. Smoke: 3.9sn latency (sonraki 1.5sn), 470+151 tokens, $0.000081 projeksiyonu (free tier — gerçek $0). Özet kalitesi good. Fallback: Gemini fail → "fallback-v0" + isStale=true.
-- **AICallLog freeTier flag eklendi (2026-04-16)**: migration `20260416201038_add_ai_call_free_tier_flag`. `GEMINI_FREE_TIER=true` env default. `costUsd` paid-tier projeksiyonu olarak devam ediyor; rapor query'leri ai-pipeline.md'de.
-- **Phase 1 Task 1.4 tamamlandı (2026-04-16)**: `GET /api/professors/:id/style-profile` endpoint.
-- **Phase 1 Task 1.5 tamamlandı (2026-04-16)**: Invalidation hook `examController.uploadExam`'e eklendi.
-- **Phase 1 Task 1.6 tamamlandı (2026-04-16)**: Vitest + Supertest kuruldu. `src/app.ts` index'ten ayrıldı (supertest listen'e ihtiyaç duymasın). `computeAggregation` pure function olarak ayrıldı (DB bağımlılığı yok, test'te mock prisma gerekmez). 7 unit test (aggregation — weighting, evolution, topTopics, edge cases) + 4 integration test (endpoint — 404 / insufficient / ready / cache-hit < 1sn). Integration `DATABASE_URL` yoksa sessiz skip. CI'ye `npm test` step eklendi. Smoke script'ler aynen duruyor (dev dostu).
-- Backend Phase 1 tamam. Sıradaki: Task 1.7 — Frontend `StyleHero` + metrics kartları.
-- Sıradaki: Task 1.4 — `GET /api/professors/:id/style-profile` endpoint.
+- Phase 1 tamamlandı. Backend tarafında Phase 2 başlıyor.
+- **Phase 2 scope (backend):** `StudentNote` + `StudyPack` schema, `pdf-parse`/`mammoth` entegrasyonu (mevcut `analysisService` pattern'ini takip), `POST /api/notes/upload`, `POST /api/study-pack/generate`, `GET /api/study-pack/:id`.
 
 ---
 
-## Phase 1 Hazırlık Notları
+## Phase 2 Hazırlık Notları
 
-- **Migration adı:** `phase_1_style_profile` — üç model birlikte (`ProfessorStyleProfile`, `AICallLog`, `AIFeedback`).
-- **Servis dizini:** `server/src/services/professorStyleService.ts` yeni.
-- **Prompt dizini:** `server/src/prompts/style-summary.ts` yeni (prompt library Phase 1'de başlatılıyor).
-- **Cache strategy Phase 1:** in-process LRU yeterli. 500 entry cap. Phase 3'te Redis.
-- **Concurrency lock:** Aynı profId için paralel `getOrBuildStyleProfile` → tek Gemini call olmalı. Basit `Map<profId, Promise>` pattern.
-- **Lazy generate:** 4500 hoca × Gemini call = $$$. Sadece ziyaret edilende üret.
-
----
-
-## Düşünceler / Keşifler
-
-- **Zod eksik**: Input validation elle yapılıyor. Phase 1'de Zod ekle (yeni endpoint yazarken alışkanlık kur).
-- **Error response tutarsız**: Bazı endpoint `{ error: "..." }`, bazı `{ message: "..." }`. Phase 1'de konsolide etme fırsatı.
-- **Prisma singleton**: Hot-reload'da yeniden kurulabiliyor. `server/src/lib/prisma.ts` içinde `globalThis.prisma` pattern'i ekle.
-- **Gemini structured output**: Response schema ile JSON garantisi iyi; Zod post-parse ek güvence (defensive).
+- **File extraction:**
+  - PDF → `pdf-parse` (mevcut, sınav upload için kullanılıyor).
+  - DOCX → `mammoth` (yeni dep).
+  - TXT → plain read.
+  - Foto OCR → Phase 6 (şimdi placeholder OK).
+- **Gemini prompt:** `prompts/study-pack.ts` yeni dosya. Structured output (JSON): `{ topicSummaries, practiceQuestions, profStylePatterns }`. Style-summary pattern'ini takip et.
+- **Study pack cache:** Phase 1 `ProfessorStyleProfile` gibi ama TTL'li (24h). Key: `userId + noteHash + professorId + version`.
+- **Cost tracking:** `aiCallTracker.recordAICall` feature="study-pack" ile. Aynı altyapı, değişiklik yok.
+- **Input kalite:** `StudentNote.wordCount < 500` → UI warning. Service'te hard reject yok, soft reject (generate it ama düşük kalite uyarısı).
 
 ---
 
-## Teknik Borç (Phase 1'de Değerlendir)
+## Teknik Borç (Geçmiş Fazlardan Kalan)
 
-- `pino` logger yerleştirme — `console.log` scatter.
-- Rate limit yok — Phase 1 için blocker değil ama Phase 4 öncesi şart.
-- JWT refresh token yok — Phase 5 kapsamında.
-- CORS dev'de açık, production'da sıkılaştır.
-- Multer dosya temizlik job'u yok — `uploads/` klasörü zamanla şişer.
-- **Docker dev workflow**: `docker-compose.yml` server source'u volume olarak mount etmiyor, build'e baked. Prisma migrate çalıştırmak için `docker compose cp` ile schema'yı container'a atıp inner run + migration'ı geri çekmek gerekti. Phase 1 içinde `server/`'a bind mount eklemek (`./server:/app` + `node_modules` override) değerlendir — hot reload + migrate workflow profesyonelleşir. Task 1.1'de bu workaround ile ilerlendi.
+- **Zod yok**: Input validation elle. Phase 2'de yeni endpoint'ler yazarken Zod eklemek için iyi fırsat.
+- **Error response tutarsız**: Bazı endpoint `{ error: "..." }`, bazı `{ message: "..." }`. Yeni endpoint'lerde standardize et.
+- **Prisma singleton**: Hot-reload'da yeniden kurulabilir. `server/src/lib/prisma.ts` içinde `globalThis.prisma` pattern'i ekle (küçük refactor).
+- **`pino` logger yerleştirme** — `console.log` scatter devam ediyor.
+- **Rate limit yok** — Phase 4 öncesi şart. Phase 2 study pack generation pahalı, rate limit gerçekten lazım (Gemini cost koruma).
+- **Docker dev workflow** — `docker-compose.yml` server source'u volume mount etmiyor, build'e baked. Phase 1'de `docker compose cp` ile workaround. Phase 2'de `./server:/app` bind mount + `node_modules` override ekle — hot reload + migrate workflow profesyonelleşir.
 
 ---
 
-## AI Pipeline Notları
+## AI Pipeline Notları (Phase 1'den kalan + Phase 2 ekleri)
 
-- **Model:** `gemini-2.5-flash-lite` stabil; `flash` 503 veriyordu.
-- **Structured output:** `responseMimeType: "application/json"` + `responseSchema` çalışıyor.
-- **Cost tracking:** Phase 1'de `AICallLog` tablosu + `geminiProvider.ts` wrap.
-- **Retry:** 503 için 2 retry (exponential backoff 500ms, 1500ms). Daha fazlası fallback.
-- **Prompt versioning:** Her prompt file'da `version: 'v1'` field'ı. Cache key'de kullanılır.
+- **Model:** `gemini-2.5-flash-lite` stabil. Structured output (`responseMimeType: application/json`) çalışıyor.
+- **Free tier flag** (`GEMINI_FREE_TIER=true`) runtime'da. `costUsd` projeksiyon olarak devam, `freeTier` kolonunda rapor ayrımı.
+- **Retry:** 503/429 için 2 retry (exponential backoff 500ms, 1.5s). Study pack de aynı.
+- **Prompt versioning:** Her prompt file `version` field'ı tutar. Cache key'de kullan.
 
 ---
 
 ## Seed / DB Notları
 
-- Seed çalıştırma **destructive**: production'da ASLA. Sadece dev.
-- Phase 1 sonrası seed'e `ProfessorStyleProfile` seed data ekleme? → Hayır, lazy generate yeterli; integration test sırasında inline insert.
+- Phase 2'de seed'e study pack fixture gerekmiyor — user-generated content, test'te inline oluştur.
+- Mevcut seed 30sn, `StudentNote` + `StudyPack` tabloları boş duracak.
 
 ---
 
@@ -87,10 +74,10 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 ## Bir Sonraki Session İçin (Backend)
 
-1. Phase 1 Task 1.1 — Prisma schema migration (en öncelikli).
-2. Öncesi kısa audit: mevcut `analysisService.ts` prompt'u `prompts/` dizinine taşımak yararlı mı? (refactor window).
-3. Vitest kurulum kararı — Task 1.6'yı önce yapmak mı test-first için daha iyi?
-4. KVKK aydınlatma metni backend tarafı: `/api/privacy-policy` + kullanıcı onay log'u (Phase 1 kapsamında düşünülmeli).
+1. Phase 2 schema: `StudentNote` + `StudyPack` modelleri, migration.
+2. `POST /api/notes/upload` — Multer + pdf-parse/mammoth extraction.
+3. `studyPackService.ts` + `prompts/study-pack.ts`.
+4. KVKK aydınlatma metni — öğrenci notları kişisel içerik; Phase 2 launch öncesi metin hazır olmalı.
 
 ---
 
@@ -99,3 +86,4 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 | Tarih | Değişiklik |
 |-------|------------|
 | 2026-04-16 | Kuruldu. |
+| 2026-04-17 | Phase 1 kapanışı — eski içerik arşive donduruldu, Phase 2 için reset. |
