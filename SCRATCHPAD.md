@@ -44,7 +44,7 @@ Bu dosya **yaşayan çalışma defteridir.** Cross-cutting işler, proje geneli 
 
 Sadece "yeni ortaya çıkan" açık sorular buraya. Olgunlaştığında [`docs/tasks/open-questions.md`](./docs/tasks/open-questions.md)'e taşı.
 
-- (yok şu an)
+- **Dependabot: 22 vulnerability** (15 high, 7 moderate) — GitHub push sırasında raporlandı (2026-04-16). `https://github.com/ProfAI-Team/ProfAI/security/dependabot` → liste. Phase 1 ilerlerken `npm audit fix` ile toplu halledilir; breaking changes yoksa basit PR. Major bump gerekiyorsa ayrı karar.
 
 ---
 
