@@ -16,7 +16,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.2 | Per-worker test DB schema izolasyonu — `test_worker_${poolId}` pattern, opt-in via `VITEST_WORKER_COUNT` env; 3 integration test self-fixture'a çevrildi | 3 saat | 5.1 | ✅ Tamam | `c15d7e5` |
 | 5.3 | Global error response middleware — `AppError` + handler + Zod normalize; Phase 0/1 controller migration Phase 6'ya ertelendi (50+ call) | 2 saat | — | ✅ Tamam | `45d8346` |
 | 5.4 | Recharts dynamic import — `StyleHero` + `EvolutionChart` + `AnalysisCard` lazy; ProfessorDetailPage 114KB → 6.5KB gzipped (Recharts 97KB ayrı chunk) | 2 saat | — | ✅ Tamam | `1230f82` |
-| 5.5 | BullMQ + Redis infrastructure — docker compose redis servisi + queue abstraction + studyGroupMaintenance job + inline queue test mode; T3 kapatıldı | 4 saat | — | ✅ Tamam | `pending` |
+| 5.5 | BullMQ + Redis infrastructure — docker compose redis servisi + queue abstraction + studyGroupMaintenance job + inline queue test mode; T3 kapatıldı | 4 saat | — | ✅ Tamam | `b0977f9` |
 | 5.6 | Demo user credit reset utility — `scripts/reset-demo-user.ts` (Phase 4 fixture birikim sorunu) | 1 saat | — | ⏳ Bekliyor | — |
 | 5.7 | Prisma schema + migration — `AcademicDNA` + `ConfidenceScore` + `GradeRecord` + `SpacedRepetition` (4 tablo) | 3 saat | — | ⏳ Bekliyor | — |
 | 5.8 | DNA aggregation servisi — strengths/weaknesses/correctRate/preferredDifficulty + `Exam.verified` invalidation hook zincirine bağla | 4 saat | 5.7 | ⏳ Bekliyor | — |
