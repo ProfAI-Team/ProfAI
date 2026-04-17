@@ -5,6 +5,11 @@ import {
   buildStyleSummaryPrompt,
   type StyleSummaryInput,
 } from "../../prompts/style-summary";
+import {
+  buildStudyPackPrompt,
+  type StudyPackPromptInput,
+  type TargetDistribution,
+} from "../../prompts/study-pack";
 import { recordAICall } from "./aiCallTracker";
 
 const DEFAULT_MODEL = "gemini-2.5-flash";
@@ -304,4 +309,173 @@ export async function generateStyleSummary(
   throw lastError instanceof Error
     ? lastError
     : new Error("Gemini style summary failed after retries");
+}
+
+// --------------------------------------------------------------------
+// Study pack (Phase 2)
+// --------------------------------------------------------------------
+
+export interface StudyPackTopicSummary {
+  topic: string;
+  content: string;
+}
+
+export interface StudyPackPracticeQuestion {
+  question: string;
+  type: "MC" | "CLASSIC" | "TF";
+  topic: string;
+  difficulty: number;
+  answer: string;
+  rationale: string;
+}
+
+export interface StudyPackContent {
+  topicSummaries: StudyPackTopicSummary[];
+  practiceQuestions: StudyPackPracticeQuestion[];
+  profStylePatterns: string[];
+}
+
+const studyPackResponseSchema = {
+  type: Type.OBJECT,
+  properties: {
+    topicSummaries: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          topic: { type: Type.STRING },
+          content: { type: Type.STRING },
+        },
+        required: ["topic", "content"],
+        propertyOrdering: ["topic", "content"],
+      },
+    },
+    practiceQuestions: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          question: { type: Type.STRING },
+          type: { type: Type.STRING, enum: ["MC", "CLASSIC", "TF"] },
+          topic: { type: Type.STRING },
+          difficulty: { type: Type.INTEGER },
+          answer: { type: Type.STRING },
+          rationale: { type: Type.STRING },
+        },
+        required: [
+          "question",
+          "type",
+          "topic",
+          "difficulty",
+          "answer",
+          "rationale",
+        ],
+        propertyOrdering: [
+          "question",
+          "type",
+          "topic",
+          "difficulty",
+          "answer",
+          "rationale",
+        ],
+      },
+    },
+    profStylePatterns: {
+      type: Type.ARRAY,
+      items: { type: Type.STRING },
+    },
+  },
+  required: ["topicSummaries", "practiceQuestions", "profStylePatterns"],
+  propertyOrdering: [
+    "topicSummaries",
+    "practiceQuestions",
+    "profStylePatterns",
+  ],
+};
+
+export interface GenerateStudyPackOptions {
+  userId?: string | null;
+}
+
+export interface GenerateStudyPackResult {
+  content: StudyPackContent;
+  model: string;
+  target: TargetDistribution;
+}
+
+/**
+ * Runs the structured study-pack generation. Always logs to AICallLog
+ * with `feature: "study-pack"`. The caller handles caching — this
+ * function is stateless and always calls Gemini.
+ */
+export async function generateStudyPack(
+  input: StudyPackPromptInput,
+  options: GenerateStudyPackOptions = {}
+): Promise<GenerateStudyPackResult> {
+  const client = getClient();
+  const model = process.env.GEMINI_MODEL || DEFAULT_MODEL;
+  const { systemInstruction, userPrompt, target } = buildStudyPackPrompt(input);
+
+  const startedAt = Date.now();
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await client.models.generateContent({
+        model,
+        contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+        config: {
+          systemInstruction,
+          temperature: 0.5,
+          responseMimeType: "application/json",
+          responseSchema: studyPackResponseSchema,
+        },
+      });
+
+      const text = response.text;
+      if (!text) throw new Error("Gemini returned empty study pack");
+
+      const parsed = JSON.parse(text) as StudyPackContent;
+
+      const usage = response.usageMetadata;
+      await recordAICall({
+        userId: options.userId,
+        feature: "study-pack",
+        provider: "gemini",
+        model,
+        inputTokens: usage?.promptTokenCount ?? 0,
+        outputTokens: usage?.candidatesTokenCount ?? 0,
+        latencyMs: Date.now() - startedAt,
+        success: true,
+      });
+
+      return { content: parsed, model, target };
+    } catch (error) {
+      lastError = error;
+      if (attempt === MAX_RETRIES || !isRetryable(error)) {
+        await recordAICall({
+          userId: options.userId,
+          feature: "study-pack",
+          provider: "gemini",
+          model,
+          inputTokens: 0,
+          outputTokens: 0,
+          latencyMs: Date.now() - startedAt,
+          success: false,
+          errorCode: error instanceof Error ? error.message.slice(0, 100) : "unknown",
+        });
+        throw error;
+      }
+      const backoffMs = 1000 * Math.pow(2, attempt);
+      console.warn(
+        `[geminiProvider:study-pack] Attempt ${attempt + 1} failed (retryable), waiting ${backoffMs}ms:`,
+        error instanceof Error ? error.message.slice(0, 120) : error
+      );
+      await sleep(backoffMs);
+    }
+  }
+
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("Gemini study pack failed after retries");
 }
