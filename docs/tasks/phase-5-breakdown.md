@@ -17,7 +17,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.3 | Global error response middleware — `AppError` + handler + Zod normalize; Phase 0/1 controller migration Phase 6'ya ertelendi (50+ call) | 2 saat | — | ✅ Tamam | `45d8346` |
 | 5.4 | Recharts dynamic import — `StyleHero` + `EvolutionChart` + `AnalysisCard` lazy; ProfessorDetailPage 114KB → 6.5KB gzipped (Recharts 97KB ayrı chunk) | 2 saat | — | ✅ Tamam | `1230f82` |
 | 5.5 | BullMQ + Redis infrastructure — docker compose redis servisi + queue abstraction + studyGroupMaintenance job + inline queue test mode; T3 kapatıldı | 4 saat | — | ✅ Tamam | `b0977f9` |
-| 5.6 | Demo user credit reset utility — `scripts/reset-demo-user.ts` (Phase 4 fixture birikim sorunu) | 1 saat | — | ⏳ Bekliyor | — |
+| 5.6 | Demo user credit reset utility — `scripts/reset-demo-user.ts` + `npm run reset:demo`, idempotent, live DB'de doğrulandı | 1 saat | — | ✅ Tamam | `pending` |
 | 5.7 | Prisma schema + migration — `AcademicDNA` + `ConfidenceScore` + `GradeRecord` + `SpacedRepetition` (4 tablo) | 3 saat | — | ⏳ Bekliyor | — |
 | 5.8 | DNA aggregation servisi — strengths/weaknesses/correctRate/preferredDifficulty + `Exam.verified` invalidation hook zincirine bağla | 4 saat | 5.7 | ⏳ Bekliyor | — |
 | 5.9 | Learning style inference servisi — quiz performansından (visual/reading/kinesthetic), min 20 soru şartı | 3 saat | 5.7, 5.8 | ⏳ Bekliyor | — |
@@ -38,7 +38,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.24 | Playwright MCP visual smoke (DNA / confidence / grades / course-advisor / reviews × 390/1440 × light/dark) + Phase 5 fixture seeder | 2 saat | 5.23 | ⏳ Bekliyor | — |
 | 5.25 | Phase 5 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle + data-model-evolution ekle | 1 saat | Hepsi | ⏳ Bekliyor | — |
 
-**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **5/25 — borçlar bitmek üzere (5.1-5.5), 5.6 kaldı.**
+**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **6/25 — borçlar tamam (5.1-5.6). Backend başlıyor.**
 
 > Task numaralama 25'e ulaştı (Phase 4: 23); borç sayısı bir fazla (BullMQ + Redis'i ayrı koyduk) + premium tier ayrı task.
 
