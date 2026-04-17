@@ -4,7 +4,7 @@ Bu dosya **yaşayan çalışma defteridir.** Cross-cutting işler, proje geneli 
 
 > Frontend'e özel notlar → [`client/SCRATCHPAD.md`](./client/SCRATCHPAD.md)
 > Backend'e özel notlar → [`server/SCRATCHPAD.md`](./server/SCRATCHPAD.md)
-> Faz 4 arşivi: [`docs/_archive/scratchpad-kok-2026-04-17-phase-4.md`](./docs/_archive/scratchpad-kok-2026-04-17-phase-4.md)
+> Faz 5 arşivi: [`docs/_archive/scratchpad-kok-2026-04-17-phase-5.md`](./docs/_archive/scratchpad-kok-2026-04-17-phase-5.md)
 
 ---
 
@@ -20,16 +20,16 @@ Bu dosya **yaşayan çalışma defteridir.** Cross-cutting işler, proje geneli 
 
 ## Şu An Üzerinde Çalışılan
 
-- Phase 4 tamamlandı (2026-04-17, aynı gün içinde 23 task). Phase 5 başlıyor.
-- **Phase 5 — Akademik DNA + Persistent Memory**: `AcademicDNA`, confidence score, grade record, spaced repetition. Detay: [`docs/roadmap/phase-5-academic-dna.md`](./docs/roadmap/phase-5-academic-dna.md).
+- Phase 5 tamamlandı (2026-04-17, aynı gün içinde 25 task). Phase 6 başlıyor.
+- **Phase 6 — Multimodal + Live AI Tutor**: Voice tutor, OCR pipeline, mobile-friendly multimodal inputs. Detay: [`docs/roadmap/phase-6-multimodal.md`](./docs/roadmap/phase-6-multimodal.md).
 
 ---
 
 ## Düşünceler / Keşifler
 
-- Phase 4'te rule-based + opt-in Gemini pattern'ı yine işe yaradı (approval, report aggregation, high-performer — Gemini sıfır call). Phase 5'te `AcademicDNA` da benzer tonda başlamalı.
-- Credit economy Serializable tx + `FOR UPDATE` ile race-safe; Phase 5 abonelik tier'ı `requireCredits` middleware'ını reuse edecek.
-- `anonymizedHash` pattern Phase 5'e taşınabilir — aynı hash akademik-DNA aggregation'ında reuse edilirse cross-feature analytics temiz çıkar.
+- Phase 5'te rule-based + opt-in Gemini pattern 5. kez geçerli — DNA, learning style, confidence, GPA, course advisor hiçbiri Gemini'ye basmadı. Phase 6'da voice tutor + OCR doğrudan AI'ya bağımlı olacak, pattern burada değişir ama tier gating aynı kalır.
+- Vite 8'in daha iyi tree-shake'i Phase 4 sonu 177KB → Phase 5 sonu 40KB gzipped başlangıç chunk'ı verdi. Phase 6'da voice/audio component'leri bu iyileşmeyi tüketmeye başlayacak.
+- BullMQ + Redis altyapısı Phase 6'nın voice session queue ve OCR background processing ihtiyacına hazır.
 
 ---
 
@@ -43,17 +43,18 @@ Bu dosya **yaşayan çalışma defteridir.** Cross-cutting işler, proje geneli 
 
 Sadece "yeni ortaya çıkan" açık sorular buraya. Olgunlaştığında [`docs/tasks/open-questions.md`](./docs/tasks/open-questions.md)'e taşı.
 
-- **vitest 2→4 + vite 5→8 spike** — D1 olarak açık, Phase 5 başına bir spike günü ayrılmalı; vitest config API (pool/coverage) ve Vite React plugin breaking change riski.
-- **Test izolasyonu per-worker schema** — Phase 4'te `singleFork: true` ile serialize ettik; yeni DB-backed unit testler eklendikçe paralelleştirme gerekecek. Phase 5'te test DB migrasyonu (`test_worker_<id>` schema pattern) değerlendirilmeli.
-- **Admin credit reset / prod seed demo kullanıcısı birikimi** — fixture seeder demo user'ı temizlemiyor; Phase 5'te admin panel planlanırken "manuel adjustments" endpoint'i gündeme gelebilir.
+- **vitest 2→4 upgrade** — D1 kısmen kapatıldı (vite 8 uygulandı, vitest Phase 6'ya ertelendi). 6 test refactor + per-worker schema mode flip ayrı spike.
+- **Phase 0/1 error shape migration** — 5.3'te infra kuruldu, 50+ `res.json({ error: "..." })` call'ı Phase 6 temizlik listesinde.
+- **Style-profile cache-hit test** — 5.2'de skip edildi, 5.16'da TODO olarak bırakıldı. Cache warmup hook'uyla Phase 6'da geri açılacak.
+- **T4 multi-provider AI stratejisi** — Phase 6 voice tutor ile birlikte değerlendirilmeli; Gemini + Claude fallback için iyi bir yer.
 
 ---
 
 ## Bir Sonraki Session İçin
 
-1. [`docs/roadmap/phase-5-academic-dna.md`](./docs/roadmap/phase-5-academic-dna.md) oku — scope + schema.
-2. [`docs/roadmap/phase-4-community.md`](./docs/roadmap/phase-4-community.md) "Phase 5'e Geçerken Hazır Olanlar" bölümü.
-3. `docs/tasks/phase-5-breakdown.md` yaz (Phase 3+4 şablonunu takip et; borçları öne al: vitest/vite spike + per-worker test DB izolasyonu).
+1. [`docs/roadmap/phase-6-multimodal.md`](./docs/roadmap/phase-6-multimodal.md) oku — scope + voice/OCR detayları.
+2. [`docs/roadmap/phase-5-academic-dna.md`](./docs/roadmap/phase-5-academic-dna.md) "Phase 6'ya Geçerken Hazır Olanlar" bölümü.
+3. `docs/tasks/phase-6-breakdown.md` yaz (Phase 4+5 şablonunu takip et; borçları öne al: vitest 2→4 + per-worker flip + Phase 0/1 error shape migration + .dockerignore).
 
 ---
 
@@ -66,3 +67,4 @@ Sadece "yeni ortaya çıkan" açık sorular buraya. Olgunlaştığında [`docs/t
 | 2026-04-17 | Phase 2 kapanışı — içerik `docs/_archive/scratchpad-kok-2026-04-17-phase-2.md`'ye donduruldu, Phase 3 için reset. |
 | 2026-04-17 | Phase 3 kapanışı — içerik `docs/_archive/scratchpad-kok-2026-04-17-phase-3.md`'ye donduruldu, Phase 4 için reset. |
 | 2026-04-17 | Phase 4 kapanışı — içerik `docs/_archive/scratchpad-kok-2026-04-17-phase-4.md`'ye donduruldu, Phase 5 için reset. |
+| 2026-04-17 | Phase 5 kapanışı — içerik `docs/_archive/scratchpad-kok-2026-04-17-phase-5.md`'ye donduruldu, Phase 6 için reset. |

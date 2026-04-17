@@ -13,8 +13,8 @@ Her faz **kullanılabilir bir ürün** ekler. Her fazın net giriş kriterleri, 
 | 2 | [Kişiselleştirilmiş Çalışma Materyalleri](./phase-2-study-packs.md) | 2 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-17 | Phase 1 tamam |
 | 3 | [Mock Exam ve Tahminler](./phase-3-mock-exams.md) | 2 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-17 | Phase 2 tamam |
 | 4 | [Topluluk Katmanı](./phase-4-community.md) | 3 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-17 | Phase 3 tamam |
-| 5 | [Akademik DNA + Persistent Memory](./phase-5-academic-dna.md) | 2 hafta | 🎯 **Sıradaki** | Phase 4 tamam |
-| 6 | [Multimodal + Live AI Tutor](./phase-6-multimodal.md) | 3 hafta | Planlı | Phase 5 tamam |
+| 5 | [Akademik DNA + Persistent Memory](./phase-5-academic-dna.md) | 2 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-17 | Phase 4 tamam |
+| 6 | [Multimodal + Live AI Tutor](./phase-6-multimodal.md) | 3 hafta | 🎯 **Sıradaki** | Phase 5 tamam |
 | 7 | [B2B + Marketplace](./phase-7-b2b-marketplace.md) | 4 hafta | Planlı | Phase 6 tamam |
 
 **Toplam süre:** ~17 hafta (≈4 ay odaklı geliştirme; realistik takvim 9 ay).
@@ -99,5 +99,7 @@ Detay: [`../operations/kpis.md`](../operations/kpis.md).
 - Task breakdown (Phase 1): [`../tasks/phase-1-breakdown.md`](../tasks/phase-1-breakdown.md)
 - Task breakdown (Phase 2): [`../tasks/phase-2-breakdown.md`](../tasks/phase-2-breakdown.md)
 - Task breakdown (Phase 3): [`../tasks/phase-3-breakdown.md`](../tasks/phase-3-breakdown.md)
+- Task breakdown (Phase 4): [`../tasks/phase-4-breakdown.md`](../tasks/phase-4-breakdown.md)
+- Task breakdown (Phase 5): [`../tasks/phase-5-breakdown.md`](../tasks/phase-5-breakdown.md)
 - Mimari evrim: [`../architecture/data-model-evolution.md`](../architecture/data-model-evolution.md)
 - Risk matrisi: [`../operations/risks.md`](../operations/risks.md)

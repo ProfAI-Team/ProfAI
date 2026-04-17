@@ -5,7 +5,7 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 > Kök / cross-cutting notlar → [`../SCRATCHPAD.md`](../SCRATCHPAD.md)
 > Backend notları → [`../server/SCRATCHPAD.md`](../server/SCRATCHPAD.md)
 > Genel frontend rehberi → [`./CLAUDE.md`](./CLAUDE.md)
-> Faz 4 arşivi: [`../docs/_archive/scratchpad-client-2026-04-17-phase-4.md`](../docs/_archive/scratchpad-client-2026-04-17-phase-4.md)
+> Faz 5 arşivi: [`../docs/_archive/scratchpad-client-2026-04-17-phase-5.md`](../docs/_archive/scratchpad-client-2026-04-17-phase-5.md)
 
 ---
 
@@ -20,41 +20,42 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 
 ## Şu An Üzerinde Çalışılan
 
-- Phase 4 tamamlandı. Frontend tarafında Phase 5'e geçiş bekleniyor.
-- **Phase 5 scope (frontend kısmı):** Akademik DNA dashboard, confidence radar, spaced repetition calendar, grade record tracker.
+- Phase 5 tamamlandı. Frontend tarafında Phase 6'ya geçiş bekleniyor.
+- **Phase 6 scope (frontend kısmı):** Voice tutor UI (mic + waveform + transcript), OCR upload flow (kamera/görsel seçici), mobile-friendly multimodal surface.
 
 ---
 
-## Phase 5 Hazırlık Notları
+## Phase 6 Hazırlık Notları
 
-- **Bundle size durumu:** initial ~172KB gzipped (Phase 4 sonu). Code split + lazy routes hâlâ etkili; Phase 5'te radar/calendar için Recharts aktif kullanılacak — dynamic import şart, yoksa initial chunk yine büyür.
-- **TanStack Query olgunlaştı:** Phase 4'te `useMockExam`, `useQuery(['credits','balance'])`, vote optimistic pattern, approval queue invalidation — Phase 5 mutation'ları aynı pattern'da kolayca eklenir.
-- **Shared components hazır:** `VoteButtons` (optimistic + rollback), `CreditBadge`, `VerifiedBadge`, `Tabs`, `ScoreGauge`, `PredictionBand`, `ExternalLinkModal`, `AggregatedExamInsights`.
-- **i18n envanteri:** `community.*` namespace 109 key, parity TR↔EN 447↔447. Phase 5 `dna.*` / `spacedRepetition.*` için sweeper pattern hazır.
+- **Bundle size durumu:** initial ~40KB gzipped (Phase 5 sonu, vite 8 tree-shake sayesinde Phase 4'ten ~130KB düştü). Phase 6 voice/audio + MediaRecorder + waveform component'leri bu hediyeyi tüketecek — her audio comp ayrı chunk olmalı.
+- **TanStack Query çok olgun:** Phase 5'te optimistic mutation + rollback + invalidate hiyerarşisi 5+ sayfada reuse edildi. Voice tutor'da real-time transcript için daha kompleks — `useInfiniteQuery` + WebSocket veya SSE değerlendirilmeli.
+- **Shared components hazır:** `DNARadar` lazy, `ConfidenceHeatmap`, `ReviewCard`, `GpaCalculator`, `InsufficientDataBanner`, `PremiumLockCard`. Phase 6 voice + OCR için yeni component'ler olacak (`VoiceRecorder`, `TranscriptView`, `CameraCapture`).
+- **i18n envanteri:** 549 key parity TR↔EN (Phase 4: 447 → Phase 5: 549, +102 key). Phase 6 `voice.*` / `ocr.*` / `multimodal.*` için sweep pattern hazır.
 
 ---
 
 ## Düşünceler / Keşifler
 
-- Phase 4'te post-exam form + study group external link modal'da native `<input>` + `form.requestSubmit()` pattern Playwright MCP fill_form tool'uyla iyi çalışıyor (controlled component state'leri set Input prototype setter ile senkronize tutuluyor). Phase 5'te daha uzun formlarda react-hook-form değerlendirilebilir.
-- ReportedTopicsEditor dynamic list pattern (add/remove/update closure'ları) Phase 5 spaced repetition card listesinde ve confidence radar editöründe reuse olur.
-- Approval wall optimistic delete pattern (`setQueryData` → filter out → invalidate on settle) Phase 5 review queue'da direkt kullanılabilir.
+- Phase 5'te `React.lazy` + `Suspense` + ayrı skeleton file pattern (EvolutionChart + StyleHero + AnalysisCard) Recharts'ı 97KB'dan ayrı chunk'a çıkardı. Phase 6'da voice waveform'a aynı pattern — `VoiceRecorder` heavy audio lib'i ayrı chunk'ta.
+- `Tabs` component'i (Credit + Grades + Reviews sayfalarında kullanıldı) simple CSS yaklaşım — Phase 6 voice session tab'larında da reuse.
+- `AxiosError<{error: {code, message}}>` typing pattern (Phase 5'te CourseAdvisor page'te ilk kez kullanıldı) — 402/403 branch'i doğru render ettirdi. Phase 6 premium gated endpoint'lerde aynı pattern.
 
 ---
 
 ## UI Borçları (Geçmiş Fazlardan)
 
-- **TanStack Query session page entegrasyonu** — Phase 3'teki `MockExamSessionPage` hâlâ localStorage + useState ile gidiyor (Phase 4 migration'ı sadece result page'i aldı). Phase 5'te dokunulursa migrate edilebilir; şu an regresyon riski taşımıyor.
-- **Recharts dynamic import** Phase 2+3+4 boyunca eklenmedi — Phase 5 dashboard ilk Recharts heavy sayfa olacak, lazy zorunlu.
-- **ProfessorDetailPage yüklü (440KB gzipped 117KB)** — içinde EvolutionChart + Recharts var. Phase 5'te chart'ları `React.lazy` + `Suspense` wrap + tab-bazlı koşullu render değerlendirilebilir.
+- **TanStack Query session page entegrasyonu** — Phase 3'teki `MockExamSessionPage` hâlâ localStorage + useState ile gidiyor. Phase 5'te dokunulmadı; Phase 6 voice session şablonu gerekecekse migrate edilmeli.
+- **`ProfessorDetailPage` 24KB** (Phase 5'te 114 → 24 düştü, Recharts lazy) — daha inebilir: EvolutionChart skeleton duplicate'i + AnalysisCard içerik. Phase 6'da dokunulursa temizlenir.
+- **`VoteButtons` 47KB gzipped** — react-markdown + remark-gfm import'ları nedeniyle şişik. Phase 4'ten beri bu. Phase 6'da voice transcript markdown işlerse fırsat.
 
 ---
 
 ## Performans Notları
 
-- Phase 4 sonu initial chunk ~172KB gzipped (Phase 3'ten 348KB'den düşüş). Code split + TanStack Query dev yalnızca ~10KB ekledi.
-- Playwright visual smoke 8 senaryo, 0 bug.
-- Credit balance query 30sn stale; her sayfa değişiminde yeni fetch yok.
+- Phase 5 sonu initial chunk ~40KB gzipped (Phase 4'ten ~130KB düşüş, vite 8 tree-shake).
+- Recharts 94KB ayrı chunk (`generateCategoricalChart-*.js`); ProfessorDetail + DNA profile + grades simulator sadece o sayfa açıldığında yükler.
+- Playwright visual smoke 6 senaryo, 0 bug.
+- TanStack Query staleTime'ları: DNA 60s, grades 30s, confidence 60s, weakest 5min, reviews 60s.
 
 ---
 
@@ -66,9 +67,10 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 
 ## Bir Sonraki Session İçin (Frontend)
 
-1. Phase 5 breakdown'da frontend işlerinin sırası (muhtemelen 5.14+).
-2. Recharts dynamic import patternı Phase 5 başında uygulanmalı.
-3. TanStack Query mutation cache invalidation hiyerarşisi genişletilmeli (Phase 5 DNA sub-queries için).
+1. Phase 6 breakdown'da frontend işlerinin sırası (muhtemelen 6.14+).
+2. MediaRecorder / getUserMedia browser compatibility kontrolü (mobile Safari quirks).
+3. Voice transcript real-time UI pattern — WebSocket + optimistic append?
+4. OCR upload: camera capture vs file picker, multipart upload (Phase 0'da Multer var, Phase 6'da büyük görseller için chunked).
 
 ---
 
@@ -81,3 +83,4 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 | 2026-04-17 | Phase 2 kapanışı — içerik arşive donduruldu, Phase 3 için reset. |
 | 2026-04-17 | Phase 3 kapanışı — içerik arşive donduruldu, Phase 4 için reset. |
 | 2026-04-17 | Phase 4 kapanışı — içerik arşive donduruldu, Phase 5 için reset. |
+| 2026-04-17 | Phase 5 kapanışı — içerik arşive donduruldu, Phase 6 için reset. |
