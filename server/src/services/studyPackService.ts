@@ -48,11 +48,13 @@ export interface GenerateArgs {
   noteIds: string[];
 }
 
-function sortedIds(ids: string[]): string[] {
+export function sortedIds(ids: string[]): string[] {
   return [...new Set(ids)].sort();
 }
 
-function computeNoteHash(orderedNotes: { id: string; extractedText: string }[]): string {
+export function computeNoteHash(
+  orderedNotes: { id: string; extractedText: string }[]
+): string {
   // `orderedNotes` must already be sorted by id. We prefix each block with
   // the id so two notes with identical content but different ids still
   // yield a different hash (prevents accidental collisions).
@@ -62,7 +64,7 @@ function computeNoteHash(orderedNotes: { id: string; extractedText: string }[]):
   return hashText(payload);
 }
 
-function buildDistributionFromContent(
+export function buildDistributionFromContent(
   content: StudyPackContent
 ): TargetDistribution {
   if (content.practiceQuestions.length === 0) {
