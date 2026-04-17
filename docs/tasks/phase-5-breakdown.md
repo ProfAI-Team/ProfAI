@@ -23,7 +23,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.9 | Learning style inference — `inferStyle` (pure) + `inferLearningStyle` (DB) + `updateLearningStyleFromInference`; reading/kinesthetic/mixed/null, min 20 soru + 15pp dominance gap | 3 saat | 5.7, 5.8 | ✅ Tamam | `04bee87` |
 | 5.10 | Confidence scoring — `computeConfidence` (pure, 70/20/10 correctRate/streak/recency weights) + `recomputeConfidence` + `getWeakestTopics`; mock exam submit hook | 3 saat | 5.7, 5.8 | ✅ Tamam | `3fc5200` |
 | 5.11 | Grade + GPA service — 3 üni preset (Aydın/Boğaziçi/ODTÜ), `calculateGPA` + `simulateGPA` + `whatIfTargetGPA` (binary search) | 3 saat | 5.7 | ✅ Tamam | `e5193bc` |
-| 5.12 | Course advisor — `scoreCompatibility` (style 30 + difficulty 20 + topic 50 weights) + `getCompatibility` insufficient branches | 3 saat | 5.7, 5.8 | ✅ Tamam | `pending` |
+| 5.12 | Course advisor — `scoreCompatibility` (style 30 + difficulty 20 + topic 50 weights) + `getCompatibility` insufficient branches | 3 saat | 5.7, 5.8 | ✅ Tamam | `45038db` |
 | 5.13 | Spaced repetition servisi — SM-2 algoritma + BullMQ daily scheduler + notification queue | 4 saat | 5.5, 5.7 | ⏳ Bekliyor | — |
 | 5.14 | Premium tier gating — `User.subscriptionTier` + `requirePremium` middleware + `reconstructExam` Gemini call activation (Phase 4 skeleton) | 3 saat | 5.7 | ⏳ Bekliyor | — |
 | 5.15 | DNA endpoint'leri — `/api/dna/me` + `/api/confidence/me` + `/api/grades` + `/api/course-advisor` + `/api/spaced-repetition` (Zod + rate-limit + premium gate) | 4 saat | 5.8–5.14 | ⏳ Bekliyor | — |
