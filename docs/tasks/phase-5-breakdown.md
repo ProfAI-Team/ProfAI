@@ -25,7 +25,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.11 | Grade + GPA service — 3 üni preset (Aydın/Boğaziçi/ODTÜ), `calculateGPA` + `simulateGPA` + `whatIfTargetGPA` (binary search) | 3 saat | 5.7 | ✅ Tamam | `e5193bc` |
 | 5.12 | Course advisor — `scoreCompatibility` (style 30 + difficulty 20 + topic 50 weights) + `getCompatibility` insufficient branches | 3 saat | 5.7, 5.8 | ✅ Tamam | `45038db` |
 | 5.13 | Spaced repetition — simplified SM-2 (tier'lı intervals), `scheduleReview` / `completeReview` / `countDueByUser`, BullMQ daily scheduler + `User.reviewFrequency` | 4 saat | 5.5, 5.7 | ✅ Tamam | `75a111f` |
-| 5.14 | Premium tier gating — `User.subscriptionTier` + `requirePremium` middleware + `reconstructExam` Gemini call activation (Phase 4 skeleton) | 3 saat | 5.7 | ⏳ Bekliyor | — |
+| 5.14 | Premium tier gating — `requirePremium` middleware (402/403/401 matrix) + feature flag registry + `reconstructExamSummary` Gemini activation with fallback | 3 saat | 5.7 | ✅ Tamam | `pending` |
 | 5.15 | DNA endpoint'leri — `/api/dna/me` + `/api/confidence/me` + `/api/grades` + `/api/course-advisor` + `/api/spaced-repetition` (Zod + rate-limit + premium gate) | 4 saat | 5.8–5.14 | ⏳ Bekliyor | — |
 | 5.16 | Backend unit + integration testler (DNA aggregation, SM-2 algoritma, GPA formül, premium middleware, scheduler idempotency) | 4 saat | 5.15 | ⏳ Bekliyor | — |
 | 5.17 | Client types + services + shared chart components (`RadarChart` lazy, `Heatmap` lazy, `GpaCalculator`, `ReviewCard`) | 4 saat | 5.15 | ⏳ Bekliyor | — |
@@ -38,7 +38,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.24 | Playwright MCP visual smoke (DNA / confidence / grades / course-advisor / reviews × 390/1440 × light/dark) + Phase 5 fixture seeder | 2 saat | 5.23 | ⏳ Bekliyor | — |
 | 5.25 | Phase 5 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle + data-model-evolution ekle | 1 saat | Hepsi | ⏳ Bekliyor | — |
 
-**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **13/25 — spaced repetition tamam, premium gating + endpoint'ler sırada.**
+**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **14/25 — premium gating tamam, REST endpoints sırada.**
 
 > Task numaralama 25'e ulaştı (Phase 4: 23); borç sayısı bir fazla (BullMQ + Redis'i ayrı koyduk) + premium tier ayrı task.
 

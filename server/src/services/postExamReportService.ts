@@ -210,6 +210,103 @@ function median(values: number[]): number {
     : sorted[mid];
 }
 
+const RECONSTRUCT_FALLBACK =
+  "Bu sınav için toplu geri bildirim özetlendi ama özet taslağı şu an " +
+  "üretilemedi. Biraz sonra tekrar denenecek — bu arada aggregated " +
+  "topic listesi çalışma için yeterli.";
+
+export type ReconstructResult =
+  | { status: "insufficient"; count: number; threshold: number }
+  | {
+      status: "ready";
+      summary: string;
+      source: "gemini" | "fallback";
+      basedOnReports: number;
+    };
+
+/**
+ * Premium-only Gemini reconstruction of the post-exam aggregate. Pulls
+ * the aggregated topic list from `getAggregatedReport`, then asks Gemini
+ * to produce a "çalışma için yaklaşık sınav özeti" paragraph. Fails
+ * gracefully back to a canned string when GEMINI_API_KEY is missing or
+ * the call errors.
+ *
+ * Gated behind `requirePremium("EXAM_RECONSTRUCT")` at the route level —
+ * this service itself stays callable so internal flows (e.g. admin
+ * previews) don't have to fake a premium user.
+ */
+export async function reconstructExamSummary(
+  professorId: string
+): Promise<ReconstructResult> {
+  const aggregated = await getAggregatedReport(professorId);
+  if (aggregated.status === "insufficient") {
+    return aggregated;
+  }
+
+  const topicLines = aggregated.topics
+    .slice(0, 10)
+    .map(
+      (t) =>
+        `- ${t.topic} (reported ${t.reportedCount}× · frequency: ${t.frequencyMode} · median difficulty: ${t.medianDifficulty.toFixed(1)})`
+    )
+    .join("\n");
+
+  if (!process.env.GEMINI_API_KEY) {
+    return {
+      status: "ready",
+      summary: RECONSTRUCT_FALLBACK,
+      source: "fallback",
+      basedOnReports: aggregated.count,
+    };
+  }
+
+  try {
+    // Lazy-import the Gemini client so test environments without the
+    // key don't pay the module-load cost.
+    const { getClient } = await import("./llm/geminiProvider");
+    const client = getClient();
+    const model = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+
+    const response = await client.models.generateContent({
+      model,
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text:
+                `You are ProfAI reconstructing a professor's likely exam ` +
+                `coverage from anonymized student reports. Produce 2 short ` +
+                `paragraphs in Turkish — first describes frequent topics, ` +
+                `second lists 3 areas students should focus on. Tone: calm, ` +
+                `factual, no guarantees. Data:\n\n${topicLines}`,
+            },
+          ],
+        },
+      ],
+      config: { temperature: 0.4, responseMimeType: "text/plain" },
+    });
+
+    const text = response.text?.trim();
+    if (!text) throw new Error("Gemini returned empty reconstruction");
+
+    return {
+      status: "ready",
+      summary: text,
+      source: "gemini",
+      basedOnReports: aggregated.count,
+    };
+  } catch (err) {
+    console.error("[reconstructExamSummary] fallback after Gemini error:", err);
+    return {
+      status: "ready",
+      summary: RECONSTRUCT_FALLBACK,
+      source: "fallback",
+      basedOnReports: aggregated.count,
+    };
+  }
+}
+
 /** Exposed for the high-performer insight service (4.11). */
 export async function listReportsForHighPerformers(
   professorId: string
