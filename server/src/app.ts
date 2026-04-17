@@ -13,6 +13,7 @@ import noteRoutes from "./routes/noteRoutes";
 import studyPackRoutes from "./routes/studyPackRoutes";
 import mockExamRoutes from "./routes/mockExamRoutes";
 import communityRoutes from "./routes/communityRoutes";
+import { errorMiddleware } from "./middleware/errorMiddleware";
 
 export function createApp(): express.Express {
   const app = express();
@@ -54,17 +55,7 @@ export function createApp(): express.Express {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
   });
 
-  app.use(
-    (
-      err: Error,
-      _req: express.Request,
-      res: express.Response,
-      _next: express.NextFunction
-    ) => {
-      console.error("Unhandled error:", err);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  );
+  app.use(errorMiddleware);
 
   return app;
 }
