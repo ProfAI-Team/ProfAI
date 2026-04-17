@@ -32,7 +32,7 @@
 | 4.20 | "A alanların stratejisi" paneli — `ProfessorDetailPage` yeni section (aggregated, k-anonim) | 2 saat | 4.14 | ✅ Tamam | `ec2da7a` |
 | 4.21 | i18n TR + EN copy sweep (paralel 2 agent, hibrit ton, `community.*` / `credit.*` / `approval.*` / `vote.*` / `postExam.*` / `studyGroup.*` namespace'leri) | 3 saat | 4.15–4.20 | ✅ Tamam | `5bec181` |
 | 4.22 | Playwright MCP visual smoke (credit / approval / vote / report form / study group × 390/1440 × light/dark) | 2 saat | 4.21 | ✅ Tamam | `aeef153` |
-| 4.23 | Phase 4 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle | 1 saat | Hepsi | ✅ Tamam | `TBD` |
+| 4.23 | Phase 4 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle | 1 saat | Hepsi | ✅ Tamam | `c954b78` |
 
 **Toplam:** ~70 saat tahmin · Gerçek: **~10-14 saat** tek oturum (Phase 1+2+3 ritmi korundu). **İlerleme:** ✅ **23/23 task tamam — Phase 4 kapandı.**
 
