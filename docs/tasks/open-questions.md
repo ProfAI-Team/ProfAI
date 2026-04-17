@@ -228,12 +228,16 @@ Karar bekleyen konular. **Yaşayan doküman** — karar verildiğinde "✅ Kapat
 - **Gerekçe:** Flash 503 error veriyordu production testlerde; flash-lite stabil + %40 ucuz.
 - **Etki:** `server/.env`, `GEMINI_MODEL` env var, `current-stack.md`.
 
-### ⏳ D1. Breaking npm upgrade kalanları (2026-04-17, Phase 5'e ertelendi)
+### ✅ D1. Breaking npm upgrade kalanları (Phase 5'te kısmen kapatıldı, 2026-04-17)
 
-- **Uygulanan:** bcrypt 5→6 — hash API aynı, Node 20 LTS minimum karşılanıyor; tüm 86 backend testi yeşil.
-- **Ertelendi:** vitest 2→4, vite 5→8. Phase 4 scope'u geniş (23 task, topluluk katmanı); test/runner/build araçlarının major bump'ı ayrı bir spike'ta ele alınmalı — Phase 5 başında bir gün ayrılır, kırılma olursa hızla rollback.
-- **Risk:** vitest config API v3→v4 arasında `pool` + `coverage.provider` değişti; vite 5→8 React plugin ekosistemi breaking. Şu an yeşil olan 112 test yeşil kalmalı; Phase 5 spike sonrası revize.
-- **Aksiyon:** Phase 5 breakdown'ına 5.X "test/build tooling major bump" task'ı ekle.
+- **Uygulanan (Phase 4):** bcrypt 5→6 — hash API aynı, Node 20 LTS minimum karşılanıyor; 86 backend testi yeşil.
+- **Uygulanan (Phase 5, task 5.1):** vite 5→8 + `@vitejs/plugin-react` 4→6 — client `npm run build` + dev server (`vite v8.0.8 ready in 114ms`) smoke geçti. Bonus: initial chunk 546KB/177KB → 124KB/40KB gzipped (v8'in geliştirilmiş tree-shaking'i).
+- **Ertelendi (Phase 6'ya):** **vitest 2→4.** `npm install --save-dev vitest@^4` sonrası 6/153 test kırıldı:
+  - `tests/unit/textExtract.test.ts` — `vi.mock` factory constructor semantics değişmiş (pdf-parse mock'u `TypeError: ... is not a constructor`).
+  - 5 adet DB-backed unit test — `poolOptions.forks.singleFork: true` v4'te serileştirmeyi eskisi gibi sağlamıyor; Serializable 40001 + fixture yarışları tekrar çıkıyor.
+  - Refactor tahmin: `vi.hoisted` + yeni pool config + `test_worker_${pid}` schema (task 5.2) birlikte yapılırsa temiz; ayrı spike Phase 6 başına taşındı.
+- **Risk:** vitest v2 hâlâ aktif maintain ediliyor, sürümü dondurmak kısa vadede güvenli. v4 refactor'u 5.2 tamamlandıktan sonra küçük PR.
+- **Aksiyon:** Phase 6 breakdown'ında "vitest 2→4 (5.2'nin üzerine)" task'ı olarak tut.
 
 ---
 
