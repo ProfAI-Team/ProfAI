@@ -335,11 +335,63 @@
       }
     },
     "session": {
+      "loading": "Loading your mock exam…",
+      "notFound": {
+        "title": "Mock exam not found",
+        "body": "It may have been deleted or belongs to another account.",
+        "cta": "Generate a new mock exam"
+      },
       "timer": {
         "ariaLabel": "Time left: {{time}}",
         "pause": "Pause",
         "resume": "Resume",
         "paused": "Paused"
+      },
+      "progressLine": "{{answered}}/{{total}} answered · {{flagged}} flagged",
+      "openNav": "Open question list",
+      "closeNav": "Close question list",
+      "prev": "Previous",
+      "next": "Next",
+      "submit": "Submit exam",
+      "submitError": "Submission failed: {{message}}. Your answers are still saved locally.",
+      "exitWarning": "You haven't submitted yet — your progress is saved locally, but a fresh submission is required to see the score.",
+      "autoSubmitting": "Time's up — submitting your answers…",
+      "types": {
+        "MC": "Multiple choice",
+        "CLASSIC": "Open-ended",
+        "TF": "True/False"
+      },
+      "tf": {
+        "true": "True",
+        "false": "False"
+      },
+      "classic": {
+        "placeholder": "Write your answer here. Keep it concise but show your reasoning.",
+        "hint": "{{count}} characters"
+      },
+      "card": {
+        "indexLabel": "Question {{index}} of {{total}}",
+        "difficulty": "Difficulty {{value}}/10",
+        "flag": "Flag for review",
+        "flagged": "Flagged"
+      },
+      "nav": {
+        "title": "Questions",
+        "ariaLabel": "Question navigator",
+        "goTo": "Go to question {{n}}",
+        "progress": "{{answered}}/{{total}} answered",
+        "legend": {
+          "answered": "Answered",
+          "flagged": "Flagged",
+          "unanswered": "Not answered"
+        }
+      },
+      "confirm": {
+        "title": "Submit your mock exam?",
+        "body": "{{unanswered}} question(s) still blank and {{flagged}} flagged. Once submitted, answers are graded and saved.",
+        "cancel": "Keep going",
+        "submit": "Submit now",
+        "submitting": "Grading…"
       }
     }
   }

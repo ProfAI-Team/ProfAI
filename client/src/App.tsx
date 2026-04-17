@@ -14,6 +14,7 @@ import UploadPage from './pages/UploadPage';
 import UploadNotesPage from './pages/UploadNotesPage';
 import StudyPackPage from './pages/StudyPackPage';
 import MockExamGeneratePage from './pages/MockExamGeneratePage';
+import MockExamSessionPage from './pages/MockExamSessionPage';
 import DashboardPage from './pages/DashboardPage';
 
 const App: React.FC = () => {
@@ -59,6 +60,14 @@ const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <MockExamGeneratePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/mock-exam/:id/session"
+                element={
+                  <ProtectedRoute>
+                    <MockExamSessionPage />
                   </ProtectedRoute>
                 }
               />

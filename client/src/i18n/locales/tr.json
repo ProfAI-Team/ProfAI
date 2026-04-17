@@ -335,11 +335,63 @@
       }
     },
     "session": {
+      "loading": "Deneme sınavın yükleniyor…",
+      "notFound": {
+        "title": "Deneme sınavı bulunamadı",
+        "body": "Silinmiş veya başka bir hesaba ait olabilir.",
+        "cta": "Yeni deneme sınavı oluştur"
+      },
       "timer": {
         "ariaLabel": "Kalan süre: {{time}}",
         "pause": "Duraklat",
         "resume": "Devam",
         "paused": "Durdu"
+      },
+      "progressLine": "{{answered}}/{{total}} cevaplandı · {{flagged}} işaretli",
+      "openNav": "Soru listesini aç",
+      "closeNav": "Soru listesini kapat",
+      "prev": "Önceki",
+      "next": "Sonraki",
+      "submit": "Sınavı bitir",
+      "submitError": "Gönderim başarısız: {{message}}. Cevapların lokal olarak hala kayıtlı.",
+      "exitWarning": "Henüz göndermedin — ilerlemen lokal olarak kayıtlı ama skoru görmek için gönderim gerekli.",
+      "autoSubmitting": "Süre doldu — cevapların gönderiliyor…",
+      "types": {
+        "MC": "Çoktan seçmeli",
+        "CLASSIC": "Klasik",
+        "TF": "Doğru/Yanlış"
+      },
+      "tf": {
+        "true": "Doğru",
+        "false": "Yanlış"
+      },
+      "classic": {
+        "placeholder": "Cevabını buraya yaz. Kısa tut ama mantığını göster.",
+        "hint": "{{count}} karakter"
+      },
+      "card": {
+        "indexLabel": "{{total}} sorunun {{index}}.",
+        "difficulty": "Zorluk {{value}}/10",
+        "flag": "İşaretle",
+        "flagged": "İşaretli"
+      },
+      "nav": {
+        "title": "Sorular",
+        "ariaLabel": "Soru gezgini",
+        "goTo": "{{n}}. soruya git",
+        "progress": "{{answered}}/{{total}} cevaplandı",
+        "legend": {
+          "answered": "Cevaplandı",
+          "flagged": "İşaretli",
+          "unanswered": "Cevaplanmadı"
+        }
+      },
+      "confirm": {
+        "title": "Sınavı gönder?",
+        "body": "{{unanswered}} soru hala boş, {{flagged}} işaretli. Gönderdikten sonra cevaplar puanlanır ve kaydedilir.",
+        "cancel": "Devam et",
+        "submit": "Şimdi gönder",
+        "submitting": "Puanlanıyor…"
       }
     }
   }

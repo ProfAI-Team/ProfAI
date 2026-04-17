@@ -21,7 +21,7 @@
 | 3.9 | Mock exam endpoint'leri (`generate` / `:id` / `:id/submit` / `session/:sid/result` / `panic-plan`) | 3 saat | 3.6, 3.7, 3.8, 3.2 | ✅ Tamam | `51262d1` |
 | 3.10 | Backend unit + integration testler (prompt schema, grading, prediction, endpoint auth + flow) | 5 saat | 3.9 | ✅ Tamam | `d4ef6d2` |
 | 3.11 | Client: TS types + `mockExamService` + `Timer` component (tick + warning state + pause/resume) | 3 saat | 3.9 | ✅ Tamam | `aba7520` |
-| 3.12 | `MockExamGeneratePage` — hoca + study pack seçimi, süre/soru sayısı override, "oluştur" CTA | 2 saat | 3.11 | ⏳ | — |
+| 3.12 | `MockExamGeneratePage` — hoca + study pack seçimi, süre/soru sayısı override, "oluştur" CTA | 2 saat | 3.11 | ✅ Tamam | `2cc5d6c` |
 | 3.13 | `MockExamSessionPage` — Timer + soru nav + "mark for review" + auto-save draft + beforeunload çıkış uyarısı + auto-submit | 8 saat | 3.11 | ⏳ | — |
 | 3.14 | `MockExamResultPage` — Tabs (genel skor / bölüm analizi / soru-bazlı feedback) + performans tahmini viz + konu boşluk → study pack CTA | 6 saat | 3.13 | ⏳ | — |
 | 3.15 | `PanicModePage` — "sınava kaç saat var?" form + priority study plan çıktısı | 3 saat | 3.11 | ⏳ | — |
