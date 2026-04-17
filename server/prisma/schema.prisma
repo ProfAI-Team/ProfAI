@@ -14,27 +14,33 @@ enum ExamType {
 }
 
 model User {
-  id               String            @id @default(uuid())
-  email            String            @unique
-  password         String
-  name             String
-  university       String?
-  department       String?
-  createdAt        DateTime          @default(now())
-  exams            Exam[]
-  ratings          ProfessorRating[]
-  aiCallLogs       AICallLog[]
-  aiFeedback       AIFeedback[]
-  studentNotes     StudentNote[]
-  studyPacks       StudyPack[]
-  mockExams        MockExam[]
-  mockExamSessions MockExamSession[]
+  id                String            @id @default(uuid())
+  email             String            @unique
+  password          String
+  name              String
+  university        String?
+  department        String?
+  subscriptionTier  String            @default("free")
+  createdAt         DateTime          @default(now())
+  exams             Exam[]
+  ratings           ProfessorRating[]
+  aiCallLogs        AICallLog[]
+  aiFeedback        AIFeedback[]
+  studentNotes      StudentNote[]
+  studyPacks        StudyPack[]
+  mockExams         MockExam[]
+  mockExamSessions  MockExamSession[]
 
-  credit           UserCredit?
-  examApprovals    ExamApproval[]
-  questionVotes    QuestionVote[]
-  postExamReports  PostExamReport[]
-  studyGroups      StudyGroup[]      @relation("StudyGroupMembers")
+  credit            UserCredit?
+  examApprovals     ExamApproval[]
+  questionVotes     QuestionVote[]
+  postExamReports   PostExamReport[]
+  studyGroups       StudyGroup[]      @relation("StudyGroupMembers")
+
+  academicDNA       AcademicDNA?
+  confidenceScores  ConfidenceScore[]
+  gradeRecords      GradeRecord[]
+  spacedRepetitions SpacedRepetition[]
 
   @@map("users")
 }
@@ -449,4 +455,98 @@ model StudyGroup {
   @@index([professorId])
   @@index([examDate])
   @@map("study_groups")
+}
+
+// ---------------------------------------------------------------------
+// Phase 5 — Academic DNA + persistent memory
+// ---------------------------------------------------------------------
+
+// Per-user aggregation of what they've been learning: which topics they
+// handle well, which ones trip them up, and which format their brain
+// seems to grok best. Recomputed on a cache-first + event-driven basis
+// — see `Exam.verified` invalidation hook in examApprovalService plus
+// the on-submit trigger in mockExamService. Under 20 answered questions
+// we treat the data as insufficient and skip inference.
+model AcademicDNA {
+  userId                 String   @id
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  learningStyle          String?  // "visual" | "reading" | "kinesthetic" | "mixed" | null
+  strengths              Json     // [{topic, score, confidence, sampleSize}]
+  weaknesses             Json     // same shape
+  totalQuestionsAnswered Int      @default(0)
+  correctRate            Float?
+  preferredDifficulty    String?  // "easy" | "medium" | "hard"
+
+  // Algorithm version. Bumping this in `dnaService` invalidates all
+  // stored DNAs (they'll be lazily recomputed on next read).
+  version                Int      @default(1)
+  lastComputedAt         DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@map("academic_dna")
+}
+
+// Per-(user, topic) readiness score on a 0-100 scale. Mock-exam submit
+// hook recomputes affected topics; dashboard's "bu hafta çalışman
+// gereken 3 konu" widget reads the lowest scores.
+model ConfidenceScore {
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic             String
+  score             Float    // 0-100
+  lastQuestionCount Int      @default(0)
+  source            String   // "mock_exam" | "practice" | "self_report"
+  updatedAt         DateTime @updatedAt
+
+  @@id([userId, topic])
+  @@index([userId])
+  @@map("confidence_scores")
+}
+
+// Free-form grade history used by the GPA simulator. `courseId` links
+// to an existing Course when the user picks from autocomplete; else
+// `courseName` is the free-text fallback. `university` selects which
+// grading formula (gpaFormulas.ts preset) to use at compute time.
+model GradeRecord {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId    String?
+  courseName  String
+  grade       Float    // numeric grade (0-100) or 0-4 depending on system
+  letterGrade String?  // AA / BA / CB / ... — derived if null
+  credit      Int
+  semester    String   // "2026-Spring" style
+  university  String?  // presets picker — "aydin" / "bogazici" / "odtu" / "custom"
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, semester])
+  @@map("grade_records")
+}
+
+// SM-2 scheduling row per (user, question). When a mock-exam answer
+// comes back wrong, the scheduler enqueues a repetition here with
+// interval=1, easiness=2.5. Each subsequent review adjusts interval +
+// easiness per simplified SM-2 (see spacedRepetitionService).
+// `questionText` is a snapshot so the review card renders even if the
+// source question is deleted.
+model SpacedRepetition {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId    String
+  questionText  String?
+  nextReview    DateTime
+  interval      Int       // days until next review
+  easiness      Float     @default(2.5)
+  correctStreak Int       @default(0)
+  lapseCount    Int       @default(0)
+  lastReviewed  DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@unique([userId, questionId])
+  @@index([userId, nextReview])
+  @@map("spaced_repetitions")
 }
