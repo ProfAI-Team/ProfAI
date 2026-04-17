@@ -20,6 +20,7 @@ export class UnsupportedMimeTypeError extends Error {
 
 export class ExtractionFailedError extends Error {
   readonly code = "EXTRACTION_FAILED";
+  readonly cause: unknown;
   constructor(mimeType: string, cause: unknown) {
     super(`Failed to extract text from ${mimeType}`);
     this.name = "ExtractionFailedError";

@@ -9,6 +9,7 @@ import professorRoutes from "./routes/professorRoutes";
 import courseRoutes from "./routes/courseRoutes";
 import examRoutes from "./routes/examRoutes";
 import ratingRoutes from "./routes/ratingRoutes";
+import noteRoutes from "./routes/noteRoutes";
 
 export function createApp(): express.Express {
   const app = express();
@@ -41,6 +42,7 @@ export function createApp(): express.Express {
   app.use("/api/courses", courseRoutes);
   app.use("/api/exams", examRoutes);
   app.use("/api/ratings", ratingRoutes);
+  app.use("/api/notes", noteRoutes);
 
   app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
