@@ -31,7 +31,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.17 | Client types + 5 services + shared components (`DNARadar` lazy, `ConfidenceHeatmap`, `GpaCalculator`, `ReviewCard`, `InsufficientDataBanner`, `PremiumLockCard`) | 4 saat | 5.15 | ✅ Tamam | `b9a36ad` |
 | 5.18 | DNA profile sayfası `/me/profile` — radar + strengths/weaknesses + learning style override + KVKK notice + insufficient banner | 4 saat | 5.17 | ✅ Tamam | `413ae5d` |
 | 5.19 | Confidence heatmap sayfası `/me/confidence` + Dashboard `WeakTopicsWidget` | 3 saat | 5.17 | ✅ Tamam | `ea81a1a` |
-| 5.20 | Grade tracker + GPA simulator sayfası `/me/grades` — tabs (list/simulator) + add/delete + GPA header + üni formül picker | 4 saat | 5.17 | ✅ Tamam | `pending` |
+| 5.20 | Grade tracker + GPA simulator sayfası `/me/grades` — tabs (list/simulator) + add/delete + GPA header + üni formül picker | 4 saat | 5.17 | ✅ Tamam | `d9d67d2` |
 | 5.21 | Course advisor sayfası `/me/course-advisor` — ders ara + compatibility score + premium paywall empty-state | 3 saat | 5.17 | ⏳ Bekliyor | — |
 | 5.22 | Spaced repetition UI `/me/reviews` — review queue + calendar + notification frequency settings | 4 saat | 5.17 | ⏳ Bekliyor | — |
 | 5.23 | i18n TR + EN copy sweep (paralel 2 agent, hibrit ton, `dna.*` / `confidence.*` / `grades.*` / `courseAdvisor.*` / `spacedRepetition.*` / `premium.*` namespace'leri) | 3 saat | 5.18–5.22 | ⏳ Bekliyor | — |
