@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 
+import { parseOrRespond } from "../lib/validation";
+import { generateStudyPackSchema } from "../schemas/study-pack";
 import {
   generateStudyPack,
   getStudyPack,
@@ -16,24 +18,13 @@ export const generate = async (
       return;
     }
 
-    const { professorId, noteIds } = req.body ?? {};
-    if (typeof professorId !== "string" || !professorId) {
-      res.status(400).json({ error: "professorId is required." });
-      return;
-    }
-    if (!Array.isArray(noteIds) || noteIds.length === 0) {
-      res.status(400).json({ error: "noteIds must be a non-empty array." });
-      return;
-    }
-    if (!noteIds.every((id) => typeof id === "string")) {
-      res.status(400).json({ error: "noteIds must contain only string ids." });
-      return;
-    }
+    const body = parseOrRespond(generateStudyPackSchema, req.body ?? {}, res);
+    if (body === null) return;
 
     const result = await generateStudyPack({
       userId: req.user.id,
-      professorId,
-      noteIds,
+      professorId: body.professorId,
+      noteIds: body.noteIds,
     });
 
     if (result.status === "insufficient_data") {

@@ -1,6 +1,12 @@
 import { Request, Response } from "express";
 
 import prisma from "../lib/prisma";
+import { parseOrRespond } from "../lib/validation";
+import {
+  generateMockExamSchema,
+  submitMockExamSchema,
+  panicPlanSchema,
+} from "../schemas/mock-exam";
 import {
   generateMockExam,
   getMockExam,
@@ -36,32 +42,16 @@ export const generate = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const { professorId, studyPackId, noteIds, questionCount, durationMin } =
-      req.body ?? {};
-    if (typeof professorId !== "string" || !professorId) {
-      res.status(400).json({ error: "professorId is required." });
-      return;
-    }
-    if (studyPackId != null && typeof studyPackId !== "string") {
-      res.status(400).json({ error: "studyPackId must be a string." });
-      return;
-    }
-    if (
-      noteIds != null &&
-      (!Array.isArray(noteIds) || !noteIds.every((id) => typeof id === "string"))
-    ) {
-      res.status(400).json({ error: "noteIds must be an array of strings." });
-      return;
-    }
+    const body = parseOrRespond(generateMockExamSchema, req.body ?? {}, res);
+    if (body === null) return;
 
     const result = await generateMockExam({
       userId: req.user.id,
-      professorId,
-      studyPackId: studyPackId ?? null,
-      noteIds: noteIds ?? [],
-      questionCount:
-        typeof questionCount === "number" ? questionCount : undefined,
-      durationMin: typeof durationMin === "number" ? durationMin : undefined,
+      professorId: body.professorId,
+      studyPackId: body.studyPackId ?? null,
+      noteIds: body.noteIds ?? [],
+      questionCount: body.questionCount,
+      durationMin: body.durationMin,
     });
 
     if (result.status === "insufficient_data") {
@@ -119,25 +109,15 @@ export const submit = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const body = req.body ?? {};
-    const answers: unknown = body.answers;
-    const autoSubmitted = Boolean(body.autoSubmitted);
-    if (!Array.isArray(answers)) {
-      res.status(400).json({ error: "answers must be an array." });
-      return;
-    }
-    const normalisedAnswers: StudentAnswer[] = [];
-    for (const a of answers as Array<Record<string, unknown>>) {
-      if (typeof a !== "object" || a == null) continue;
-      if (typeof a.qIdx !== "number") continue;
-      normalisedAnswers.push({
-        qIdx: a.qIdx,
-        answer: typeof a.answer === "string" ? a.answer : "",
-        timeSpentSec:
-          typeof a.timeSpentSec === "number" ? a.timeSpentSec : undefined,
-        flagged: typeof a.flagged === "boolean" ? a.flagged : undefined,
-      });
-    }
+    const body = parseOrRespond(submitMockExamSchema, req.body ?? {}, res);
+    if (body === null) return;
+
+    const normalisedAnswers: StudentAnswer[] = body.answers.map((a) => ({
+      qIdx: a.qIdx,
+      answer: a.answer,
+      timeSpentSec: a.timeSpentSec,
+      flagged: a.flagged,
+    }));
 
     const exam = await getMockExam(id, req.user.id);
     if (!exam) {
@@ -160,7 +140,7 @@ export const submit = async (req: Request, res: Response): Promise<void> => {
       session,
       exam,
       {
-        autoSubmitted,
+        autoSubmitted: body.autoSubmitted,
         userId: req.user.id,
       }
     );
@@ -169,7 +149,7 @@ export const submit = async (req: Request, res: Response): Promise<void> => {
     const topicGaps = detectTopicGaps(questions, grading.feedback);
     const prediction = predictExamPerformance({
       mockScore: grading.score,
-      autoSubmitted,
+      autoSubmitted: body.autoSubmitted,
       timeSpentSec: graded.timeSpentSec ?? 0,
       plannedDurationSec: exam.durationMin * 60,
     });
@@ -255,21 +235,14 @@ export const panicPlan = async (
       res.status(401).json({ error: "Not authenticated." });
       return;
     }
-    const { hoursUntilExam, professorId, mockExamSessionId } = req.body ?? {};
-    if (typeof hoursUntilExam !== "number" || hoursUntilExam <= 0) {
-      res.status(400).json({ error: "hoursUntilExam must be a positive number." });
-      return;
-    }
-    if (typeof professorId !== "string" || !professorId) {
-      res.status(400).json({ error: "professorId is required." });
-      return;
-    }
+    const body = parseOrRespond(panicPlanSchema, req.body ?? {}, res);
+    if (body === null) return;
 
     let topicGaps: Awaited<ReturnType<typeof detectTopicGaps>> | undefined;
 
-    if (typeof mockExamSessionId === "string" && mockExamSessionId) {
+    if (body.mockExamSessionId) {
       const session = await prisma.mockExamSession.findFirst({
-        where: { id: mockExamSessionId, userId: req.user.id },
+        where: { id: body.mockExamSessionId, userId: req.user.id },
       });
       if (session?.topicGaps) {
         topicGaps = session.topicGaps as unknown as typeof topicGaps;
@@ -278,14 +251,14 @@ export const panicPlan = async (
 
     let topTopics: { topic: string; frequency: number }[] | undefined;
     if (!topicGaps || topicGaps.length === 0) {
-      const style = await getOrBuildStyleProfile(professorId);
+      const style = await getOrBuildStyleProfile(body.professorId);
       if (style.status === "ready") {
         topTopics = style.profile.topTopics as unknown as typeof topTopics;
       }
     }
 
     const plan = buildPanicPlan({
-      hoursUntilExam,
+      hoursUntilExam: body.hoursUntilExam,
       topicGaps,
       topTopics,
     });
