@@ -38,6 +38,13 @@ d("/api community endpoints", () => {
     alice = await mkUser("alice");
     bob = await mkUser("bob");
 
+    // Clean up synthetic question votes from prior runs in this schema —
+    // the `mockExam:alice-int:qN` ids are reused every run, so a stray row
+    // would inflate upvote counts.
+    await prisma.questionVote.deleteMany({
+      where: { questionId: { startsWith: "mockExam:alice-int:" } },
+    });
+
     const prof = await prisma.professor.create({
       data: {
         name: `Prof Community ${Date.now()}`,

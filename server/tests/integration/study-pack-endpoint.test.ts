@@ -44,8 +44,13 @@ d("/api/study-pack endpoints (no Gemini)", () => {
     bobToken = jwt.sign({ id: bob.id, email: bob.email, name: bob.name }, secret);
 
     // Seed Bob a stub study pack so Alice can try (and fail) to read it.
-    const anyProfessor = await prisma.professor.findFirst();
-    if (!anyProfessor) throw new Error("Seed required");
+    const anyProfessor = await prisma.professor.create({
+      data: {
+        name: `Prof StudyPack ${Date.now()}`,
+        department: "CS",
+        university: "Test U",
+      },
+    });
     const pack = await prisma.studyPack.create({
       data: {
         userId: bob.id,

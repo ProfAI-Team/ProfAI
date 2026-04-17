@@ -47,8 +47,13 @@ d("/api/mock-exam endpoints (no Gemini)", () => {
       secret
     );
 
-    const anyProfessor = await prisma.professor.findFirst();
-    if (!anyProfessor) throw new Error("Seed required");
+    const anyProfessor = await prisma.professor.create({
+      data: {
+        name: `Prof MockExam ${Date.now()}`,
+        department: "CS",
+        university: "Test U",
+      },
+    });
 
     // Seed Bob a completed exam + session so Alice can fail to read them.
     const bobExam = await prisma.mockExam.create({

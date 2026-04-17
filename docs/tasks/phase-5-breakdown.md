@@ -13,7 +13,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | # | Task | Tahmini | Bağımlılık | Durum | Commit |
 |---|------|---------|------------|-------|--------|
 | 5.1 | vitest 2→4 + vite 5→8 spike — vite 8 uygulandı (bundle 177→40KB gzipped), vitest 4 Phase 6'ya ertelendi (6 test kırıldı) | 3 saat | — | ✅ Tamam | `ad66c29` |
-| 5.2 | Per-worker test DB schema izolasyonu — `test_worker_${id}` pattern (`singleFork` kaldır) | 3 saat | 5.1 | ⏳ Bekliyor | — |
+| 5.2 | Per-worker test DB schema izolasyonu — `test_worker_${poolId}` pattern, opt-in via `VITEST_WORKER_COUNT` env; 3 integration test self-fixture'a çevrildi | 3 saat | 5.1 | ✅ Tamam | `pending` |
 | 5.3 | Global error response middleware — Phase 0/1 `{ error: "..." }` string → `{ error: { code, message } }` | 2 saat | — | ⏳ Bekliyor | — |
 | 5.4 | Recharts dynamic import — ProfessorDetail EvolutionChart + Phase 5 DNA/confidence charts için hazırlık | 2 saat | — | ⏳ Bekliyor | — |
 | 5.5 | BullMQ + Redis infrastructure — docker compose redis servisi + queue abstraction + node-cron → BullMQ taşıma (T3 kararı) | 4 saat | — | ⏳ Bekliyor | — |
@@ -38,7 +38,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.24 | Playwright MCP visual smoke (DNA / confidence / grades / course-advisor / reviews × 390/1440 × light/dark) + Phase 5 fixture seeder | 2 saat | 5.23 | ⏳ Bekliyor | — |
 | 5.25 | Phase 5 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle + data-model-evolution ekle | 1 saat | Hepsi | ⏳ Bekliyor | — |
 
-**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **1/25 — 5.1 tamam.**
+**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **2/25 — 5.1 + 5.2 tamam.**
 
 > Task numaralama 25'e ulaştı (Phase 4: 23); borç sayısı bir fazla (BullMQ + Redis'i ayrı koyduk) + premium tier ayrı task.
 
