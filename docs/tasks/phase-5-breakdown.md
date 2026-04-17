@@ -17,7 +17,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.3 | Global error response middleware — `AppError` + handler + Zod normalize; Phase 0/1 controller migration Phase 6'ya ertelendi (50+ call) | 2 saat | — | ✅ Tamam | `45d8346` |
 | 5.4 | Recharts dynamic import — `StyleHero` + `EvolutionChart` + `AnalysisCard` lazy; ProfessorDetailPage 114KB → 6.5KB gzipped (Recharts 97KB ayrı chunk) | 2 saat | — | ✅ Tamam | `1230f82` |
 | 5.5 | BullMQ + Redis infrastructure — docker compose redis servisi + queue abstraction + studyGroupMaintenance job + inline queue test mode; T3 kapatıldı | 4 saat | — | ✅ Tamam | `b0977f9` |
-| 5.6 | Demo user credit reset utility — `scripts/reset-demo-user.ts` + `npm run reset:demo`, idempotent, live DB'de doğrulandı | 1 saat | — | ✅ Tamam | `pending` |
+| 5.6 | Demo user credit reset utility — `scripts/reset-demo-user.ts` + `npm run reset:demo`, idempotent, live DB'de doğrulandı | 1 saat | — | ✅ Tamam | `d657ea3` |
 | 5.7 | Prisma schema + migration — `AcademicDNA` + `ConfidenceScore` + `GradeRecord` + `SpacedRepetition` (4 tablo) | 3 saat | — | ⏳ Bekliyor | — |
 | 5.8 | DNA aggregation servisi — strengths/weaknesses/correctRate/preferredDifficulty + `Exam.verified` invalidation hook zincirine bağla | 4 saat | 5.7 | ⏳ Bekliyor | — |
 | 5.9 | Learning style inference servisi — quiz performansından (visual/reading/kinesthetic), min 20 soru şartı | 3 saat | 5.7, 5.8 | ⏳ Bekliyor | — |
