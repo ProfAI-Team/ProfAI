@@ -1,23 +1,25 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+import RouteSuspense from './components/RouteSuspense';
 import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import ProfessorListPage from './pages/ProfessorListPage';
-import ProfessorDetailPage from './pages/ProfessorDetailPage';
-import UploadPage from './pages/UploadPage';
-import UploadNotesPage from './pages/UploadNotesPage';
-import StudyPackPage from './pages/StudyPackPage';
-import MockExamGeneratePage from './pages/MockExamGeneratePage';
-import MockExamSessionPage from './pages/MockExamSessionPage';
-import MockExamResultPage from './pages/MockExamResultPage';
-import PanicModePage from './pages/PanicModePage';
-import DashboardPage from './pages/DashboardPage';
+
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const ProfessorListPage = lazy(() => import('./pages/ProfessorListPage'));
+const ProfessorDetailPage = lazy(() => import('./pages/ProfessorDetailPage'));
+const UploadPage = lazy(() => import('./pages/UploadPage'));
+const UploadNotesPage = lazy(() => import('./pages/UploadNotesPage'));
+const StudyPackPage = lazy(() => import('./pages/StudyPackPage'));
+const MockExamGeneratePage = lazy(() => import('./pages/MockExamGeneratePage'));
+const MockExamSessionPage = lazy(() => import('./pages/MockExamSessionPage'));
+const MockExamResultPage = lazy(() => import('./pages/MockExamResultPage'));
+const PanicModePage = lazy(() => import('./pages/PanicModePage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 
 const App: React.FC = () => {
   return (
@@ -25,80 +27,82 @@ const App: React.FC = () => {
       <AuthProvider>
         <Router>
           <div className="min-h-screen flex flex-col bg-background text-foreground">
-          <Navbar />
-          <main className="flex-1">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/professors" element={<ProfessorListPage />} />
-              <Route path="/professors/:id" element={<ProfessorDetailPage />} />
-              <Route
-                path="/upload"
-                element={
-                  <ProtectedRoute>
-                    <UploadPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/upload-notes"
-                element={
-                  <ProtectedRoute>
-                    <UploadNotesPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/study-pack/:id"
-                element={
-                  <ProtectedRoute>
-                    <StudyPackPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/mock-exam/generate"
-                element={
-                  <ProtectedRoute>
-                    <MockExamGeneratePage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/mock-exam/:id/session"
-                element={
-                  <ProtectedRoute>
-                    <MockExamSessionPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/mock-exam/session/:sessionId/result"
-                element={
-                  <ProtectedRoute>
-                    <MockExamResultPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/panic"
-                element={
-                  <ProtectedRoute>
-                    <PanicModePage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <DashboardPage />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </main>
+            <Navbar />
+            <main className="flex-1">
+              <RouteSuspense>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/professors" element={<ProfessorListPage />} />
+                  <Route path="/professors/:id" element={<ProfessorDetailPage />} />
+                  <Route
+                    path="/upload"
+                    element={
+                      <ProtectedRoute>
+                        <UploadPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/upload-notes"
+                    element={
+                      <ProtectedRoute>
+                        <UploadNotesPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/study-pack/:id"
+                    element={
+                      <ProtectedRoute>
+                        <StudyPackPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/mock-exam/generate"
+                    element={
+                      <ProtectedRoute>
+                        <MockExamGeneratePage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/mock-exam/:id/session"
+                    element={
+                      <ProtectedRoute>
+                        <MockExamSessionPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/mock-exam/session/:sessionId/result"
+                    element={
+                      <ProtectedRoute>
+                        <MockExamResultPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/panic"
+                    element={
+                      <ProtectedRoute>
+                        <PanicModePage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <DashboardPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                </Routes>
+              </RouteSuspense>
+            </main>
             <Footer />
           </div>
         </Router>
