@@ -27,7 +27,7 @@
 | 4.15 | Credit dashboard sayfası + Navbar balance widget + kazanç/harcama history tab | 3 saat | 4.14 | ✅ Tamam | `4c75402` |
 | 4.16 | Exam approval wall — upload queue, approve/reject CTA, verified filter switch | 4 saat | 4.14 | ✅ Tamam | `8b112df` |
 | 4.17 | Question vote UI — `ExamQuestionCard` + study-pack practice soruları içine entegrasyon + "sınavda çıktı" rozeti | 3 saat | 4.14 | ✅ Tamam | `b381b76` |
-| 4.18 | Post-exam report form + `/post-exam-reports/new` + hoca detay sayfasında aggregated view | 4 saat | 4.14 | ⏳ | — |
+| 4.18 | Post-exam report form + `/post-exam-reports/new` + hoca detay sayfasında aggregated view | 4 saat | 4.14 | ✅ Tamam | `1b1db22` |
 | 4.19 | Study group index + hoca detayında "5+ kişi bekliyor" banner + external link input modal | 4 saat | 4.14 | ⏳ | — |
 | 4.20 | "A alanların stratejisi" paneli — `ProfessorDetailPage` yeni section (aggregated, k-anonim) | 2 saat | 4.14 | ⏳ | — |
 | 4.21 | i18n TR + EN copy sweep (paralel 2 agent, hibrit ton, `community.*` / `credit.*` / `approval.*` / `vote.*` / `postExam.*` / `studyGroup.*` namespace'leri) | 3 saat | 4.15–4.20 | ⏳ | — |

@@ -25,6 +25,7 @@ const ExamApprovalPage = lazy(() => import('./pages/ExamApprovalPage'));
 const PostExamReportFormPage = lazy(
   () => import('./pages/PostExamReportFormPage')
 );
+const StudyGroupsPage = lazy(() => import('./pages/StudyGroupsPage'));
 
 const App: React.FC = () => {
   return (
@@ -126,6 +127,14 @@ const App: React.FC = () => {
                     element={
                       <ProtectedRoute>
                         <PostExamReportFormPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/study-groups"
+                    element={
+                      <ProtectedRoute>
+                        <StudyGroupsPage />
                       </ProtectedRoute>
                     }
                   />

@@ -22,6 +22,7 @@ import MetricsCards, { MetricsCardsSkeleton } from '../components/MetricsCards';
 import EvolutionChart, { EvolutionChartSkeleton } from '../components/EvolutionChart';
 import TopicBadges, { TopicBadgesSkeleton } from '../components/TopicBadges';
 import AggregatedExamInsights from '../components/AggregatedExamInsights';
+import StudyGroupMatchBanner from '../components/StudyGroupMatchBanner';
 import {
   professorService,
   type StyleProfileResponse,
@@ -373,6 +374,12 @@ const ProfessorDetailPage: React.FC = () => {
               </motion.div>
             ))}
           </div>
+        </section>
+      )}
+
+      {id && isAuthenticated && (
+        <section className="mt-8 space-y-4">
+          <StudyGroupMatchBanner professorId={id} />
         </section>
       )}
 
