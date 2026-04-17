@@ -110,3 +110,35 @@ export const groupJoinDailyLimiter = rateLimit(
     message: "Daily study group action limit reached.",
   })
 );
+
+// Phase 5 — DNA / grades / advisor endpoints. Recompute + advisor
+// calls are relatively expensive (join-heavy reads + potential Gemini
+// hit behind premium); grade writes are cheap but the user should
+// be nudged if they're trying to add 50 grades at once (almost
+// always a bot or a typo).
+export const dnaRecomputeDailyLimiter = rateLimit(
+  rateLimited({
+    name: "dna-recompute:daily",
+    windowMs: DAY_MS,
+    max: 10,
+    message: "Daily DNA recompute limit reached.",
+  })
+);
+
+export const gradeWriteDailyLimiter = rateLimit(
+  rateLimited({
+    name: "grade-write:daily",
+    windowMs: DAY_MS,
+    max: 30,
+    message: "Daily grade write limit reached.",
+  })
+);
+
+export const advisorDailyLimiter = rateLimit(
+  rateLimited({
+    name: "course-advisor:daily",
+    windowMs: DAY_MS,
+    max: 20,
+    message: "Daily course advisor limit reached.",
+  })
+);

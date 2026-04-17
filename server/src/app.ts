@@ -13,6 +13,7 @@ import noteRoutes from "./routes/noteRoutes";
 import studyPackRoutes from "./routes/studyPackRoutes";
 import mockExamRoutes from "./routes/mockExamRoutes";
 import communityRoutes from "./routes/communityRoutes";
+import dnaRoutes from "./routes/dnaRoutes";
 import { errorMiddleware } from "./middleware/errorMiddleware";
 
 export function createApp(): express.Express {
@@ -50,6 +51,7 @@ export function createApp(): express.Express {
   app.use("/api/study-pack", studyPackRoutes);
   app.use("/api/mock-exam", mockExamRoutes);
   app.use("/api", communityRoutes);
+  app.use("/api", dnaRoutes);
 
   app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
