@@ -23,6 +23,7 @@ import EvolutionChart, { EvolutionChartSkeleton } from '../components/EvolutionC
 import TopicBadges, { TopicBadgesSkeleton } from '../components/TopicBadges';
 import AggregatedExamInsights from '../components/AggregatedExamInsights';
 import StudyGroupMatchBanner from '../components/StudyGroupMatchBanner';
+import HighPerformerStrategy from '../components/HighPerformerStrategy';
 import {
   professorService,
   type StyleProfileResponse,
@@ -384,8 +385,9 @@ const ProfessorDetailPage: React.FC = () => {
       )}
 
       {id && (
-        <section className="mt-8 space-y-4">
+        <section className="mt-8 grid gap-4 md:grid-cols-2">
           <AggregatedExamInsights professorId={id} />
+          <HighPerformerStrategy professorId={id} />
         </section>
       )}
     </div>
