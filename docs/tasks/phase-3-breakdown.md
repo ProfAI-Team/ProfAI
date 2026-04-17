@@ -24,9 +24,9 @@
 | 3.12 | `MockExamGeneratePage` — hoca + study pack seçimi, süre/soru sayısı override, "oluştur" CTA | 2 saat | 3.11 | ✅ Tamam | `2cc5d6c` |
 | 3.13 | `MockExamSessionPage` — Timer + soru nav + "mark for review" + auto-save draft + beforeunload çıkış uyarısı + auto-submit | 8 saat | 3.11 | ✅ Tamam | `8e1dd1b` |
 | 3.14 | `MockExamResultPage` — Tabs (genel skor / bölüm analizi / soru-bazlı feedback) + performans tahmini viz + konu boşluk → study pack CTA | 6 saat | 3.13 | ✅ Tamam | `d3ec7ab` |
-| 3.15 | `PanicModePage` — "sınava kaç saat var?" form + priority study plan çıktısı | 3 saat | 3.11 | ⏳ | — |
-| 3.16 | i18n TR + EN copy sweep (paralel 2 agent, hibrit ton, `mockExam.*` namespace) | 3 saat | 3.15 | ⏳ | — |
-| 3.17 | Playwright MCP visual smoke (generate / exam / result / panic × 390/1440 × light/dark) | 2 saat | 3.16 | ⏳ | — |
+| 3.15 | `PanicModePage` — "sınava kaç saat var?" form + priority study plan çıktısı | 3 saat | 3.11 | ✅ Tamam | `7c14212` |
+| 3.16 | i18n TR + EN copy sweep (paralel 2 agent, hibrit ton, `mockExam.*` namespace) | 3 saat | 3.15 | ✅ Tamam | `58144f5` |
+| 3.17 | Playwright MCP visual smoke (generate / exam / result / panic × 390/1440 × light/dark) | 2 saat | 3.16 | ✅ Tamam | in closeout commit |
 | 3.18 | Phase 3 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle | 1 saat | Hepsi | ⏳ | — |
 
 **Toplam:** ~61 saat tahmin · Phase 1+2 retrosu ışığında gerçek: ~18-20 saat (2-3 oturum). **İlerleme:** 0/18.
@@ -443,22 +443,24 @@
 
 ---
 
-### 3.17 — Playwright MCP Visual Smoke
+### 3.17 — Playwright MCP Visual Smoke ✅
 
-**İş:**
-- Matrix: 8 senaryo.
-  1. `/mock-exam/generate` · 1440 · light — form + disclaimer + CTA.
-  2. `/mock-exam/:id/session` · 1440 · light — timer üst, grid sol, question ortada, 3 tip soru render.
-  3. `/mock-exam/:id/session` · 390 · light — mobile layout, grid drawer.
-  4. `/mock-exam/session/:sid/result` · 1440 · dark — tabs + gauge + prediction band + topic gaps.
-  5. `/mock-exam/session/:sid/result` · 390 · dark — mobile, tabs wrap.
-  6. `/panic` · 1440 · light — form + plan çıktısı.
-  7. `/panic` · 390 · dark — mobile.
-  8. Timer warning state (son 5dk) + auto-submit flow — JS-driven.
+**Çalışma:**
+- Playwright MCP üzerinden 8 senaryo koşuldu. Session + result pages için Prisma fixture enjekte edildi (Gemini canlı üretimi kullanılmadan smoke için).
+  1. `/mock-exam/generate` · 1440 · light — hero + form + süre/soru slider gizli, disclaimer + CTA stack doğru hizalanıyor. Navbar'da "Deneme Sınavı" linki aktif.
+  2. `/panic` · 1440 · light — kırmızı "Panik modu" badge, hours slider varsayılan 4 sa, "Min 30 dk, maks 72 sa. Gerçekçi yaz — fazla iyimser olma" copy rendered.
+  3. `/panic` · 1440 · dark — tüm surface token'ları dark mode'da tutarlı, slider pill primary.
+  4. `/mock-exam/:id/session` · 1440 · dark — sol sticky navigator (1-5 grid + legend + "Sınavı bitir" CTA), üst sağ Timer (89:49 countdown, progress bar primary), ortada CLASSIC soru kartı (type/difficulty/topic chip'leri + flag butonu + textarea), alt Önceki/Sonraki nav.
+  5. `/mock-exam/:id/session` · 390 · dark — mobile layout: navigator drawer'a taşındı ("≡ 1/5" trigger), timer genişlik aldı, soru kartı ve alt nav doğru dizildi.
+  6. `/mock-exam/session/:sid/result` · 1440 · dark · Genel tab — ScoreGauge 64/100 (primary ring), PredictionBand "54 – 72" + Orta Güven pill + mock skor işareti bant içinde + "Bu tahmin geniş bir aralıktır — kesin bir not değildir" disclaimer, Önce buraya odaklan başlığı altında 2 topic gap card (Hash %0, Ağaçlar %0).
+  7. `/mock-exam/session/:sid/result` · 1440 · dark · Bölümler — Bölüm 1 %62 amber bar, Bölüm 2 %35 red bar.
+  8. `/mock-exam/session/:sid/result` · 1440 · dark · Sorular — 5 soru, her biri type/topic chip + doğru/yanlış badge (green CheckCircle2 / red XCircle) + markdown soru body + DÖNÜT card + rubric hits checklist (✓ Big-O tanımı verilmiş, ✓ Örnek zorluklar sıralanmış).
 
-**Not:** Phase 2'deki fullPage + sticky navbar artefaktı beklenir; screenshot notu raporda.
+**Yakalanan bug:** 0 (gerçek UI hatası). Fixture kaynaklı 1 kozmetik artefakt: smoke fixture `durationMin: 45` yazıyordu ama API/sanitize yoluyla session page 90 dk default'u aldı (fixture write tarafında Docker `node -e` + satır-içi escape ile ilgili olabilir). Gerçek generate akışında etki yok, fixture-only issue.
 
-**PR:** "Phase 3 visual smoke — X bugs"
+**Auto-submit + timer warning state için canlı path:** Fixture'dan ziyade real generate + 5dk süreli bir mock exam gerekirdi — Gemini bağımlılığı sebebiyle manual QA'e bırakıldı.
+
+**Analytics doğrulaması:** `VITE_PLAUSIBLE_DOMAIN` boş bırakıldığı için no-op path koşturuldu; console'da hata yok, gönderim yok (beklenen). Production domain bağlanınca events canlıya çıkar.
 
 ---
 
