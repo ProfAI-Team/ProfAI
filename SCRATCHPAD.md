@@ -4,7 +4,7 @@ Bu dosya **yaşayan çalışma defteridir.** Cross-cutting işler, proje geneli 
 
 > Frontend'e özel notlar → [`client/SCRATCHPAD.md`](./client/SCRATCHPAD.md)
 > Backend'e özel notlar → [`server/SCRATCHPAD.md`](./server/SCRATCHPAD.md)
-> Faz 1 arşivi (tarihsel bağlam): [`docs/_archive/scratchpad-kok-2026-04-17.md`](./docs/_archive/scratchpad-kok-2026-04-17.md)
+> Faz 2 arşivi (tarihsel bağlam): [`docs/_archive/scratchpad-kok-2026-04-17-phase-2.md`](./docs/_archive/scratchpad-kok-2026-04-17-phase-2.md)
 
 ---
 
@@ -20,14 +20,15 @@ Bu dosya **yaşayan çalışma defteridir.** Cross-cutting işler, proje geneli 
 
 ## Şu An Üzerinde Çalışılan
 
-- Phase 1 tamamlandı (2026-04-17). Phase 2 başlıyor.
-- **Phase 2 — Kişiselleştirilmiş Çalışma Materyalleri**: konu materyali yükleme + AI study pack + pratik sorular. Detay: [`docs/roadmap/phase-2-study-packs.md`](./docs/roadmap/phase-2-study-packs.md).
+- Phase 2 tamamlandı (2026-04-17, Phase 1'le aynı gün içinde tek oturum). Phase 3 başlıyor.
+- **Phase 3 — Mock Exam ve Tahminler**: hoca stili + study pack verisiyle simulasyon sınavı üretimi + sonuç analizi. Detay: [`docs/roadmap/phase-3-mock-exams.md`](./docs/roadmap/phase-3-mock-exams.md).
 
 ---
 
 ## Düşünceler / Keşifler
 
-- (Phase 2 başlangıcı — henüz yok)
+- Phase 2'de structured output schema (responseSchema) çok işe yaradı — Phase 3 mock exam de aynı pattern'ı izlemeli.
+- 22 saniyelik sync generate tolere edildi (step progress + ETA UI ile) ama Phase 3 mock exam daha uzun sürebilir (daha çok soru). Async queue Phase 3'te değerlendirilmeli.
 
 ---
 
@@ -41,17 +42,19 @@ Bu dosya **yaşayan çalışma defteridir.** Cross-cutting işler, proje geneli 
 
 Sadece "yeni ortaya çıkan" açık sorular buraya. Olgunlaştığında [`docs/tasks/open-questions.md`](./docs/tasks/open-questions.md)'e taşı.
 
-- **Dependabot: 24 vulnerability** (15 high, 9 moderate) — GitHub push sırasında raporlandı. `https://github.com/ProfAI-Team/ProfAI/security/dependabot` → liste. Phase 2'de `npm audit fix` ile toplu değerlendir.
-- **Phase 1 bulgusu — hardcoded UI string'ler:** bazı yerler (`index.html` title, home hero badge) i18n'e bağlı değildi. Phase 2'de lint kuralı veya test ile bunu yakalamak iyi olur.
-- **Phase 1 bulgusu — Docker server src mount eksik:** Prisma migrate için `docker compose cp` workaround gerekti. Phase 2'de `./server:/app` bind mount ekleme değerlendir.
+- **Dependabot: 24+ vulnerability** — Phase 1'den devam. `npm audit fix` ile toplu değerlendir (Phase 3 başı).
+- **Docker server src bind mount eksik** — Phase 1 ve Phase 2'de her schema/kod değişikliğinde `docker compose build` + `cp` workaround'u gerekti. Phase 3 başı iş verimi için ekle (`./server:/app` + `node_modules` override).
+- **Analytics kurulumu bekliyor** — Phase 1 ve Phase 2 retro'da da vurgulandı. Phase 3 öncesi (bu hafta) Plausible veya eşdeğer kurulmalı.
+- **Rate limit Phase 4 öncesi şart** — Phase 3'te mock exam generation daha pahalı; Gemini cost koruma gerçekten lazım.
 
 ---
 
 ## Bir Sonraki Session İçin
 
-1. [`docs/roadmap/phase-2-study-packs.md`](./docs/roadmap/phase-2-study-packs.md)'ı yeniden oku — schema + endpoint'ler.
-2. `docs/tasks/phase-2-breakdown.md` yaz (Phase 1 breakdown şablonunu takip et).
-3. İlk task: `StudentNote` + `StudyPack` Prisma schema + migration.
+1. [`docs/roadmap/phase-3-mock-exams.md`](./docs/roadmap/phase-3-mock-exams.md)'ı oku — schema + endpoint'ler.
+2. [`docs/roadmap/phase-2-study-packs.md`](./docs/roadmap/phase-2-study-packs.md) "Phase 3'e Geçerken Hazır Olanlar" bölümünü oku — altyapı listesi.
+3. `docs/tasks/phase-3-breakdown.md` yaz (Phase 1 + Phase 2 breakdown şablonunu takip et).
+4. İlk task: `MockExam` + `MockExamSession` Prisma schema + migration.
 
 ---
 
@@ -61,3 +64,4 @@ Sadece "yeni ortaya çıkan" açık sorular buraya. Olgunlaştığında [`docs/t
 |-------|------------|
 | 2026-04-16 | Kuruldu; doc restructure tamam + Phase 1 planı hazır. |
 | 2026-04-17 | Phase 1 kapanışı — eski içerik `docs/_archive/scratchpad-kok-2026-04-17.md`'ye donduruldu, Phase 2 için reset. |
+| 2026-04-17 | Phase 2 kapanışı — içerik `docs/_archive/scratchpad-kok-2026-04-17-phase-2.md`'ye donduruldu, Phase 3 için reset. |

@@ -5,7 +5,7 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 > Kök / cross-cutting notlar → [`../SCRATCHPAD.md`](../SCRATCHPAD.md)
 > Backend notları → [`../server/SCRATCHPAD.md`](../server/SCRATCHPAD.md)
 > Genel frontend rehberi → [`./CLAUDE.md`](./CLAUDE.md)
-> Faz 1 arşivi: [`../docs/_archive/scratchpad-client-2026-04-17.md`](../docs/_archive/scratchpad-client-2026-04-17.md)
+> Faz 2 arşivi: [`../docs/_archive/scratchpad-client-2026-04-17-phase-2.md`](../docs/_archive/scratchpad-client-2026-04-17-phase-2.md)
 
 ---
 
@@ -20,39 +20,41 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 
 ## Şu An Üzerinde Çalışılan
 
-- Phase 1 tamamlandı. Frontend tarafında Phase 2'ye geçiş bekleniyor.
-- **Phase 2 scope (frontend kısmı):** `/upload-notes` sayfası, multi-file upload, `/study-pack/:id` sayfası (3 tab: özet / pratik sorular / hoca trick'leri).
+- Phase 2 tamamlandı. Frontend tarafında Phase 3'e geçiş bekleniyor.
+- **Phase 3 scope (frontend kısmı):** mock exam generate sayfası, timed exam UI (zamanlayıcı + soru navigasyonu), mock exam result sayfası (genel skor + bölüm analizi + soru-bazlı dönüt).
 
 ---
 
-## Phase 2 Hazırlık Notları
+## Phase 3 Hazırlık Notları
 
-- **Study Pack UI** tab yapısı — `Tabs` component'i yok, yeni yazılacak (headlessui benzeri accessible pattern).
-- **Markdown render** — study pack summary markdown → `marked` veya `react-markdown` kullan. Pre-existing dep yok.
-- **File upload multi** — `UploadPage` pattern'ini genişlet, drag-drop + preview.
-- **Practice questions UI** — her soru için "Cevabı göster" accordion. `<details>` yeterli olur.
+- **Tabs component** — Phase 2'de yazıldı, mock exam result'ta yeniden kullanılır (genel skor / bölüm / soru analizi tab'ları).
+- **Markdown render** — `react-markdown` + `remark-gfm` + `@tailwindcss/typography` Phase 2'de eklendi, mock exam soru açıklamaları için hazır.
+- **Zamanlayıcı UI** — yeni component. `Timer` component'i lazım; tick + warning state + pause.
+- **Navigasyon iskeleti** — soru × soru gezinme, flag (şüpheli) işaretleme, mock exam submit dialog.
+- **State yönetimi** — Phase 3'te birden fazla sayfa arası mock exam session state var. TanStack Query eklemeyi ciddi değerlendir (client/SCRATCHPAD phase-2 arşivinde de önerilmişti).
 
 ---
 
 ## Düşünceler / Keşifler
 
-- Phase 1'de `copy-tone-guide.md` kuruldu. Phase 2 UI copy'si bu rehbere göre yazılacak — aynı ton.
-- `StyleProfile` types'ı `professorService.ts` içinde, Phase 2 StudyPack types'ı benzer pattern izlemeli.
+- Phase 2 StudyPackPage + UploadNotesPage pattern'ları kuruldu — Phase 3 aynı yapı: service + types + page. Hızlı gelecek.
+- `PracticeQuestionCard` yeniden kullanılabilir — mock exam'ın soru UI'ı bunun biraz genişlemiş versiyonu olabilir (timer + flag + nav).
 
 ---
 
-## UI Borçları (Geçmiş Fazlardan — Phase 2+ değerlendir)
+## UI Borçları (Geçmiş Fazlardan — Phase 3+ değerlendir)
 
-- **TanStack Query yok**, `useEffect + useState` devam. Phase 2'de study pack + study pack generation aynı anda birden fazla state yönetilecek — TanStack Query ekleme kararı verilmeli.
-- **Route-level code split** yok. Phase 3+ bundle büyüyünce değerlendir.
-- **Recharts bundle ağır** (~80KB gzip). Phase 2'de study pack'ta grafik yoksa tree-shake etkili mi kontrol et.
+- **TanStack Query yok**, `useEffect + useState` devam. Phase 3 mock exam session state için gerçekten lazım olabilir.
+- **Route-level code split** yok. Phase 3 sonu bundle büyüyünce değerlendir.
+- **Recharts** hâlâ yüklü — mock exam result grafiklerinde kullanılabilir.
 
 ---
 
 ## Performans Notları
 
-- Phase 1 endpoint'leri: cache hit 2-5ms, cache miss 1.44sn. Phase 2 study pack üretimi: ~30sn (Gemini + markdown). Async generation + progress UI gerekecek.
-- Bundle analiz henüz yapılmadı — Phase 2 sonu öncelik.
+- Phase 2 StudyPackPage cold 22sn (Gemini) · cache hit 14ms. UI tarafı <200ms.
+- Phase 3 mock exam generation muhtemelen 30-60sn sürecek — async job queue veya streaming düşünülebilir.
+- Bundle analiz hâlâ yapılmadı — Phase 3 sonu öncelik.
 
 ---
 
@@ -64,9 +66,9 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 
 ## Bir Sonraki Session İçin (Frontend)
 
-1. Phase 2 task breakdown'da frontend işlerinin sırası: 2.7+ (genelde backend+data önce, UI sonra).
-2. Tabs component pattern belirle.
-3. Markdown dep (`react-markdown` önerisi).
+1. Phase 3 breakdown'da frontend işlerinin sırası: muhtemelen 3.7+ (backend önce).
+2. `Timer` component pattern belirle (pause/resume, warning threshold).
+3. TanStack Query eklemeye karar ver.
 
 ---
 
@@ -76,3 +78,4 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 |-------|------------|
 | 2026-04-16 | Kuruldu. |
 | 2026-04-17 | Phase 1 kapanışı — eski içerik arşive donduruldu, Phase 2 için reset. |
+| 2026-04-17 | Phase 2 kapanışı — içerik arşive donduruldu, Phase 3 için reset. |

@@ -10,8 +10,8 @@ Her faz **kullanılabilir bir ürün** ekler. Her fazın net giriş kriterleri, 
 |-----|----|----- |-------|-------|
 | 0 | [Mevcut Temel](./phase-0-baseline.md) | — | ✅ Tamamlandı | — |
 | 1 | [Hoca-Merkezli Stil Profili](./phase-1-style-profile.md) | 1 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-17 | Phase 0 |
-| 2 | [Kişiselleştirilmiş Çalışma Materyalleri](./phase-2-study-packs.md) | 2 hafta | 🎯 **Aktif / Sıradaki** | Phase 1 tamam |
-| 3 | [Mock Exam ve Tahminler](./phase-3-mock-exams.md) | 2 hafta | Planlı | Phase 2 tamam |
+| 2 | [Kişiselleştirilmiş Çalışma Materyalleri](./phase-2-study-packs.md) | 2 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-17 | Phase 1 tamam |
+| 3 | [Mock Exam ve Tahminler](./phase-3-mock-exams.md) | 2 hafta | 🎯 **Sıradaki** | Phase 2 tamam |
 | 4 | [Topluluk Katmanı](./phase-4-community.md) | 3 hafta | Planlı | Phase 3 tamam |
 | 5 | [Akademik DNA + Persistent Memory](./phase-5-academic-dna.md) | 2 hafta | Planlı | Phase 4 tamam |
 | 6 | [Multimodal + Live AI Tutor](./phase-6-multimodal.md) | 3 hafta | Planlı | Phase 5 tamam |
@@ -97,5 +97,6 @@ Detay: [`../operations/kpis.md`](../operations/kpis.md).
 ## İlgili
 
 - Task breakdown (Phase 1): [`../tasks/phase-1-breakdown.md`](../tasks/phase-1-breakdown.md)
+- Task breakdown (Phase 2): [`../tasks/phase-2-breakdown.md`](../tasks/phase-2-breakdown.md)
 - Mimari evrim: [`../architecture/data-model-evolution.md`](../architecture/data-model-evolution.md)
 - Risk matrisi: [`../operations/risks.md`](../operations/risks.md)
