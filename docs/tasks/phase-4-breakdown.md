@@ -16,7 +16,7 @@
 | 4.4 | Breaking npm upgrades değerlendirmesi (bcrypt 5→6 ✓; vitest/vite Phase 5'e ertelendi) | 3 saat | — | ✅ Tamam | `5b827ab` |
 | 4.5 | Prisma schema + migration — `UserCredit` + `ExamApproval` + `QuestionVote` + `PostExamReport` + `StudyGroup` (5 tablo) | 3 saat | — | ✅ Tamam | `5b3845e` |
 | 4.6 | Credit economy servisi — `earn` / `spend` / `history`, balance middleware, config tablosu | 4 saat | 4.5 | ✅ Tamam | `b320714` |
-| 4.7 | Exam approval servisi — `vote` / 3-eşik / verified badge propagation + `Exam.verified` flag | 4 saat | 4.5, 4.6 | ⏳ | — |
+| 4.7 | Exam approval servisi — `vote` / 3-eşik / verified badge propagation + `Exam.verified` flag | 4 saat | 4.5, 4.6 | ✅ Tamam | `1c682da` |
 | 4.8 | Question vote servisi — up/down/cameOnExam, `verified` havuz derivation, anti-brigade rate-limit | 3 saat | 4.5, 4.6 | ⏳ | — |
 | 4.9 | Post-exam report servisi — submit + anonimleştirme + 10+ user aggregation + Gemini opsiyonel reconstruct | 4 saat | 4.5 | ⏳ | — |
 | 4.10 | Study group matcher servisi — professor+examDate eşleştirme, günlük job, external link submission | 3 saat | 4.5 | ⏳ | — |
