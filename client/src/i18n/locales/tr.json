@@ -10,6 +10,8 @@
     "uploadNotes": "Çalışma Paketi",
     "mockExam": "Deneme Sınavı",
     "panic": "Panik Modu",
+    "approveExams": "Sınav Onayla",
+    "studyGroups": "Çalışma Grupları",
     "dashboard": "Panel",
     "signIn": "Giriş Yap",
     "signUp": "Üye ol",
@@ -469,6 +471,161 @@
       "step": {
         "minutes": "{{minutes}} dk"
       }
+    }
+  },
+  "community": {
+    "verifiedBadge": {
+      "label": "Doğrulanmış",
+      "tooltip": "3 öğrenci doğrularsa bu sınav onaylı kabul edilir."
+    },
+    "credit": {
+      "eyebrow": "Topluluk Kredisi",
+      "title": "Kredi panon",
+      "subtitle": "Sınav yükleyerek, soru oylayarak, rapor yazarak kazan. Deneme ve çalışma paketi üretirken harca.",
+      "balanceLabel": "Mevcut bakiye",
+      "balanceUnit": "kredi",
+      "badgeAria": "Topluluk kredisi, {{balance}}",
+      "earnHeading": "Nasıl kazanırsın?",
+      "spendHeading": "Nerede harcanır?",
+      "tabs": {
+        "balance": "Bakiye",
+        "history": "Geçmiş"
+      },
+      "empty": {
+        "title": "Henüz kredin yok",
+        "body": "İlk sınavını yüklediğinde +10 kredi kazanırsın."
+      },
+      "rules": {
+        "examApproved": "Sınav yüklemen onaylandı",
+        "postExamReport": "Sınav sonrası raporu yazdın",
+        "mockExamGenerate": "Deneme sınavı oluştur",
+        "studyPackGenerate": "Çalışma paketi oluştur"
+      },
+      "reason": {
+        "ExamApproved": "Sınav onaylandı",
+        "PostExamReport": "Sınav sonrası raporu",
+        "MockExamGenerate": "Deneme sınavı üretimi",
+        "StudyPackGenerate": "Çalışma paketi üretimi"
+      }
+    },
+    "approval": {
+      "eyebrow": "Topluluk doğrulaması",
+      "title": "Sınavları onayla",
+      "subtitle": "Yüklenen sınavları incele ve doğru olanları işaretle. 3 onay alınca sınav doğrulanmış olur, yükleyene +10 kredi gider.",
+      "empty": {
+        "title": "Şu an incelenecek sınav yok",
+        "body": "Yeni yüklemeler geldikçe burada görünecek. Arada bir gözat."
+      },
+      "approve": "Doğru",
+      "reject": "Yanlış",
+      "reasonHint": "Yanlış işaretliyorsan kısa bir sebep ekle — bu moderasyona yardımcı olur.",
+      "reasonLabel": "Sebep (isteğe bağlı)",
+      "reasonPlaceholder": "Örn. bu dosya hoca adıyla uyuşmuyor gibi…",
+      "flagged": "İşaretlendi",
+      "error": "Oy kaydedilirken bir sorun oldu. Bir dakika sonra tekrar dene.",
+      "examType": {
+        "MIDTERM": "Vize",
+        "FINAL": "Final",
+        "MAKEUP": "Bütünleme"
+      }
+    },
+    "vote": {
+      "upvote": "Faydalı",
+      "downvote": "Yardımcı değil",
+      "cameOnExam": "Sınavda çıktı",
+      "promptExam": "Bu soruyu oyla — verified havuzuna taşınmasına yardım et.",
+      "promptPractice": "Bu soru işine yaradı mı? Oyun havuzu iyileştirir."
+    },
+    "postExam": {
+      "eyebrow": "Sınav sonrası rapor",
+      "title": "Sınavın nasıl geçti?",
+      "subtitle": "Hangi konular çıktı, hangileri zorladı? 10 öğrenci rapor yazdığında anonim bir özet ortaya çıkar.",
+      "kvkkNotice": "Raporun anonim olarak havuza katılır — senin adın ya da kimliğin aggregated veride görünmez. Sadece konu + frekans + zorluk istatistiği işlenir.",
+      "topicsHeading": "Konular ve zorlukları",
+      "submit": "Raporu gönder (+5 kredi)",
+      "submitting": "Gönderiliyor…",
+      "error": "Gönderim sırasında bir şey ters gitti. Bir dakika sonra tekrar dene.",
+      "fields": {
+        "professorId": "Hoca ID",
+        "professorPlaceholder": "Hoca kimliği",
+        "courseId": "Ders ID (isteğe bağlı)",
+        "courseIdPlaceholder": "Ders kimliği",
+        "examDate": "Sınav tarihi",
+        "selfGrade": "Aldığın not (isteğe bağlı, 0-100)",
+        "selfGradePlaceholder": "Örn. 85",
+        "notes": "Ek not (isteğe bağlı)",
+        "notesPlaceholder": "Tarz, süre, sürpriz sorular…"
+      },
+      "editor": {
+        "empty": "Önce bir konu ekle.",
+        "addTopic": "Konu ekle",
+        "topicLabel": "Konu adı",
+        "topicPlaceholder": "Örn. Scrum rolleri",
+        "frequencyLabel": "Sıklık",
+        "difficultyLabel": "Zorluk",
+        "remove": "Konuyu sil"
+      },
+      "frequency": {
+        "once": "Bir kez",
+        "few": "Birkaç",
+        "many": "Çokça"
+      },
+      "insights": {
+        "title": "Bu hocadan son sınav raporları",
+        "subtitle": "Öğrenci paylaşımlarından anonim özet.",
+        "insufficient": "Daha {{threshold}} rapora ulaşılmadı ({{count}}/{{threshold}}). Sen de rapor yazarsan aggregated insight açılır.",
+        "contributeCta": "Rapor yaz",
+        "difficulty": "Ortalama zorluk: {{value}}"
+      }
+    },
+    "studyGroup": {
+      "eyebrow": "Çalışma grupları",
+      "title": "Gruplarım",
+      "subtitle": "Aynı hocadan sınava hazırlanan öğrencilerle otomatik eşleşirsin. Grup oluşunca WhatsApp ya da Discord bağlantısı ekleyebilirsin.",
+      "empty": {
+        "title": "Henüz grubun yok",
+        "body": "Bir hocanın detay sayfasındaki 'Bu sınava giriyorum' önerisine tıklayarak katıl."
+      },
+      "status": {
+        "SUGGESTED": "Öneri",
+        "ACTIVE": "Aktif",
+        "CLOSED": "Kapandı"
+      },
+      "card": {
+        "title": "{{count}} üye",
+        "openLink": "Bağlantıyı aç",
+        "noLink": "Henüz bağlantı eklenmedi",
+        "attachLink": "Bağlantı ekle",
+        "replaceLink": "Bağlantıyı değiştir"
+      },
+      "banner": {
+        "title": "Aynı hocadan {{count}} öğrenci bekliyor",
+        "subtitle": "Katılırsan otomatik eşleşirsin, 5+ olduğunda aktif gruba dönüşür.",
+        "join": "Gruba katıl",
+        "joining": "Katılıyor…"
+      },
+      "linkModal": {
+        "title": "WhatsApp / Discord bağlantısı",
+        "subtitle": "Grubun diğer üyeleri gördüğünde katılacak.",
+        "close": "Kapat",
+        "piiWarning": "Kalıcı olarak paylaşmadan önce iki kez düşün — bağlantın herkese açık bir davet oluyor. WhatsApp veya Discord invite URL'si dışında bir şey kabul edilmez.",
+        "urlLabel": "Bağlantı URL'si",
+        "urlPlaceholder": "https://chat.whatsapp.com/…",
+        "cancel": "Vazgeç",
+        "submit": "Bağlantıyı kaydet",
+        "submitting": "Kaydediliyor…",
+        "errors": {
+          "notAllowed": "Sadece WhatsApp ya da Discord davet bağlantıları kabul ediliyor.",
+          "generic": "Bir şey ters gitti. Bir dakika sonra tekrar dene."
+        }
+      }
+    },
+    "highPerformer": {
+      "title": "Yüksek alanların odağı",
+      "subtitle": "Bu hocadan 85+ alan öğrencilerin raporlarına göre hangi konular öne çıkıyor.",
+      "insufficient": "Henüz {{threshold}} yüksek performans raporu yok ({{count}}/{{threshold}}). Sınav sonrası kendi notunu paylaşırsan bu insight açılır.",
+      "noDominantTopics": "Henüz öne çıkan bir konu yok — raporlar birbirinden farklı yönlere dağılmış.",
+      "disclaimer": "Bu veri anonim, en az 5 öğrenciden toplandı. Trend gösterir, garanti değildir."
     }
   }
 }

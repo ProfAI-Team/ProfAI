@@ -11,6 +11,8 @@
     "mockExam": "Mock exam",
     "panic": "Panic mode",
     "dashboard": "Dashboard",
+    "approveExams": "Approve exams",
+    "studyGroups": "Study groups",
     "signIn": "Sign in",
     "signUp": "Sign up",
     "signOut": "Sign out",
@@ -469,6 +471,161 @@
       "step": {
         "minutes": "{{minutes}} min"
       }
+    }
+  },
+  "community": {
+    "verifiedBadge": {
+      "label": "Verified",
+      "tooltip": "Three students confirmed this exam is genuine."
+    },
+    "credit": {
+      "eyebrow": "Community credit",
+      "title": "Your credit ledger",
+      "subtitle": "Earn by uploading exams, voting on questions, and writing reports. Spend on mock exams and study packs.",
+      "balanceLabel": "Current balance",
+      "balanceUnit": "credits",
+      "badgeAria": "Community credit balance, {{balance}}",
+      "earnHeading": "How to earn",
+      "spendHeading": "Where it goes",
+      "tabs": {
+        "balance": "Balance",
+        "history": "History"
+      },
+      "empty": {
+        "title": "No credits yet",
+        "body": "Uploading your first exam earns you 10 credits."
+      },
+      "rules": {
+        "examApproved": "Your exam upload is approved",
+        "postExamReport": "You wrote a post-exam report",
+        "mockExamGenerate": "Generate a mock exam",
+        "studyPackGenerate": "Generate a study pack"
+      },
+      "reason": {
+        "ExamApproved": "Exam approved",
+        "PostExamReport": "Post-exam report",
+        "MockExamGenerate": "Mock exam generation",
+        "StudyPackGenerate": "Study pack generation"
+      }
+    },
+    "approval": {
+      "eyebrow": "Community verification",
+      "title": "Approve uploaded exams",
+      "subtitle": "Review uploads and confirm the ones that look right. Three approvals mark an exam as verified and earn the uploader 10 credits.",
+      "empty": {
+        "title": "No exams waiting for review right now",
+        "body": "New uploads will show up here. Check back in a bit."
+      },
+      "approve": "Looks right",
+      "reject": "Looks off",
+      "reasonHint": "If you're rejecting, a short reason helps moderation.",
+      "reasonLabel": "Reason (optional)",
+      "reasonPlaceholder": "e.g. the professor name doesn't match this file…",
+      "flagged": "Flagged",
+      "error": "Couldn't save your vote. Give it a minute and try again.",
+      "examType": {
+        "MIDTERM": "Midterm",
+        "FINAL": "Final",
+        "MAKEUP": "Make-up"
+      }
+    },
+    "vote": {
+      "upvote": "Helpful",
+      "downvote": "Not useful",
+      "cameOnExam": "Came on exam",
+      "promptExam": "Vote on this question — push it toward the verified pool.",
+      "promptPractice": "Did this practice question help? Votes shape the pool."
+    },
+    "postExam": {
+      "eyebrow": "Post-exam report",
+      "title": "How did your exam go?",
+      "subtitle": "Which topics showed up, which ones were hard? Once ten students report, an anonymous summary appears.",
+      "kvkkNotice": "Your report enters the pool anonymously — your name or identity never appears in aggregates. Only topic + frequency + difficulty statistics are processed.",
+      "topicsHeading": "Topics and difficulty",
+      "submit": "Submit report (+5 credits)",
+      "submitting": "Sending…",
+      "error": "Something went wrong while sending. Give it a minute and try again.",
+      "fields": {
+        "professorId": "Professor ID",
+        "professorPlaceholder": "Professor identifier",
+        "courseId": "Course ID (optional)",
+        "courseIdPlaceholder": "Course identifier",
+        "examDate": "Exam date",
+        "selfGrade": "Your grade (optional, 0-100)",
+        "selfGradePlaceholder": "e.g. 85",
+        "notes": "Extra notes (optional)",
+        "notesPlaceholder": "Style, timing, surprise questions…"
+      },
+      "editor": {
+        "empty": "Add a topic to get started.",
+        "addTopic": "Add topic",
+        "topicLabel": "Topic",
+        "topicPlaceholder": "e.g. Scrum roles",
+        "frequencyLabel": "Frequency",
+        "difficultyLabel": "Difficulty",
+        "remove": "Remove topic"
+      },
+      "frequency": {
+        "once": "Once",
+        "few": "A few",
+        "many": "Many"
+      },
+      "insights": {
+        "title": "Recent post-exam reports",
+        "subtitle": "Anonymous summary from student reports.",
+        "insufficient": "Need {{threshold}} reports; we have {{count}}/{{threshold}}. Add yours to unlock the aggregate.",
+        "contributeCta": "Write a report",
+        "difficulty": "Avg difficulty: {{value}}"
+      }
+    },
+    "studyGroup": {
+      "eyebrow": "Study groups",
+      "title": "Your groups",
+      "subtitle": "You're auto-matched with students preparing for the same professor. Once a group forms, anyone can attach a WhatsApp or Discord link.",
+      "empty": {
+        "title": "No groups yet",
+        "body": "Tap the matcher banner on a professor's page to join."
+      },
+      "status": {
+        "SUGGESTED": "Suggested",
+        "ACTIVE": "Active",
+        "CLOSED": "Closed"
+      },
+      "card": {
+        "title": "{{count}} members",
+        "openLink": "Open link",
+        "noLink": "No link attached yet",
+        "attachLink": "Add link",
+        "replaceLink": "Replace link"
+      },
+      "banner": {
+        "title": "{{count}} students waiting for this professor",
+        "subtitle": "Join to be auto-matched. Once 5+ people have joined, the group becomes active.",
+        "join": "Join group",
+        "joining": "Joining…"
+      },
+      "linkModal": {
+        "title": "WhatsApp / Discord link",
+        "subtitle": "Other members will see it and can join.",
+        "close": "Close",
+        "piiWarning": "Think twice before you publish this — it becomes a public invite. Only WhatsApp and Discord invite URLs are accepted.",
+        "urlLabel": "Link URL",
+        "urlPlaceholder": "https://chat.whatsapp.com/…",
+        "cancel": "Cancel",
+        "submit": "Save link",
+        "submitting": "Saving…",
+        "errors": {
+          "notAllowed": "Only WhatsApp or Discord invite links are allowed.",
+          "generic": "Something went wrong. Give it a minute and try again."
+        }
+      }
+    },
+    "highPerformer": {
+      "title": "High-scorers' focus",
+      "subtitle": "What topics are trending in reports from students who scored 85+.",
+      "insufficient": "We need {{threshold}} high-scorer reports; we have {{count}}/{{threshold}}. Share your grade after your exam to unlock this insight.",
+      "noDominantTopics": "No dominant topic yet — reports spread across the syllabus.",
+      "disclaimer": "Aggregated anonymously from at least five students. It's a trend, not a guarantee."
     }
   }
 }
