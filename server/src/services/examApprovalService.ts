@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import prisma from "../lib/prisma";
 import * as creditService from "./creditService";
 import { invalidateStyleProfile } from "./professorStyleService";
+import { invalidateDNA } from "./dnaService";
 import { invalidateStudyPacksForProfessor } from "./studyPackService";
 import { invalidateMockExamsForProfessor } from "./mockExamService";
 
@@ -144,10 +145,25 @@ export async function castApproval(params: {
   // Invalidate downstream caches only after the transaction commits —
   // doing it inside the tx risks a dirty state if a later step throws.
   if (result.justVerified && professorId) {
+    // Uploader + every approver who pushed this exam past the threshold
+    // now have new source data that could shift their DNA — mark their
+    // academic_dna rows stale so the next read recomputes.
+    const approvers = await prisma.examApproval.findMany({
+      where: { examId: params.examId, approved: true },
+      select: { userId: true },
+    });
+    const dnaUserIds = [
+      ...new Set([
+        exam.uploadedById,
+        ...approvers.map((a) => a.userId),
+      ]),
+    ];
+
     await Promise.all([
       invalidateStyleProfile(professorId),
       invalidateStudyPacksForProfessor(professorId),
       invalidateMockExamsForProfessor(professorId),
+      invalidateDNA(dnaUserIds),
     ]);
   }
 

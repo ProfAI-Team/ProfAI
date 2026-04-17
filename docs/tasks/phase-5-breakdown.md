@@ -19,7 +19,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.5 | BullMQ + Redis infrastructure — docker compose redis servisi + queue abstraction + studyGroupMaintenance job + inline queue test mode; T3 kapatıldı | 4 saat | — | ✅ Tamam | `b0977f9` |
 | 5.6 | Demo user credit reset utility — `scripts/reset-demo-user.ts` + `npm run reset:demo`, idempotent, live DB'de doğrulandı | 1 saat | — | ✅ Tamam | `d657ea3` |
 | 5.7 | Prisma schema + migration — 4 DNA tablosu + `User.subscriptionTier`, migrate dev uygulandı, test suite 163/164 | 3 saat | — | ✅ Tamam | `7fa91e6` |
-| 5.8 | DNA aggregation servisi — strengths/weaknesses/correctRate/preferredDifficulty + `Exam.verified` invalidation hook zincirine bağla | 4 saat | 5.7 | ⏳ Bekliyor | — |
+| 5.8 | DNA aggregation servisi — `recomputeDNA` + `getDNA` (cache-first 6h TTL) + `invalidateDNA`; Exam.verified hook uploader + approvers DNA'larını mark stale | 4 saat | 5.7 | ✅ Tamam | `pending` |
 | 5.9 | Learning style inference servisi — quiz performansından (visual/reading/kinesthetic), min 20 soru şartı | 3 saat | 5.7, 5.8 | ⏳ Bekliyor | — |
 | 5.10 | Confidence scoring servisi — per-topic 0-100, mock exam sonrası otomatik update + "bu hafta" öneri aggregation | 3 saat | 5.7, 5.8 | ⏳ Bekliyor | — |
 | 5.11 | Grade record + GPA calculator servisi — 3+ üni formül preset (Aydın, Boğaziçi, ODTÜ) + what-if simulator | 3 saat | 5.7 | ⏳ Bekliyor | — |
@@ -38,7 +38,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.24 | Playwright MCP visual smoke (DNA / confidence / grades / course-advisor / reviews × 390/1440 × light/dark) + Phase 5 fixture seeder | 2 saat | 5.23 | ⏳ Bekliyor | — |
 | 5.25 | Phase 5 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle + data-model-evolution ekle | 1 saat | Hepsi | ⏳ Bekliyor | — |
 
-**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **7/25 — schema + migration tamam, servisler sırada.**
+**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **8/25 — DNA servisi hazır, learning style ve confidence sırada.**
 
 > Task numaralama 25'e ulaştı (Phase 4: 23); borç sayısı bir fazla (BullMQ + Redis'i ayrı koyduk) + premium tier ayrı task.
 
