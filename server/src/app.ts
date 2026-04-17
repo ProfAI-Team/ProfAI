@@ -11,6 +11,7 @@ import examRoutes from "./routes/examRoutes";
 import ratingRoutes from "./routes/ratingRoutes";
 import noteRoutes from "./routes/noteRoutes";
 import studyPackRoutes from "./routes/studyPackRoutes";
+import mockExamRoutes from "./routes/mockExamRoutes";
 
 export function createApp(): express.Express {
   const app = express();
@@ -45,6 +46,7 @@ export function createApp(): express.Express {
   app.use("/api/ratings", ratingRoutes);
   app.use("/api/notes", noteRoutes);
   app.use("/api/study-pack", studyPackRoutes);
+  app.use("/api/mock-exam", mockExamRoutes);
 
   app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
