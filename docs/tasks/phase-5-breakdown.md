@@ -34,7 +34,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.20 | Grade tracker + GPA simulator sayfası `/me/grades` — tabs (list/simulator) + add/delete + GPA header + üni formül picker | 4 saat | 5.17 | ✅ Tamam | `d9d67d2` |
 | 5.21 | Course advisor sayfası `/me/course-advisor` — professor search + compatibility card + PremiumLockCard 402 handler + insufficient branches | 3 saat | 5.17 | ✅ Tamam | `f1640f5` |
 | 5.22 | Spaced repetition UI `/me/reviews` — 3 tab (today + 30-day calendar + settings) + optimistic complete mutation; Navbar'da DNA/Grades/Reviews linkleri | 4 saat | 5.17 | ✅ Tamam | `cfb9a14` |
-| 5.23 | i18n TR + EN copy sweep — `dna.*` / `confidence.*` / `grades.*` / `courseAdvisor.*` / `spacedRepetition.*` / `premium.*` (549↔549 key parity; tek oturum manuel sweep) | 3 saat | 5.18–5.22 | ✅ Tamam | `pending` |
+| 5.23 | i18n TR + EN copy sweep — `dna.*` / `confidence.*` / `grades.*` / `courseAdvisor.*` / `spacedRepetition.*` / `premium.*` (549↔549 key parity; tek oturum manuel sweep) | 3 saat | 5.18–5.22 | ✅ Tamam | `8f756ea` |
 | 5.24 | Playwright MCP visual smoke (DNA / confidence / grades / course-advisor / reviews × 390/1440 × light/dark) + Phase 5 fixture seeder | 2 saat | 5.23 | ⏳ Bekliyor | — |
 | 5.25 | Phase 5 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle + data-model-evolution ekle | 1 saat | Hepsi | ⏳ Bekliyor | — |
 
