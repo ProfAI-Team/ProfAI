@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -14,12 +14,16 @@ import {
   FileText,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import AnalysisCard from '../components/AnalysisCard';
 import RatingForm from '../components/RatingForm';
 import ProfAvatar from '../components/Avatar';
-import StyleHero, { StyleHeroSkeleton } from '../components/StyleHero';
+// Lazy-loaded Recharts-heavy components — each keeps its own
+// chunk so the ProfessorDetail page's initial payload stays small.
+const AnalysisCard = lazy(() => import('../components/AnalysisCard'));
+const StyleHero = lazy(() => import('../components/StyleHero'));
+const EvolutionChart = lazy(() => import('../components/EvolutionChart'));
+import { StyleHeroSkeleton } from '../components/StyleHeroSkeleton';
+import { EvolutionChartSkeleton } from '../components/EvolutionChartSkeleton';
 import MetricsCards, { MetricsCardsSkeleton } from '../components/MetricsCards';
-import EvolutionChart, { EvolutionChartSkeleton } from '../components/EvolutionChart';
 import TopicBadges, { TopicBadgesSkeleton } from '../components/TopicBadges';
 import AggregatedExamInsights from '../components/AggregatedExamInsights';
 import StudyGroupMatchBanner from '../components/StudyGroupMatchBanner';
@@ -223,9 +227,13 @@ const ProfessorDetailPage: React.FC = () => {
       {!styleLoading && styleProfile?.status === 'ready' && (
         <section className="space-y-4">
           <MetricsCards metrics={styleProfile.profile.metrics} />
-          <StyleHero profile={styleProfile.profile} />
+          <Suspense fallback={<StyleHeroSkeleton />}>
+            <StyleHero profile={styleProfile.profile} />
+          </Suspense>
           <TopicBadges topics={styleProfile.profile.topTopics} />
-          <EvolutionChart evolution={styleProfile.profile.evolution} />
+          <Suspense fallback={<EvolutionChartSkeleton />}>
+            <EvolutionChart evolution={styleProfile.profile.evolution} />
+          </Suspense>
         </section>
       )}
 
@@ -307,9 +315,11 @@ const ProfessorDetailPage: React.FC = () => {
               <ChevronDown className="w-5 h-5 text-muted-foreground shrink-0 transition-transform group-open:rotate-180" />
             </summary>
             <div className="border-t border-border p-5 sm:p-6 space-y-5">
-              {analyses.map((a, i) => (
-                <AnalysisCard key={a.id} analysis={a} index={i} />
-              ))}
+              <Suspense fallback={<div className="h-40 bg-secondary/50 rounded-xl animate-pulse" />}>
+                {analyses.map((a, i) => (
+                  <AnalysisCard key={a.id} analysis={a} index={i} />
+                ))}
+              </Suspense>
             </div>
           </details>
         </section>
