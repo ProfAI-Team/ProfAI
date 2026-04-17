@@ -26,7 +26,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.12 | Course advisor — `scoreCompatibility` (style 30 + difficulty 20 + topic 50 weights) + `getCompatibility` insufficient branches | 3 saat | 5.7, 5.8 | ✅ Tamam | `45038db` |
 | 5.13 | Spaced repetition — simplified SM-2 (tier'lı intervals), `scheduleReview` / `completeReview` / `countDueByUser`, BullMQ daily scheduler + `User.reviewFrequency` | 4 saat | 5.5, 5.7 | ✅ Tamam | `75a111f` |
 | 5.14 | Premium tier gating — `requirePremium` middleware (402/403/401 matrix) + feature flag registry + `reconstructExamSummary` Gemini activation with fallback | 3 saat | 5.7 | ✅ Tamam | `5f97d51` |
-| 5.15 | DNA endpoint'leri — 14 route (`/dna` + `/confidence` + `/grades` + `/course-advisor` + `/exam-reconstruct` + `/spaced-repetition` + `/users/me/review-frequency`) + Zod + premium gate + 3 yeni limiter | 4 saat | 5.8–5.14 | ✅ Tamam | `pending` |
+| 5.15 | DNA endpoint'leri — 14 route (`/dna` + `/confidence` + `/grades` + `/course-advisor` + `/exam-reconstruct` + `/spaced-repetition` + `/users/me/review-frequency`) + Zod + premium gate + 3 yeni limiter | 4 saat | 5.8–5.14 | ✅ Tamam | `5dc5a1f` |
 | 5.16 | Backend unit + integration testler (DNA aggregation, SM-2 algoritma, GPA formül, premium middleware, scheduler idempotency) | 4 saat | 5.15 | ⏳ Bekliyor | — |
 | 5.17 | Client types + services + shared chart components (`RadarChart` lazy, `Heatmap` lazy, `GpaCalculator`, `ReviewCard`) | 4 saat | 5.15 | ⏳ Bekliyor | — |
 | 5.18 | DNA profile sayfası `/me/profile` — radar + strengths/weaknesses + learning style + "DNA oluşuyor" banner (<20 soru) | 4 saat | 5.17 | ⏳ Bekliyor | — |
