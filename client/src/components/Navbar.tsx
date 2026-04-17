@@ -7,6 +7,7 @@ import {
   Home,
   Users,
   Upload as UploadIcon,
+  Wand2,
   LayoutDashboard,
   Menu,
   X,
@@ -29,6 +30,7 @@ const NAV_LINKS: NavLink[] = [
   { to: '/', labelKey: 'nav.home', icon: Home },
   { to: '/professors', labelKey: 'nav.professors', icon: Users },
   { to: '/upload', labelKey: 'nav.upload', icon: UploadIcon, authRequired: true },
+  { to: '/upload-notes', labelKey: 'nav.uploadNotes', icon: Wand2, authRequired: true },
   { to: '/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard, authRequired: true },
 ];
 

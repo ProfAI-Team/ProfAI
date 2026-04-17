@@ -11,6 +11,7 @@ import RegisterPage from './pages/RegisterPage';
 import ProfessorListPage from './pages/ProfessorListPage';
 import ProfessorDetailPage from './pages/ProfessorDetailPage';
 import UploadPage from './pages/UploadPage';
+import UploadNotesPage from './pages/UploadNotesPage';
 import DashboardPage from './pages/DashboardPage';
 
 const App: React.FC = () => {
@@ -32,6 +33,14 @@ const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <UploadPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/upload-notes"
+                element={
+                  <ProtectedRoute>
+                    <UploadNotesPage />
                   </ProtectedRoute>
                 }
               />

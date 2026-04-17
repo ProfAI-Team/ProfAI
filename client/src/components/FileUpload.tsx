@@ -7,8 +7,9 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-const ACCEPTED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
-const ACCEPTED_EXTENSIONS = '.pdf,.jpg,.jpeg,.png';
+const DEFAULT_ACCEPTED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
+const DEFAULT_ACCEPTED_EXTENSIONS = '.pdf,.jpg,.jpeg,.png';
+const DEFAULT_REJECTION = 'Sadece PDF, JPG veya PNG kabul edilir.';
 const MAX_SIZE = 10 * 1024 * 1024;
 
 export type FileStatus = 'pending' | 'uploading' | 'success' | 'error';
@@ -20,22 +21,40 @@ export interface UploadFile {
   errorMessage?: string;
   /** Exam id returned from backend on success */
   examId?: string;
+  /** Note id returned from backend on success (Phase 2 notes flow). */
+  noteId?: string;
 }
 
 interface Props {
   files: UploadFile[];
   onChange: (files: UploadFile[]) => void;
   disabled?: boolean;
+  /** Override mime whitelist (Phase 2 notes flow accepts PDF/DOCX/TXT). */
+  acceptedTypes?: string[];
+  /** Override file-picker `accept=` attribute — paired with acceptedTypes. */
+  acceptedExtensions?: string;
+  /** Override rejection copy shown when a file fails validation. */
+  rejectionMessage?: string;
+  /** Override the hint line below the drop zone. */
+  hint?: string;
 }
 
-const FileUpload: React.FC<Props> = ({ files, onChange, disabled = false }) => {
+const FileUpload: React.FC<Props> = ({
+  files,
+  onChange,
+  disabled = false,
+  acceptedTypes = DEFAULT_ACCEPTED_TYPES,
+  acceptedExtensions = DEFAULT_ACCEPTED_EXTENSIONS,
+  rejectionMessage = DEFAULT_REJECTION,
+  hint,
+}) => {
   const { t } = useTranslation();
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = (file: File): string | null => {
-    if (!ACCEPTED_TYPES.includes(file.type)) return 'Sadece PDF, JPG veya PNG kabul edilir.';
+    if (!acceptedTypes.includes(file.type)) return rejectionMessage;
     if (file.size > MAX_SIZE) return 'Dosya 10 MB altında olmalı.';
     return null;
   };
@@ -111,7 +130,7 @@ const FileUpload: React.FC<Props> = ({ files, onChange, disabled = false }) => {
         <input
           ref={inputRef}
           type="file"
-          accept={ACCEPTED_EXTENSIONS}
+          accept={acceptedExtensions}
           multiple
           onChange={(e) => {
             if (e.target.files) addFiles(Array.from(e.target.files));
@@ -126,7 +145,7 @@ const FileUpload: React.FC<Props> = ({ files, onChange, disabled = false }) => {
           </div>
           <p className="text-foreground font-medium">{t('upload.drag')}</p>
           <p className="text-sm text-muted-foreground">
-            {t('upload.fileHint')} · birden fazla seçebilirsin
+            {hint ?? `${t('upload.fileHint')} · birden fazla seçebilirsin`}
           </p>
         </div>
       </div>
