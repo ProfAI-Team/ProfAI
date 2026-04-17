@@ -10,6 +10,8 @@ import {
   Wand2,
   ClipboardCheck,
   AlarmClockCheck,
+  ShieldCheck,
+  UsersRound,
   LayoutDashboard,
   Menu,
   X,
@@ -19,6 +21,7 @@ import { useAuth } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
 import LanguageSwitcher from './LanguageSwitcher';
 import ProfAvatar from './Avatar';
+import CreditBadge from './CreditBadge';
 import { cn } from '../lib/utils';
 
 interface NavLink {
@@ -35,6 +38,8 @@ const NAV_LINKS: NavLink[] = [
   { to: '/upload-notes', labelKey: 'nav.uploadNotes', icon: Wand2, authRequired: true },
   { to: '/mock-exam/generate', labelKey: 'nav.mockExam', icon: ClipboardCheck, authRequired: true },
   { to: '/panic', labelKey: 'nav.panic', icon: AlarmClockCheck, authRequired: true },
+  { to: '/approve-exams', labelKey: 'nav.approveExams', icon: ShieldCheck, authRequired: true },
+  { to: '/study-groups', labelKey: 'nav.studyGroups', icon: UsersRound, authRequired: true },
   { to: '/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard, authRequired: true },
 ];
 
@@ -111,6 +116,7 @@ const Navbar: React.FC = () => {
             <ThemeToggle />
             {isAuthenticated && user ? (
               <div className="flex items-center gap-3 ml-2 pl-3 border-l border-border">
+                <CreditBadge />
                 <Link
                   to="/dashboard"
                   className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-secondary transition-colors"

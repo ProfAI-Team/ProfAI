@@ -20,6 +20,7 @@ const MockExamSessionPage = lazy(() => import('./pages/MockExamSessionPage'));
 const MockExamResultPage = lazy(() => import('./pages/MockExamResultPage'));
 const PanicModePage = lazy(() => import('./pages/PanicModePage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const CreditsPage = lazy(() => import('./pages/CreditsPage'));
 
 const App: React.FC = () => {
   return (
@@ -97,6 +98,14 @@ const App: React.FC = () => {
                     element={
                       <ProtectedRoute>
                         <DashboardPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/credits"
+                    element={
+                      <ProtectedRoute>
+                        <CreditsPage />
                       </ProtectedRoute>
                     }
                   />
