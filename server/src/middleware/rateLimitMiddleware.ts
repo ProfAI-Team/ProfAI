@@ -70,3 +70,43 @@ export const panicPlanDailyLimiter = rateLimit(
     message: "Daily panic plan limit reached.",
   })
 );
+
+// Phase 4 — community endpoints. Quotas are tuned to discourage
+// brigading (votes) and spam (reports, group joins) without punishing
+// active contributors. Values are deliberate conservatives; the Phase 4
+// retro may loosen them.
+export const approvalDailyLimiter = rateLimit(
+  rateLimited({
+    name: "approval:daily",
+    windowMs: DAY_MS,
+    max: 30,
+    message: "Daily approval limit reached.",
+  })
+);
+
+export const voteDailyLimiter = rateLimit(
+  rateLimited({
+    name: "vote:daily",
+    windowMs: DAY_MS,
+    max: 50,
+    message: "Daily vote limit reached.",
+  })
+);
+
+export const reportDailyLimiter = rateLimit(
+  rateLimited({
+    name: "post-exam-report:daily",
+    windowMs: DAY_MS,
+    max: 3,
+    message: "Daily report limit reached.",
+  })
+);
+
+export const groupJoinDailyLimiter = rateLimit(
+  rateLimited({
+    name: "study-group:daily",
+    windowMs: DAY_MS,
+    max: 5,
+    message: "Daily study group action limit reached.",
+  })
+);

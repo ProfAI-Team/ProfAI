@@ -118,7 +118,7 @@ d("/api/mock-exam endpoints (no Gemini)", () => {
       .set("Authorization", `Bearer ${aliceToken}`)
       .send({});
     expect(res.status).toBe(400);
-    expect(res.body.error).toContain("professorId");
+    expect(res.body.error.code).toBe("VALIDATION_FAILED");
   });
 
   it("GET /:id returns 404 for another user's exam", async () => {

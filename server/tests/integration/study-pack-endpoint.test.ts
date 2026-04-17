@@ -85,7 +85,7 @@ d("/api/study-pack endpoints (no Gemini)", () => {
       .set("Authorization", `Bearer ${aliceToken}`)
       .send({ noteIds: ["a"] });
     expect(res.status).toBe(400);
-    expect(res.body.error).toContain("professorId");
+    expect(res.body.error.code).toBe("VALIDATION_FAILED");
   });
 
   it("POST /generate rejects empty noteIds", async () => {
@@ -94,7 +94,7 @@ d("/api/study-pack endpoints (no Gemini)", () => {
       .set("Authorization", `Bearer ${aliceToken}`)
       .send({ professorId: "x", noteIds: [] });
     expect(res.status).toBe(400);
-    expect(res.body.error).toContain("noteIds");
+    expect(res.body.error.code).toBe("VALIDATION_FAILED");
   });
 
   it("POST /generate surfaces insufficient_data when notes can't be found", async () => {

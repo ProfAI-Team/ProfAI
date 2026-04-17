@@ -20,7 +20,7 @@
 | 4.8 | Question vote servisi — up/down/cameOnExam, `verified` havuz derivation, anti-brigade rate-limit | 3 saat | 4.5, 4.6 | ✅ Tamam | `6b896f2` |
 | 4.9 | Post-exam report servisi — submit + anonimleştirme + 10+ user aggregation + Gemini opsiyonel reconstruct | 4 saat | 4.5 | ✅ Tamam | `7d434aa` |
 | 4.10 | Study group matcher servisi — professor+examDate eşleştirme, günlük job, external link submission | 3 saat | 4.5 | ✅ Tamam | `3fe298d` |
-| 4.11 | "A alanların stratejisi" aggregation — self-reported grade + topic focus (≥5 kişi anonim) | 3 saat | 4.5 | ⏳ | — |
+| 4.11 | "A alanların stratejisi" aggregation — self-reported grade + topic focus (≥5 kişi anonim) | 3 saat | 4.5 | ✅ Tamam | `7fe515d` |
 | 4.12 | Topluluk endpoint'leri — `/api/credits/*` / `/api/exams/:id/approve` / `/api/questions/:id/vote` / `/api/post-exam-reports` / `/api/study-groups` (Zod + rate-limit + credit middleware) | 4 saat | 4.6–4.11 | ⏳ | — |
 | 4.13 | Backend unit + integration testler (credit state machine, 3-eşik verified, cameOnExam precedence, rate-limit brigade, aggregation k-anonymity) | 5 saat | 4.12 | ⏳ | — |
 | 4.14 | Client types + services + shared components (`VoteButtons`, `CreditBadge`, `VerifiedBadge`, `ShareDialog`) | 4 saat | 4.12 | ⏳ | — |
