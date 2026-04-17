@@ -10,6 +10,15 @@ import {
   type StudyPackPromptInput,
   type TargetDistribution,
 } from "../../prompts/study-pack";
+import {
+  buildMockExamPrompt,
+  buildGradeAnswerPrompt,
+  type MockExamPromptInput,
+  type MockExamContent,
+  type MockExamQuestion,
+  type GradeAnswerPromptInput,
+  type GradeAnswerResult,
+} from "../../prompts/mock-exam";
 import { recordAICall } from "./aiCallTracker";
 
 const DEFAULT_MODEL = "gemini-2.5-flash";
@@ -479,3 +488,263 @@ export async function generateStudyPack(
     ? lastError
     : new Error("Gemini study pack failed after retries");
 }
+
+// --------------------------------------------------------------------
+// Mock exam (Phase 3)
+// --------------------------------------------------------------------
+
+const mockExamResponseSchema = {
+  type: Type.OBJECT,
+  properties: {
+    title: { type: Type.STRING },
+    durationMin: { type: Type.INTEGER },
+    questions: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          q: { type: Type.STRING },
+          type: { type: Type.STRING, enum: ["MC", "CLASSIC", "TF"] },
+          options: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING },
+          },
+          correctAnswer: { type: Type.STRING },
+          topic: { type: Type.STRING },
+          difficulty: { type: Type.INTEGER },
+          rationale: { type: Type.STRING },
+          rubric: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING },
+          },
+        },
+        required: [
+          "q",
+          "type",
+          "options",
+          "correctAnswer",
+          "topic",
+          "difficulty",
+          "rationale",
+          "rubric",
+        ],
+        propertyOrdering: [
+          "q",
+          "type",
+          "options",
+          "correctAnswer",
+          "topic",
+          "difficulty",
+          "rationale",
+          "rubric",
+        ],
+      },
+    },
+    sections: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          title: { type: Type.STRING },
+          startIdx: { type: Type.INTEGER },
+          endIdx: { type: Type.INTEGER },
+        },
+        required: ["title", "startIdx", "endIdx"],
+        propertyOrdering: ["title", "startIdx", "endIdx"],
+      },
+    },
+  },
+  required: ["title", "durationMin", "questions", "sections"],
+  propertyOrdering: ["title", "durationMin", "questions", "sections"],
+};
+
+export interface GenerateMockExamOptions {
+  userId?: string | null;
+}
+
+export interface GenerateMockExamResult {
+  content: MockExamContent;
+  model: string;
+  target: TargetDistribution;
+  questionCount: number;
+  durationMin: number;
+}
+
+export async function generateMockExam(
+  input: MockExamPromptInput,
+  options: GenerateMockExamOptions = {}
+): Promise<GenerateMockExamResult> {
+  const client = getClient();
+  const model = process.env.GEMINI_MODEL || DEFAULT_MODEL;
+  const { systemInstruction, userPrompt, target, questionCount, durationMin } =
+    buildMockExamPrompt(input);
+
+  const startedAt = Date.now();
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await client.models.generateContent({
+        model,
+        contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+        config: {
+          systemInstruction,
+          temperature: 0.6,
+          responseMimeType: "application/json",
+          responseSchema: mockExamResponseSchema,
+        },
+      });
+
+      const text = response.text;
+      if (!text) throw new Error("Gemini returned empty mock exam");
+
+      const parsed = JSON.parse(text) as MockExamContent;
+
+      const usage = response.usageMetadata;
+      await recordAICall({
+        userId: options.userId,
+        feature: "mock-exam",
+        provider: "gemini",
+        model,
+        inputTokens: usage?.promptTokenCount ?? 0,
+        outputTokens: usage?.candidatesTokenCount ?? 0,
+        latencyMs: Date.now() - startedAt,
+        success: true,
+      });
+
+      return { content: parsed, model, target, questionCount, durationMin };
+    } catch (error) {
+      lastError = error;
+      if (attempt === MAX_RETRIES || !isRetryable(error)) {
+        await recordAICall({
+          userId: options.userId,
+          feature: "mock-exam",
+          provider: "gemini",
+          model,
+          inputTokens: 0,
+          outputTokens: 0,
+          latencyMs: Date.now() - startedAt,
+          success: false,
+          errorCode:
+            error instanceof Error ? error.message.slice(0, 100) : "unknown",
+        });
+        throw error;
+      }
+      const backoffMs = 1000 * Math.pow(2, attempt);
+      console.warn(
+        `[geminiProvider:mock-exam] Attempt ${attempt + 1} failed (retryable), waiting ${backoffMs}ms:`,
+        error instanceof Error ? error.message.slice(0, 120) : error
+      );
+      await sleep(backoffMs);
+    }
+  }
+
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("Gemini mock exam failed after retries");
+}
+
+// --------------------------------------------------------------------
+// Grade answer (CLASSIC only — MC/TF is rule-based)
+// --------------------------------------------------------------------
+
+const gradeAnswerResponseSchema = {
+  type: Type.OBJECT,
+  properties: {
+    scoreOutOf100: { type: Type.INTEGER },
+    feedback: { type: Type.STRING },
+    rubricHits: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          criterion: { type: Type.STRING },
+          met: { type: Type.BOOLEAN },
+        },
+        required: ["criterion", "met"],
+        propertyOrdering: ["criterion", "met"],
+      },
+    },
+  },
+  required: ["scoreOutOf100", "feedback", "rubricHits"],
+  propertyOrdering: ["scoreOutOf100", "feedback", "rubricHits"],
+};
+
+export interface GradeAnswerOptions {
+  userId?: string | null;
+}
+
+export async function gradeClassicAnswer(
+  input: GradeAnswerPromptInput,
+  options: GradeAnswerOptions = {}
+): Promise<GradeAnswerResult> {
+  const client = getClient();
+  const model = process.env.GEMINI_MODEL || DEFAULT_MODEL;
+  const { systemInstruction, userPrompt } = buildGradeAnswerPrompt(input);
+
+  const startedAt = Date.now();
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await client.models.generateContent({
+        model,
+        contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+        config: {
+          systemInstruction,
+          temperature: 0.2,
+          responseMimeType: "application/json",
+          responseSchema: gradeAnswerResponseSchema,
+        },
+      });
+
+      const text = response.text;
+      if (!text) throw new Error("Gemini returned empty grading response");
+
+      const parsed = JSON.parse(text) as GradeAnswerResult;
+
+      const usage = response.usageMetadata;
+      await recordAICall({
+        userId: options.userId,
+        feature: "mock-exam-grade",
+        provider: "gemini",
+        model,
+        inputTokens: usage?.promptTokenCount ?? 0,
+        outputTokens: usage?.candidatesTokenCount ?? 0,
+        latencyMs: Date.now() - startedAt,
+        success: true,
+      });
+
+      return parsed;
+    } catch (error) {
+      lastError = error;
+      if (attempt === MAX_RETRIES || !isRetryable(error)) {
+        await recordAICall({
+          userId: options.userId,
+          feature: "mock-exam-grade",
+          provider: "gemini",
+          model,
+          inputTokens: 0,
+          outputTokens: 0,
+          latencyMs: Date.now() - startedAt,
+          success: false,
+          errorCode:
+            error instanceof Error ? error.message.slice(0, 100) : "unknown",
+        });
+        throw error;
+      }
+      const backoffMs = 1000 * Math.pow(2, attempt);
+      console.warn(
+        `[geminiProvider:mock-exam-grade] Attempt ${attempt + 1} failed (retryable), waiting ${backoffMs}ms:`,
+        error instanceof Error ? error.message.slice(0, 120) : error
+      );
+      await sleep(backoffMs);
+    }
+  }
+
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("Gemini grading failed after retries");
+}
+
+export type { MockExamQuestion };
