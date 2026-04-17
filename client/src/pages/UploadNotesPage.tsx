@@ -22,6 +22,7 @@ import type {
   UploadedNote,
 } from '../types/studyPack';
 import { cn } from '../lib/utils';
+import { track, AnalyticsEvents } from '../lib/analytics';
 
 type GenerationStep = 'idle' | 'uploading' | 'generating' | 'error';
 
@@ -77,6 +78,11 @@ const UploadNotesPage: React.FC = () => {
       setUploadResult(response);
       uploaded = response.notes;
 
+      track(AnalyticsEvents.NotesUploaded, {
+        file_count: uploaded.length,
+        total_word_count: uploaded.reduce((sum, n) => sum + n.wordCount, 0),
+      });
+
       if (response.errors.length > 0) {
         setErrorMessage(
           t('uploadNotes.uploadFailed', {
@@ -116,6 +122,12 @@ const UploadNotesPage: React.FC = () => {
         setStep('error');
         return;
       }
+
+      track(AnalyticsEvents.StudyPackGenerated, {
+        professor_id: professorId,
+        note_count: uploaded.length,
+        cache_hit: result.cacheHit,
+      });
 
       navigate(`/study-pack/${result.pack.id}`);
     } catch (err) {

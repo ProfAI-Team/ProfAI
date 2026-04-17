@@ -22,6 +22,7 @@ import { professorService } from '../services/professorService';
 import type { StudyPack } from '../types/studyPack';
 import type { Professor } from '../types';
 import { cn } from '../lib/utils';
+import { track, AnalyticsEvents } from '../lib/analytics';
 
 type TabId = 'summary' | 'practice' | 'trick';
 
@@ -44,6 +45,11 @@ const StudyPackPage: React.FC = () => {
       .getById(id)
       .then(async (data) => {
         setPack(data);
+        track(AnalyticsEvents.StudyPackViewed, {
+          professor_id: data.professorId,
+          topic_count: data.topicSummaries.length,
+          question_count: data.practiceQuestions.length,
+        });
         try {
           const prof = await professorService.getById(data.professorId);
           setProfessor(prof);
