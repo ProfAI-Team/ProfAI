@@ -228,6 +228,13 @@ Karar bekleyen konular. **Yaşayan doküman** — karar verildiğinde "✅ Kapat
 - **Gerekçe:** Flash 503 error veriyordu production testlerde; flash-lite stabil + %40 ucuz.
 - **Etki:** `server/.env`, `GEMINI_MODEL` env var, `current-stack.md`.
 
+### ⏳ D1. Breaking npm upgrade kalanları (2026-04-17, Phase 5'e ertelendi)
+
+- **Uygulanan:** bcrypt 5→6 — hash API aynı, Node 20 LTS minimum karşılanıyor; tüm 86 backend testi yeşil.
+- **Ertelendi:** vitest 2→4, vite 5→8. Phase 4 scope'u geniş (23 task, topluluk katmanı); test/runner/build araçlarının major bump'ı ayrı bir spike'ta ele alınmalı — Phase 5 başında bir gün ayrılır, kırılma olursa hızla rollback.
+- **Risk:** vitest config API v3→v4 arasında `pool` + `coverage.provider` değişti; vite 5→8 React plugin ekosistemi breaking. Şu an yeşil olan 112 test yeşil kalmalı; Phase 5 spike sonrası revize.
+- **Aksiyon:** Phase 5 breakdown'ına 5.X "test/build tooling major bump" task'ı ekle.
+
 ---
 
 ## İlgili

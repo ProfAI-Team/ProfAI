@@ -12,7 +12,7 @@
 |---|------|---------|------------|-------|--------|
 | 4.1 | Route-level code split — `React.lazy` + `Suspense` `pages/**.tsx` (Phase 2+3 borcu, 348KB gzip) | 2 saat | — | ✅ Tamam | `f3811b4` |
 | 4.2 | Zod introduction — `lib/validation.ts` + mock-exam/study-pack endpoint'lerine retrofit (Phase 3 borcu) | 3 saat | — | ✅ Tamam | `a09d52d` |
-| 4.3 | TanStack Query v5 eklenmesi + `QueryClientProvider` + `mockExamService`'e ilk entegrasyon (Phase 3 borcu) | 3 saat | — | ⏳ | — |
+| 4.3 | TanStack Query v5 eklenmesi + `QueryClientProvider` + `mockExamService`'e ilk entegrasyon (Phase 3 borcu) | 3 saat | — | ✅ Tamam | `49603c3` |
 | 4.4 | Breaking npm upgrades değerlendirmesi (bcrypt 5→6, vitest 2→4, vite 5→8) — güvenli olanları uygula, riskli olanı belgele (Phase 3 borcu) | 3 saat | — | ⏳ | — |
 | 4.5 | Prisma schema + migration — `UserCredit` + `ExamApproval` + `QuestionVote` + `PostExamReport` + `StudyGroup` (5 tablo) | 3 saat | — | ⏳ | — |
 | 4.6 | Credit economy servisi — `earn` / `spend` / `history`, balance middleware, config tablosu | 4 saat | 4.5 | ⏳ | — |
