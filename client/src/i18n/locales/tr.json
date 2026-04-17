@@ -198,15 +198,15 @@
     "backToUpload": "Yeni paket oluştur",
     "headerBadge": "Kişisel çalışma paketi",
     "headerTitleShort": "Çalışma paketin hazır",
-    "headerSubtitle": "{{count}} konu özeti, {{questionCount}} pratik soru, {{patternCount}} hoca trick'i",
+    "headerSubtitle": "{{count}} konu özeti · {{questionCount}} pratik soru · {{patternCount}} hoca kalıbı",
     "cacheBadge": "Önbellekten geldi",
     "freshBadge": "Az önce üretildi",
     "disclaimer": "Bu içerik yapay zeka tarafından üretildi. Önemli tanımları ders materyalinden doğrula.",
-    "toleranceWarning": "Bu pakette soru tipi dağılımı hocanın alışkanlığından biraz kaydı — yine de kullanışlı, ama ders notuyla karşılaştırarak bak.",
+    "toleranceWarning": "Soru tipi dağılımı hocanın alışkanlığından biraz kaydı. Kullan, ama ders notuyla karşılaştır.",
     "tabs": {
       "summary": "Konu özeti",
       "practice": "Pratik sorular",
-      "trick": "Hoca trick'leri"
+      "trick": "Hoca kalıpları"
     },
     "summary": {
       "empty": "Bu paket için konu özeti üretilememiş.",
@@ -226,7 +226,7 @@
       }
     },
     "trick": {
-      "empty": "Bu hocaya özgü bir kalıp yakalanamadı. Daha çok sınav biriktikçe netleşir.",
+      "empty": "Bu hocaya özgü kalıp henüz çıkmadı. Birkaç sınav daha eklenince netleşir.",
       "header": "Bu hoca nasıl sorar?",
       "subtitle": "Geçmiş sınav kalıbından çıkardığımız kısa hatırlatıcılar"
     },
@@ -244,8 +244,8 @@
   },
   "uploadNotes": {
     "badge": "Kişisel çalışma paketi",
-    "title": "Kendi notunu hocanın tarzıyla eşle",
-    "subtitle": "Ders notunu yükle, hocanın sınav stiline göre özet + pratik soru + \"hocam nasıl sorar\" hatırlatıcısı al.",
+    "title": "Kendi notun, hocanın tarzı",
+    "subtitle": "Notunu yükle; hocanın sınav stiline göre özet, pratik soru ve kalıp hatırlatıcısı çıkaralım.",
     "selectCourse": "Ders",
     "selectCourseHint": "Hoca bu dersten otomatik seçiliyor.",
     "fileLabel": "Ders notun",
@@ -256,14 +256,14 @@
     "submitting": "Hazırlanıyor…",
     "uploadStep": "Notları yüklüyoruz",
     "generateStep": "Hoca stilini katıp paketi çıkarıyoruz",
-    "generateEta": "Gemini ~20-30 saniye içinde bitirir. Sayfayı kapatma.",
+    "generateEta": "20-30 saniye sürer. Sayfayı kapatma.",
     "noCourse": "Önce bir ders seç.",
     "noFiles": "En az bir not dosyası ekle.",
     "uploadFailed": "Yükleme başarısız: {{message}}",
     "generateFailed": "Paket oluşturulamadı: {{message}}",
     "insufficientStyle": "Bu hoca için sınav stili henüz çıkarılamadı. Önce bu hocaya birkaç sınav ekle.",
     "insufficientNotes": "Seçilen notlar bulunamadı.",
-    "shortWarning": "{{title}} kısa (yaklaşık {{count}} kelime). 500+ kelime daha iyi sonuç verir, yine de denersen dene.",
+    "shortWarning": "{{title}} kısa — yaklaşık {{count}} kelime. 500+ kelime daha iyi sonuç verir; yine de denemek istersen devam et.",
     "privacyNote": "Notların sadece senin hesabına bağlı — paylaşılmaz.",
     "copyrightNote": "Yayınevi kitabı, başkasına ait ders notu gibi telifli içeriği yükleme. Sadece kendi kişisel kullanımın için derlediğin notları ekle.",
     "existingNotesTitle": "Mevcut notların",
