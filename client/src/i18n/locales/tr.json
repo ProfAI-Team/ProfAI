@@ -393,6 +393,54 @@
         "submit": "Şimdi gönder",
         "submitting": "Puanlanıyor…"
       }
+    },
+    "result": {
+      "loading": "Sonuçların yükleniyor…",
+      "back": "Deneme sınavlarına dön",
+      "badge": "Deneme sınavı sonucu",
+      "newMock": "Yeni deneme oluştur",
+      "disclaimer": "Puanlama AI destekli — klasik sorular rubrikle değerlendirildi, insan denetimi yok. Dönütleri başlangıç noktası olarak kullan, kesin hüküm olarak değil.",
+      "scoreOutOf": "/ 100",
+      "scoreExplainer": "Soru zorluğuna göre ağırlıklandırıldı.",
+      "completedAt": "{{when}} gönderildi",
+      "minutesSpent": "{{minutes}} dk harcandı",
+      "autoSubmitted": "Süre doldu — otomatik gönderildi",
+      "tabs": {
+        "ariaLabel": "Deneme sınavı sonuç bölümleri",
+        "overview": "Genel",
+        "sections": "Bölümler",
+        "questions": "Sorular"
+      },
+      "prediction": {
+        "title": "Olası gerçek sınav aralığı",
+        "range": "{{lower}} – {{upper}}",
+        "confidence": {
+          "low": "Düşük güven",
+          "medium": "Orta güven",
+          "high": "Yüksek güven"
+        }
+      },
+      "topicGap": {
+        "ratio": "{{correct}}/{{total}} doğru",
+        "cta": "Çalışma paketinde bu konuyu gözden geçir"
+      },
+      "topicGaps": {
+        "title": "Nereye odaklan",
+        "subtitle": "Doğruluğun düştüğü konular — bir sonraki çalışmada ilk buradan başla."
+      },
+      "sections": {
+        "empty": "Bu sınav için bölüm dağılımı saklanmamış.",
+        "questionRange": "Sorular {{start}}-{{end}} · {{count}} soru"
+      },
+      "questions": {
+        "indexLabel": "S{{index}}",
+        "feedbackLabel": "Dönüt"
+      },
+      "notFound": {
+        "title": "Sonuç bulunamadı",
+        "body": "Bu oturum silinmiş veya başka bir hesaba ait olabilir.",
+        "cta": "Yeni deneme sınavı oluştur"
+      }
     }
   }
 }

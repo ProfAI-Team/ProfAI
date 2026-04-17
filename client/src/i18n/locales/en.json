@@ -393,6 +393,54 @@
         "submit": "Submit now",
         "submitting": "Grading…"
       }
+    },
+    "result": {
+      "loading": "Loading your results…",
+      "back": "Back to mock exams",
+      "badge": "Mock exam result",
+      "newMock": "Build a new mock exam",
+      "disclaimer": "Grading is AI-assisted — open-ended questions use a rubric, not a human reviewer. Use the feedback as a starting point, not a final verdict.",
+      "scoreOutOf": "/ 100",
+      "scoreExplainer": "Weighted by question difficulty.",
+      "completedAt": "Submitted {{when}}",
+      "minutesSpent": "{{minutes}} min spent",
+      "autoSubmitted": "Timer ran out — auto-submitted",
+      "tabs": {
+        "ariaLabel": "Mock exam result sections",
+        "overview": "Overall",
+        "sections": "By section",
+        "questions": "By question"
+      },
+      "prediction": {
+        "title": "Likely real-exam range",
+        "range": "{{lower}} – {{upper}}",
+        "confidence": {
+          "low": "Low confidence",
+          "medium": "Medium confidence",
+          "high": "Higher confidence"
+        }
+      },
+      "topicGap": {
+        "ratio": "{{correct}}/{{total}} correct",
+        "cta": "Review this in your study pack"
+      },
+      "topicGaps": {
+        "title": "Where to focus next",
+        "subtitle": "Topics where your accuracy dipped — easy wins for your next study session."
+      },
+      "sections": {
+        "empty": "No section breakdown was stored for this exam.",
+        "questionRange": "Questions {{start}}-{{end}} · {{count}} items"
+      },
+      "questions": {
+        "indexLabel": "Q{{index}}",
+        "feedbackLabel": "Feedback"
+      },
+      "notFound": {
+        "title": "Result not found",
+        "body": "This session may have been deleted, or it belongs to a different account.",
+        "cta": "Generate a new mock exam"
+      }
     }
   }
 }

@@ -22,7 +22,7 @@
 | 3.10 | Backend unit + integration testler (prompt schema, grading, prediction, endpoint auth + flow) | 5 saat | 3.9 | ✅ Tamam | `d4ef6d2` |
 | 3.11 | Client: TS types + `mockExamService` + `Timer` component (tick + warning state + pause/resume) | 3 saat | 3.9 | ✅ Tamam | `aba7520` |
 | 3.12 | `MockExamGeneratePage` — hoca + study pack seçimi, süre/soru sayısı override, "oluştur" CTA | 2 saat | 3.11 | ✅ Tamam | `2cc5d6c` |
-| 3.13 | `MockExamSessionPage` — Timer + soru nav + "mark for review" + auto-save draft + beforeunload çıkış uyarısı + auto-submit | 8 saat | 3.11 | ⏳ | — |
+| 3.13 | `MockExamSessionPage` — Timer + soru nav + "mark for review" + auto-save draft + beforeunload çıkış uyarısı + auto-submit | 8 saat | 3.11 | ✅ Tamam | `8e1dd1b` |
 | 3.14 | `MockExamResultPage` — Tabs (genel skor / bölüm analizi / soru-bazlı feedback) + performans tahmini viz + konu boşluk → study pack CTA | 6 saat | 3.13 | ⏳ | — |
 | 3.15 | `PanicModePage` — "sınava kaç saat var?" form + priority study plan çıktısı | 3 saat | 3.11 | ⏳ | — |
 | 3.16 | i18n TR + EN copy sweep (paralel 2 agent, hibrit ton, `mockExam.*` namespace) | 3 saat | 3.15 | ⏳ | — |
