@@ -29,7 +29,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.15 | DNA endpoint'leri — 14 route (`/dna` + `/confidence` + `/grades` + `/course-advisor` + `/exam-reconstruct` + `/spaced-repetition` + `/users/me/review-frequency`) + Zod + premium gate + 3 yeni limiter | 4 saat | 5.8–5.14 | ✅ Tamam | `5dc5a1f` |
 | 5.16 | Backend tests — 76 yeni test (DNA + learning style + confidence + grade/GPA + advisor + SM-2 + premium + error middleware + queue + endpoint integration). Toplam 229/230 yeşil | 4 saat | 5.15 | ✅ Tamam | `aec376f` |
 | 5.17 | Client types + 5 services + shared components (`DNARadar` lazy, `ConfidenceHeatmap`, `GpaCalculator`, `ReviewCard`, `InsufficientDataBanner`, `PremiumLockCard`) | 4 saat | 5.15 | ✅ Tamam | `b9a36ad` |
-| 5.18 | DNA profile sayfası `/me/profile` — radar + strengths/weaknesses + learning style + "DNA oluşuyor" banner (<20 soru) | 4 saat | 5.17 | ⏳ Bekliyor | — |
+| 5.18 | DNA profile sayfası `/me/profile` — radar + strengths/weaknesses + learning style override + KVKK notice + insufficient banner | 4 saat | 5.17 | ✅ Tamam | `pending` |
 | 5.19 | Confidence heatmap sayfası `/me/confidence` + Dashboard "Bu hafta çalışman gereken 3 konu" widget | 3 saat | 5.17 | ⏳ Bekliyor | — |
 | 5.20 | Grade tracker + GPA simulator sayfası `/me/grades` — record list + what-if hesap + üni formül picker | 4 saat | 5.17 | ⏳ Bekliyor | — |
 | 5.21 | Course advisor sayfası `/me/course-advisor` — ders ara + compatibility score + premium paywall empty-state | 3 saat | 5.17 | ⏳ Bekliyor | — |
@@ -38,7 +38,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.24 | Playwright MCP visual smoke (DNA / confidence / grades / course-advisor / reviews × 390/1440 × light/dark) + Phase 5 fixture seeder | 2 saat | 5.23 | ⏳ Bekliyor | — |
 | 5.25 | Phase 5 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle + data-model-evolution ekle | 1 saat | Hepsi | ⏳ Bekliyor | — |
 
-**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **17/25 — types + services + shared UI hazır, sayfa build'leri sırada.**
+**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **18/25 — DNA profile sayfası hazır, 4 frontend sayfası kaldı.**
 
 > Task numaralama 25'e ulaştı (Phase 4: 23); borç sayısı bir fazla (BullMQ + Redis'i ayrı koyduk) + premium tier ayrı task.
 
