@@ -264,7 +264,8 @@
     "insufficientStyle": "Bu hoca için sınav stili henüz çıkarılamadı. Önce bu hocaya birkaç sınav ekle.",
     "insufficientNotes": "Seçilen notlar bulunamadı.",
     "shortWarning": "{{title}} kısa (yaklaşık {{count}} kelime). 500+ kelime daha iyi sonuç verir, yine de denersen dene.",
-    "privacyNote": "Notların sadece senin hesabına bağlı — paylaşılmaz. Sadece kendi kişisel kullanımın için yüklediğin içeriği ekle.",
+    "privacyNote": "Notların sadece senin hesabına bağlı — paylaşılmaz.",
+    "copyrightNote": "Yayınevi kitabı, başkasına ait ders notu gibi telifli içeriği yükleme. Sadece kendi kişisel kullanımın için derlediğin notları ekle.",
     "existingNotesTitle": "Mevcut notların",
     "existingNotesHint": "Önceki yüklediğin notlardan seçerek hızlıca paket oluşturabilirsin."
   },

@@ -9,6 +9,7 @@ import {
   AlertTriangle,
   Loader2,
   Wand2,
+  FileWarning,
 } from 'lucide-react';
 import FileUpload, { UploadFile } from '../components/FileUpload';
 import CourseCombobox from '../components/CourseCombobox';
@@ -188,10 +189,16 @@ const UploadNotesPage: React.FC = () => {
             />
           </div>
 
-          <p className="text-xs text-muted-foreground flex items-start gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 shrink-0 mt-0.5 text-primary" />
-            <span>{t('uploadNotes.privacyNote')}</span>
-          </p>
+          <div className="space-y-1.5 text-xs text-muted-foreground">
+            <p className="flex items-start gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 shrink-0 mt-0.5 text-primary" />
+              <span>{t('uploadNotes.privacyNote')}</span>
+            </p>
+            <p className="flex items-start gap-1.5">
+              <FileWarning className="w-3.5 h-3.5 shrink-0 mt-0.5 text-warning" />
+              <span>{t('uploadNotes.copyrightNote')}</span>
+            </p>
+          </div>
         </div>
 
         {/* Short note warnings */}

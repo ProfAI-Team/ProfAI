@@ -264,7 +264,8 @@
     "insufficientStyle": "This professor doesn't have a style profile yet. Add a few past exams first.",
     "insufficientNotes": "The selected notes were not found.",
     "shortWarning": "{{title}} is short (about {{count}} words). 500+ words gives better output — you can still try.",
-    "privacyNote": "Your notes stay private to your account. Only upload material you're allowed to use personally.",
+    "privacyNote": "Your notes stay private to your account.",
+    "copyrightNote": "Don't upload copyrighted material like publisher textbooks or another student's notes. Only add what you've authored for personal study.",
     "existingNotesTitle": "Your existing notes",
     "existingNotesHint": "Pick from previously uploaded notes to build a pack quickly."
   },
