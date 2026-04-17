@@ -22,7 +22,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.8 | DNA aggregation servisi — `recomputeDNA` + `getDNA` (cache-first 6h TTL) + `invalidateDNA`; Exam.verified hook uploader + approvers DNA'larını mark stale | 4 saat | 5.7 | ✅ Tamam | `d5c51e1` |
 | 5.9 | Learning style inference — `inferStyle` (pure) + `inferLearningStyle` (DB) + `updateLearningStyleFromInference`; reading/kinesthetic/mixed/null, min 20 soru + 15pp dominance gap | 3 saat | 5.7, 5.8 | ✅ Tamam | `04bee87` |
 | 5.10 | Confidence scoring — `computeConfidence` (pure, 70/20/10 correctRate/streak/recency weights) + `recomputeConfidence` + `getWeakestTopics`; mock exam submit hook | 3 saat | 5.7, 5.8 | ✅ Tamam | `3fc5200` |
-| 5.11 | Grade record + GPA calculator servisi — 3+ üni formül preset (Aydın, Boğaziçi, ODTÜ) + what-if simulator | 3 saat | 5.7 | ⏳ Bekliyor | — |
+| 5.11 | Grade + GPA service — 3 üni preset (Aydın/Boğaziçi/ODTÜ), `calculateGPA` + `simulateGPA` + `whatIfTargetGPA` (binary search) | 3 saat | 5.7 | ✅ Tamam | `pending` |
 | 5.12 | Course advisor servisi — DNA × style profile cross-fit compatibility score (k-anonim ≥1 dönem veri) | 3 saat | 5.7, 5.8 | ⏳ Bekliyor | — |
 | 5.13 | Spaced repetition servisi — SM-2 algoritma + BullMQ daily scheduler + notification queue | 4 saat | 5.5, 5.7 | ⏳ Bekliyor | — |
 | 5.14 | Premium tier gating — `User.subscriptionTier` + `requirePremium` middleware + `reconstructExam` Gemini call activation (Phase 4 skeleton) | 3 saat | 5.7 | ⏳ Bekliyor | — |
@@ -38,7 +38,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.24 | Playwright MCP visual smoke (DNA / confidence / grades / course-advisor / reviews × 390/1440 × light/dark) + Phase 5 fixture seeder | 2 saat | 5.23 | ⏳ Bekliyor | — |
 | 5.25 | Phase 5 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle + data-model-evolution ekle | 1 saat | Hepsi | ⏳ Bekliyor | — |
 
-**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **10/25 — DNA + learning style + confidence tamam, GPA sırada.**
+**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **11/25 — tüm aggregation + GPA servisleri hazır, course advisor + spaced rep sırada.**
 
 > Task numaralama 25'e ulaştı (Phase 4: 23); borç sayısı bir fazla (BullMQ + Redis'i ayrı koyduk) + premium tier ayrı task.
 
