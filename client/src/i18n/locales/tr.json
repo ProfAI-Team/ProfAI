@@ -310,26 +310,26 @@
     "generate": {
       "badge": "Deneme sınavı",
       "title": "Hocanın tarzında deneme çöz",
-      "subtitle": "Dersi seç, istersen bir çalışma paketine bağla — hocanın alışkın olduğu şekilde, süreli bir deneme sınavı kuralım.",
+      "subtitle": "Dersi seç, istersen bir çalışma paketine bağla. Hocanın tarzında, süreli bir deneme çıkaralım.",
       "selectCourse": "Ders",
       "selectCourseHint": "Hoca dersten otomatik seçilir.",
       "selectPack": "Çalışma paketi (opsiyonel)",
-      "packOptionNone": "Yok — sadece hocanın stili yeter",
+      "packOptionNone": "Yok — sadece hocanın stiline göre yazalım",
       "packOption": "{{topicCount}} konu · {{date}}",
-      "noPacks": "Bu hoca için kayıtlı çalışma paketin yok — sınav yalnızca hocanın stiline göre üretilecek.",
+      "noPacks": "Bu hoca için çalışma paketin yok — sınavı yalnızca hocanın stiline göre üreteceğiz.",
       "advancedShow": "Soru sayısı ve süreyi ayarla",
       "advancedHide": "Ayarları gizle",
       "questionCount": "Soru sayısı",
       "duration": "Süre",
       "durationValue": "{{minutes}} dk",
-      "disclaimer": "Bu AI üretimi bir deneme — gerçek sınav değil. Soruları ısınma olarak değerlendir.",
+      "disclaimer": "Bu AI üretimi bir deneme — gerçek sınav değil. Isınma için kullan.",
       "submit": "Deneme sınavı oluştur",
       "submitting": "Oluşturuluyor…",
       "generating": "Deneme sınavın hazırlanıyor",
-      "generatingEta": "Genelde 30-60 saniye sürer — hocanın stiline göre soruları şekillendiriyoruz.",
+      "generatingEta": "Genelde 30-60 saniye sürer. Soruları hocanın tarzına göre şekillendiriyoruz.",
       "errors": {
         "noCourse": "Önce dersi seç.",
-        "styleMissing": "Bu hoca için henüz yeterince analiz edilmiş sınav yok. Biraz sınav ekle, sonra tekrar dene.",
+        "styleMissing": "Bu hoca için henüz yeterli analiz yok. Birkaç sınav daha ekle, sonra tekrar dene.",
         "packNotFound": "Bu çalışma paketi bulunamadı.",
         "notesNotFound": "Pakete bağlı notlar bulunamadı.",
         "generic": "Bir şey ters gitti: {{message}}"
@@ -339,7 +339,7 @@
       "loading": "Deneme sınavın yükleniyor…",
       "notFound": {
         "title": "Deneme sınavı bulunamadı",
-        "body": "Silinmiş veya başka bir hesaba ait olabilir.",
+        "body": "Silinmiş ya da sana ait olmayabilir.",
         "cta": "Yeni deneme sınavı oluştur"
       },
       "timer": {
@@ -354,9 +354,9 @@
       "prev": "Önceki",
       "next": "Sonraki",
       "submit": "Sınavı bitir",
-      "submitError": "Gönderim başarısız: {{message}}. Cevapların lokal olarak hala kayıtlı.",
-      "exitWarning": "Henüz göndermedin — ilerlemen lokal olarak kayıtlı ama skoru görmek için gönderim gerekli.",
-      "autoSubmitting": "Süre doldu — cevapların gönderiliyor…",
+      "submitError": "Gönderim başarısız: {{message}}. Cevapların tarayıcında hala duruyor — tekrar dene.",
+      "exitWarning": "Henüz göndermedin — ilerlemen tarayıcında kayıtlı, ama skoru görmek için göndermen lazım.",
+      "autoSubmitting": "Süre doldu. Cevapların gönderiliyor…",
       "types": {
         "MC": "Çoktan seçmeli",
         "CLASSIC": "Klasik",
@@ -367,7 +367,7 @@
         "false": "Yanlış"
       },
       "classic": {
-        "placeholder": "Cevabını buraya yaz. Kısa tut ama mantığını göster.",
+        "placeholder": "Cevabını buraya yaz. Kısa tut, ama nasıl düşündüğünü göster.",
         "hint": "{{count}} karakter"
       },
       "card": {
@@ -388,9 +388,9 @@
         }
       },
       "confirm": {
-        "title": "Sınavı gönder?",
-        "body": "{{unanswered}} soru hala boş, {{flagged}} işaretli. Gönderdikten sonra cevaplar puanlanır ve kaydedilir.",
-        "cancel": "Devam et",
+        "title": "Sınavı gönderelim mi?",
+        "body": "{{unanswered}} soru boş, {{flagged}} işaretli. Gönderdikten sonra cevaplar puanlanır ve kayda geçer.",
+        "cancel": "Geri dön",
         "submit": "Şimdi gönder",
         "submitting": "Puanlanıyor…"
       }
@@ -400,12 +400,12 @@
       "back": "Deneme sınavlarına dön",
       "badge": "Deneme sınavı sonucu",
       "newMock": "Yeni deneme oluştur",
-      "disclaimer": "Puanlama AI destekli — klasik sorular rubrikle değerlendirildi, insan denetimi yok. Dönütleri başlangıç noktası olarak kullan, kesin hüküm olarak değil.",
+      "disclaimer": "Puanlama AI destekli — klasik cevaplar rubrikle değerlendirildi, insan denetimi yok. Dönütleri başlangıç noktası olarak gör, kesin not olarak değil.",
       "scoreOutOf": "/ 100",
-      "scoreExplainer": "Soru zorluğuna göre ağırlıklandırıldı.",
+      "scoreExplainer": "Zor sorular daha çok ağırlık taşıyor.",
       "completedAt": "{{when}} gönderildi",
       "minutesSpent": "{{minutes}} dk harcandı",
-      "autoSubmitted": "Süre doldu — otomatik gönderildi",
+      "autoSubmitted": "Süre dolunca otomatik gönderildi",
       "tabs": {
         "ariaLabel": "Deneme sınavı sonuç bölümleri",
         "overview": "Genel",
@@ -413,7 +413,7 @@
         "questions": "Sorular"
       },
       "prediction": {
-        "title": "Olası gerçek sınav aralığı",
+        "title": "Gerçek sınavda olası aralık",
         "range": "{{lower}} – {{upper}}",
         "confidence": {
           "low": "Düşük güven",
@@ -423,14 +423,14 @@
       },
       "topicGap": {
         "ratio": "{{correct}}/{{total}} doğru",
-        "cta": "Çalışma paketinde bu konuyu gözden geçir"
+        "cta": "Bu konuyu çalışma paketinde tekrar et"
       },
       "topicGaps": {
-        "title": "Nereye odaklan",
-        "subtitle": "Doğruluğun düştüğü konular — bir sonraki çalışmada ilk buradan başla."
+        "title": "Önce buraya odaklan",
+        "subtitle": "Doğruluğun düştüğü konular. Bir sonraki çalışmada ilk buradan başla."
       },
       "sections": {
-        "empty": "Bu sınav için bölüm dağılımı saklanmamış.",
+        "empty": "Bu sınav için bölüm dağılımı kaydedilmemiş.",
         "questionRange": "Sorular {{start}}-{{end}} · {{count}} soru"
       },
       "questions": {
@@ -439,7 +439,7 @@
       },
       "notFound": {
         "title": "Sonuç bulunamadı",
-        "body": "Bu oturum silinmiş veya başka bir hesaba ait olabilir.",
+        "body": "Bu oturum silinmiş ya da sana ait olmayabilir.",
         "cta": "Yeni deneme sınavı oluştur"
       }
     }
@@ -447,12 +447,12 @@
   "panic": {
     "badge": "Panik modu",
     "title": "Sınav yakın. Bir plan kuralım.",
-    "subtitle": "Ne kadar zamanın kaldığını ve hangi dersi söyle. Kalan süreyi şu an en çok gereken konulara böleriz.",
+    "subtitle": "Dersi ve kalan süreni söyle. Süreyi şu an en çok gereken konulara böleriz.",
     "form": {
       "course": "Ders",
       "hours": "Sınava kaç saat kaldı",
       "hoursValue": "{{hours}} sa",
-      "hoursHint": "Min 30 dk, maks 72 sa. Gerçekçi ol — iyimser değil.",
+      "hoursHint": "Min 30 dk, maks 72 sa. Gerçekçi yaz — fazla iyimser olma.",
       "submit": "Planımı oluştur",
       "submitting": "Plan hazırlanıyor…"
     },
@@ -462,10 +462,10 @@
     },
     "plan": {
       "title": "Önümüzdeki {{hours}} saat için planın",
-      "summary": "{{minutes}} odaklanmış dakika, {{steps}} konuya bölündü. Geri kalan mola, yemek ve uyku için.",
-      "emptySteps": "Henüz yeterli konu sinyali yok. Bir deneme sınavı daha ekle, plan keskinleşir.",
+      "summary": "{{minutes}} odak dakikası, {{steps}} konuya bölündü. Kalan zaman mola, yemek ve uyku için.",
+      "emptySteps": "Henüz konu sinyali az. Bir deneme sınavı daha çöz, plan keskinleşir.",
       "disclaimer": "Bu bir öneri — müfredat değil. Gidişata göre uyarla.",
-      "practiceCta": "Deneme sınavıyla ısın",
+      "practiceCta": "Deneme sınavıyla ısınmaya başla",
       "step": {
         "minutes": "{{minutes}} dk"
       }

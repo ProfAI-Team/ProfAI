@@ -309,29 +309,29 @@
   "mockExam": {
     "generate": {
       "badge": "Mock exam",
-      "title": "Sit a mock in your professor's style",
-      "subtitle": "Pick the course, optionally point to a study pack, and we'll build a timed practice exam matching their usual shape.",
+      "title": "Take a mock exam in your professor's style",
+      "subtitle": "Pick a course, optionally link a study pack, and we'll build a timed practice exam that matches how they usually ask.",
       "selectCourse": "Course",
       "selectCourseHint": "The professor is picked up from the course automatically.",
       "selectPack": "Study pack (optional)",
       "packOptionNone": "None — use the professor's style only",
       "packOption": "{{topicCount}} topics · {{date}}",
-      "noPacks": "No study pack saved for this professor yet — the exam will be built from the professor's style alone.",
-      "advancedShow": "Customise length and duration",
+      "noPacks": "No study pack saved for this professor yet — we'll build the exam from their style alone.",
+      "advancedShow": "Customize length and duration",
       "advancedHide": "Hide options",
       "questionCount": "Questions",
       "duration": "Duration",
       "durationValue": "{{minutes}} min",
-      "disclaimer": "This is AI-generated practice, not a real exam. Treat the questions as a warm-up.",
+      "disclaimer": "AI-generated practice, not a real exam. Treat it as a warm-up.",
       "submit": "Generate mock exam",
       "submitting": "Generating…",
       "generating": "Building your mock exam",
-      "generatingEta": "Usually 30-60 seconds — we're shaping questions in your professor's style.",
+      "generatingEta": "Usually 30-60 seconds — we're shaping each question in your professor's style.",
       "errors": {
         "noCourse": "Pick a course first.",
-        "styleMissing": "This professor doesn't have enough analyzed exams yet. Add one and try again.",
-        "packNotFound": "That study pack couldn't be found.",
-        "notesNotFound": "The notes linked to that pack can't be found.",
+        "styleMissing": "Not enough analyzed exams for this professor yet. Add one and try again.",
+        "packNotFound": "We couldn't find that study pack.",
+        "notesNotFound": "We couldn't find the notes linked to that pack.",
         "generic": "Something went wrong: {{message}}"
       }
     },
@@ -339,7 +339,7 @@
       "loading": "Loading your mock exam…",
       "notFound": {
         "title": "Mock exam not found",
-        "body": "It may have been deleted or belongs to another account.",
+        "body": "It may have been deleted, or it belongs to another account.",
         "cta": "Generate a new mock exam"
       },
       "timer": {
@@ -354,9 +354,9 @@
       "prev": "Previous",
       "next": "Next",
       "submit": "Submit exam",
-      "submitError": "Submission failed: {{message}}. Your answers are still saved locally.",
-      "exitWarning": "You haven't submitted yet — your progress is saved locally, but a fresh submission is required to see the score.",
-      "autoSubmitting": "Time's up — submitting your answers…",
+      "submitError": "Submission failed: {{message}}. Your answers are safe locally — try again in a moment.",
+      "exitWarning": "You haven't submitted yet. Your answers are saved locally, but you'll need to submit to see your score.",
+      "autoSubmitting": "Time's up — submitting your answers now…",
       "types": {
         "MC": "Multiple choice",
         "CLASSIC": "Open-ended",
@@ -367,7 +367,7 @@
         "false": "False"
       },
       "classic": {
-        "placeholder": "Write your answer here. Keep it concise but show your reasoning.",
+        "placeholder": "Write your answer here. Keep it concise, but show your reasoning.",
         "hint": "{{count}} characters"
       },
       "card": {
@@ -389,7 +389,7 @@
       },
       "confirm": {
         "title": "Submit your mock exam?",
-        "body": "{{unanswered}} question(s) still blank and {{flagged}} flagged. Once submitted, answers are graded and saved.",
+        "body": "{{unanswered}} still blank, {{flagged}} flagged. Once you submit, we grade and save your answers.",
         "cancel": "Keep going",
         "submit": "Submit now",
         "submitting": "Grading…"
@@ -400,7 +400,7 @@
       "back": "Back to mock exams",
       "badge": "Mock exam result",
       "newMock": "Build a new mock exam",
-      "disclaimer": "Grading is AI-assisted — open-ended questions use a rubric, not a human reviewer. Use the feedback as a starting point, not a final verdict.",
+      "disclaimer": "Grading is AI-assisted — open-ended answers are scored against a rubric, not by a human. Use the feedback as a starting point, not a final verdict.",
       "scoreOutOf": "/ 100",
       "scoreExplainer": "Weighted by question difficulty.",
       "completedAt": "Submitted {{when}}",
@@ -427,7 +427,7 @@
       },
       "topicGaps": {
         "title": "Where to focus next",
-        "subtitle": "Topics where your accuracy dipped — easy wins for your next study session."
+        "subtitle": "Topics where your accuracy dipped — easy wins for the next session."
       },
       "sections": {
         "empty": "No section breakdown was stored for this exam.",
@@ -439,22 +439,22 @@
       },
       "notFound": {
         "title": "Result not found",
-        "body": "This session may have been deleted, or it belongs to a different account.",
+        "body": "This session may have been deleted, or it belongs to another account.",
         "cta": "Generate a new mock exam"
       }
     }
   },
   "panic": {
     "badge": "Panic mode",
-    "title": "Exam's close. Let's build a plan.",
-    "subtitle": "Tell us how long you've got and which class. We'll split the window by the topics that matter most right now.",
+    "title": "Exam's close. Let's build a plan together.",
+    "subtitle": "Tell us the course and how much time you've got. We'll split the window by the topics that matter most right now.",
     "form": {
       "course": "Course",
       "hours": "Hours until exam",
       "hoursValue": "{{hours}} h",
-      "hoursHint": "Min 30 min, max 72 h. Realistic — not optimistic.",
+      "hoursHint": "Min 30 min, max 72 h. Be realistic — not optimistic.",
       "submit": "Build my plan",
-      "submitting": "Building plan…"
+      "submitting": "Building your plan…"
     },
     "errors": {
       "noCourse": "Pick a course first.",
@@ -462,9 +462,9 @@
     },
     "plan": {
       "title": "Your plan for the next {{hours}} hours",
-      "summary": "{{minutes}} focused minutes across {{steps}} topics. The rest is for breaks, food, and sleep.",
-      "emptySteps": "We don't have enough topic signal yet. Add one more mock exam to sharpen the plan.",
-      "disclaimer": "This is a suggestion, not a syllabus — adjust as you go.",
+      "summary": "{{minutes}} focused minutes across {{steps}} topics. The rest is for breaks, food, and sleep — you'll need them.",
+      "emptySteps": "Not enough topic signal yet. Run one more mock exam and the plan sharpens up.",
+      "disclaimer": "A suggestion, not a syllabus — adjust as you go.",
       "practiceCta": "Warm up with a mock exam",
       "step": {
         "minutes": "{{minutes}} min"
