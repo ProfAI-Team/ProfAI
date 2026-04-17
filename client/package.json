@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.99.0",
     "axios": "^1.6.7",
     "boring-avatars": "^2.0.4",
     "class-variance-authority": "^0.7.1",

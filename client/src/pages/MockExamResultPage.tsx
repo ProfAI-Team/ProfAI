@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -21,12 +21,12 @@ import { Tabs, TabPanel, useTabListId } from '../components/Tabs';
 import ScoreGauge from '../components/ScoreGauge';
 import PredictionBand from '../components/PredictionBand';
 import TopicGapCard from '../components/TopicGapCard';
-import { mockExamService } from '../services/mockExamService';
 import type {
   MockExamResultResponse,
   SectionScore,
   QuestionFeedback,
 } from '../types/mockExam';
+import { useMockExamResult } from '../hooks/useMockExam';
 import { cn } from '../lib/utils';
 
 type TabId = 'overview' | 'sections' | 'questions';
@@ -57,24 +57,16 @@ const MockExamResultPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const tabListId = useTabListId('mock-exam-result');
 
-  const [data, setData] = useState<MockExamResultResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<'not_found' | 'generic' | null>(null);
+  const query = useMockExamResult(sessionId);
+  const data = query.data;
+  const loading = query.isLoading;
+  const error: 'not_found' | 'generic' | null = query.error
+    ? ((query.error as { response?: { status?: number } })?.response?.status ===
+      404
+        ? 'not_found'
+        : 'generic')
+    : null;
   const [active, setActive] = useState<TabId>('overview');
-
-  useEffect(() => {
-    if (!sessionId) return;
-    setLoading(true);
-    setError(null);
-    mockExamService
-      .getResult(sessionId)
-      .then((res) => setData(res))
-      .catch((err) => {
-        const status = err?.response?.status;
-        setError(status === 404 ? 'not_found' : 'generic');
-      })
-      .finally(() => setLoading(false));
-  }, [sessionId]);
 
   const feedback = data?.session.feedback ?? [];
   const prediction = data?.session.prediction ?? null;
