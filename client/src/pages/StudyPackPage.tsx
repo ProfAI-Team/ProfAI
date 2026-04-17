@@ -230,6 +230,7 @@ const StudyPackPage: React.FC = () => {
                 key={`${q.topic}-${i}`}
                 question={q}
                 index={i}
+                voteQuestionId={`studyPack:${pack.id}:q${i}`}
               />
             ))}
           </div>

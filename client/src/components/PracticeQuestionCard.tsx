@@ -6,10 +6,13 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { PracticeQuestion } from '../types/studyPack';
 import { cn } from '../lib/utils';
+import VoteButtons from './VoteButtons';
 
 interface Props {
   question: PracticeQuestion;
   index: number;
+  /** Synthetic question id for the community vote service. */
+  voteQuestionId?: string;
 }
 
 const typeColor: Record<string, string> = {
@@ -18,7 +21,11 @@ const typeColor: Record<string, string> = {
   TF: 'bg-chart-5/15 text-chart-5',
 };
 
-const PracticeQuestionCard: React.FC<Props> = ({ question, index }) => {
+const PracticeQuestionCard: React.FC<Props> = ({
+  question,
+  index,
+  voteQuestionId,
+}) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
@@ -125,6 +132,15 @@ const PracticeQuestionCard: React.FC<Props> = ({ question, index }) => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {voteQuestionId && (
+        <div className="mt-3 pt-3 border-t border-border flex items-center justify-between gap-3 flex-wrap">
+          <span className="text-xs text-muted-foreground">
+            {t('community.vote.promptPractice')}
+          </span>
+          <VoteButtons questionId={voteQuestionId} compact />
+        </div>
+      )}
     </motion.div>
   );
 };

@@ -6,6 +6,8 @@ import remarkGfm from 'remark-gfm';
 import { cn } from '../lib/utils';
 import type { MockExamClientQuestion } from '../types/mockExam';
 
+import VoteButtons from './VoteButtons';
+
 export interface ExamQuestionCardProps {
   qIdx: number;
   total: number;
@@ -15,6 +17,12 @@ export interface ExamQuestionCardProps {
   onAnswerChange: (value: string) => void;
   onFlagToggle: () => void;
   readOnly?: boolean;
+  /**
+   * When provided, renders the community VoteButtons beneath the answer
+   * area. Intentionally off by default: during a live session we don't
+   * want to distract with voting UI — only on review / read-only views.
+   */
+  voteQuestionId?: string;
 }
 
 const TYPE_LABELS: Record<MockExamClientQuestion['type'], string> = {
@@ -44,6 +52,7 @@ export const ExamQuestionCard: React.FC<ExamQuestionCardProps> = ({
   onAnswerChange,
   onFlagToggle,
   readOnly,
+  voteQuestionId,
 }) => {
   const { t, i18n } = useTranslation();
   const typeKey = `mockExam.session.types.${question.type}`;
@@ -176,6 +185,15 @@ export const ExamQuestionCard: React.FC<ExamQuestionCardProps> = ({
           <p className="text-xs text-muted-foreground mt-1.5">
             {t('mockExam.session.classic.hint', { count: answer.length })}
           </p>
+        </div>
+      )}
+
+      {voteQuestionId && readOnly && (
+        <div className="pt-4 border-t border-border flex items-center justify-between gap-3 flex-wrap">
+          <span className="text-xs text-muted-foreground">
+            {t('community.vote.promptExam')}
+          </span>
+          <VoteButtons questionId={voteQuestionId} compact />
         </div>
       )}
     </div>

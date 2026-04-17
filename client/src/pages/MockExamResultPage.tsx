@@ -27,6 +27,7 @@ import type {
   QuestionFeedback,
 } from '../types/mockExam';
 import { useMockExamResult } from '../hooks/useMockExam';
+import VoteButtons from '../components/VoteButtons';
 import { cn } from '../lib/utils';
 
 type TabId = 'overview' | 'sections' | 'questions';
@@ -338,6 +339,15 @@ const MockExamResultPage: React.FC = () => {
                       ))}
                     </ul>
                   )}
+                  <div className="pt-3 border-t border-border flex items-center justify-between gap-3 flex-wrap">
+                    <span className="text-xs text-muted-foreground">
+                      {t('community.vote.promptExam')}
+                    </span>
+                    <VoteButtons
+                      questionId={`mockExam:${exam.id}:q${i}`}
+                      compact
+                    />
+                  </div>
                 </div>
               );
             })}
