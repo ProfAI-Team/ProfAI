@@ -14,17 +14,19 @@ enum ExamType {
 }
 
 model User {
-  id         String            @id @default(uuid())
-  email      String            @unique
-  password   String
-  name       String
-  university String?
-  department String?
-  createdAt  DateTime          @default(now())
-  exams      Exam[]
-  ratings    ProfessorRating[]
-  aiCallLogs AICallLog[]
-  aiFeedback AIFeedback[]
+  id           String            @id @default(uuid())
+  email        String            @unique
+  password     String
+  name         String
+  university   String?
+  department   String?
+  createdAt    DateTime          @default(now())
+  exams        Exam[]
+  ratings      ProfessorRating[]
+  aiCallLogs   AICallLog[]
+  aiFeedback   AIFeedback[]
+  studentNotes StudentNote[]
+  studyPacks   StudyPack[]
 
   @@map("users")
 }
@@ -38,18 +40,20 @@ model Professor {
   courses      Course[]
   ratings      ProfessorRating[]
   styleProfile ProfessorStyleProfile?
+  studyPacks   StudyPack[]
 
   @@map("professors")
 }
 
 model Course {
-  id          String   @id @default(uuid())
-  name        String
-  code        String
-  professorId String
-  professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-  exams       Exam[]
+  id           String        @id @default(uuid())
+  name         String
+  code         String
+  professorId  String
+  professor    Professor     @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  createdAt    DateTime      @default(now())
+  exams        Exam[]
+  studentNotes StudentNote[]
 
   @@map("courses")
 }
@@ -174,4 +178,66 @@ model AIFeedback {
   @@index([userId])
   @@index([feature])
   @@map("ai_feedback")
+}
+
+// Phase 2 — User-uploaded study material (personal, private).
+// Source for personalized study pack generation; extractedText is the
+// plain-text payload fed into the Gemini prompt alongside the professor's
+// style profile.
+model StudentNote {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId      String?
+  course        Course?  @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  title         String
+  fileUrl       String
+  mimeType      String
+  extractedText String   @db.Text
+  wordCount     Int
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([courseId])
+  @@map("student_notes")
+}
+
+// Phase 2 — Generated personalized study pack (topic summaries, practice
+// questions, professor-specific trick patterns). Cache key is
+// (userId, professorId, noteHash, promptVersion) so regenerating with the
+// same notes + same prompt version short-circuits to the cached result
+// until `expiresAt` passes (24h TTL by default).
+model StudyPack {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  professorId String
+  professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
+
+  // IDs of the StudentNote records this pack was built from. Sorted before
+  // hashing so the same set of notes in any order produces the same
+  // `noteHash` and hits the cache.
+  noteIds  String[]
+  // SHA-256 of concatenated extractedText (notes sorted by id). Stable
+  // across re-orderings; changes when any note content changes.
+  noteHash String
+
+  topicSummaries    Json // [{ topic, content (markdown) }]
+  practiceQuestions Json // [{ question, type, topic, difficulty, answer, rationale }]
+  profStylePatterns Json // string[] — "trick" patterns surfaced from style profile
+
+  geminiVersion String
+  promptVersion String // e.g. "study-pack-v1"
+
+  generatedAt DateTime @default(now())
+  // Cache TTL — defaulted to generatedAt + 24h at create time.
+  expiresAt   DateTime
+
+  @@unique([userId, professorId, noteHash, promptVersion])
+  @@index([userId])
+  @@index([professorId])
+  @@index([expiresAt])
+  @@map("study_packs")
 }
