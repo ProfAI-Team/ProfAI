@@ -88,15 +88,11 @@ Karar bekleyen konular. **Yaşayan doküman** — karar verildiğinde "✅ Kapat
 - **Eğilim:** B.
 - **Karar zamanı:** Phase 3 sonu / Phase 4 başı.
 
-### T3. Background jobs — BullMQ vs node-cron
+### ✅ T3. Background jobs — BullMQ seçildi (2026-04-17, Phase 5 task 5.5)
 
-- **Durum:** Açık.
-- **Seçenekler:**
-  - A) node-cron (basit, tek instance).
-  - B) BullMQ (Redis, retry, DLQ).
-  - C) Cloudflare Cron Triggers (serverless).
-- **Eğilim:** B (Phase 4'te Redis zaten gelecek).
-- **Karar zamanı:** Phase 4 başı.
+- **Karar:** BullMQ + Redis.
+- **Gerekçe:** Phase 5 spaced repetition scheduler günlük tetiklenmeli + multi-instance'ta duplicate job koruması şart. node-cron multi-worker'da aynı cron'u iki kez çalıştırırdı. BullMQ repeat + Redis lock bu sorunu temiz çözüyor. Ayrıca mevcut `studyGroupService.closeStaleGroups` hiç tetiklenmiyordu — BullMQ wiring onu da canlandırdı.
+- **Etki:** `docker-compose.yml`'a `redis:7-alpine` servisi + healthcheck; `server/src/lib/queue.ts` abstraction (prod BullMQ / test `RUN_INLINE_QUEUE=1` inline handler); `server/src/jobs/runner.ts` worker registration; `REDIS_URL` + `RUN_JOBS` env flag'ları; ilk BullMQ job `studyGroupMaintenance` (cron `0 2 * * *`). Test suite inline mode'da Redis'siz çalışıyor.
 
 ### T4. AI provider stratejisi
 
