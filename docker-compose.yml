@@ -14,6 +14,8 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
+      target: builder
+    command: sh -c "npx prisma migrate deploy && npm run dev"
     ports:
       - "5000:5000"
     depends_on:
@@ -26,7 +28,10 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.5-flash-lite}
       - GEMINI_FREE_TIER=${GEMINI_FREE_TIER:-true}
+      - NODE_ENV=development
     volumes:
+      - ./server:/app
+      - /app/node_modules
       - uploads:/app/uploads
     networks:
       - profai-network
