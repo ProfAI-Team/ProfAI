@@ -13,6 +13,9 @@
     "approveExams": "Sınav Onayla",
     "studyGroups": "Çalışma Grupları",
     "dashboard": "Panel",
+    "dnaProfile": "Akademik DNA",
+    "grades": "Notlarım",
+    "reviews": "Tekrar",
     "signIn": "Giriş Yap",
     "signUp": "Üye ol",
     "signOut": "Çıkış Yap",
@@ -626,6 +629,179 @@
       "insufficient": "Henüz {{threshold}} yüksek performans raporu yok ({{count}}/{{threshold}}). Sınav sonrası kendi notunu paylaşırsan bu insight açılır.",
       "noDominantTopics": "Henüz öne çıkan bir konu yok — raporlar birbirinden farklı yönlere dağılmış.",
       "disclaimer": "Bu veri anonim, en az 5 öğrenciden toplandı. Trend gösterir, garanti değildir."
+    }
+  },
+  "dna": {
+    "profile": {
+      "title": "Akademik DNA",
+      "subtitle": "Çözdüğün sorulardan çıkarılan güçlü ve gelişime açık yönlerin — sadece senin görebileceğin özel bir profil.",
+      "recompute": "Yeniden hesapla",
+      "radar": {
+        "title": "Konu haritası"
+      },
+      "strengths": {
+        "title": "Güçlü olduğun konular",
+        "empty": "Henüz net bir güçlü konu yok. Birkaç deneme daha çözünce buraya isimler gelir."
+      },
+      "weaknesses": {
+        "title": "Gelişime açık konular",
+        "empty": "Gelişime açık belirgin bir alan gözükmüyor — iyi iş."
+      },
+      "learningStyle": {
+        "title": "Öğrenme stilin",
+        "override": "Kendim seçeyim",
+        "disclaimer": "Bu bir tahmin — istediğin zaman değiştirebilirsin.",
+        "values": {
+          "reading": "Okuma ağırlıklı — metin ve tanımları iyi tutuyorsun.",
+          "kinesthetic": "Uygulama ağırlıklı — problem çözerek öğreniyorsun.",
+          "visual": "Görsel — grafik ve şemalar seni hızlandırıyor.",
+          "auditory": "İşitsel — yakında açılacak (sesli anlatım).",
+          "mixed": "Karma — birden fazla stilde dengeli çalışıyorsun.",
+          "unknown": "Henüz belirsiz — biraz daha veri toplansın."
+        }
+      },
+      "kvkkNotice": "Bu veri {{samples}} soru üzerinden üretildi ve yalnızca sana açık. Hesap ayarlarından dışa aktarabilir ya da silebilirsin."
+    },
+    "insufficient": {
+      "title": "DNA oluşuyor — {{count}}/{{minRequired}} soru",
+      "hint": "{{remaining}} soru daha çözünce güçlü ve zayıf yönlerini net görebileceksin."
+    }
+  },
+  "confidence": {
+    "title": "Güven haritası",
+    "subtitle": "Her konuda kendini ne kadar hazır hissediyorsun — son çözümlerinden çıkardık.",
+    "empty": {
+      "title": "Henüz güven skoru yok",
+      "hint": "Birkaç deneme sınavı çözdüğünde her konu için bir skor bu sayfaya düşecek."
+    },
+    "legend": "Yeşil = 70+ hazır · sarı = 40-69 ara · kırmızı = 40 altı gelişim alanı.",
+    "widget": {
+      "title": "Bu hafta çalışman gereken 3 konu",
+      "hint": "Skorları en düşük konulardan başlarsak verimli olur."
+    }
+  },
+  "grades": {
+    "title": "Notlarım",
+    "subtitle": "Dönem notlarını ekle, GPA'ını görmek ve simülasyon yapmak için.",
+    "gpa": {
+      "label": "Güncel GPA",
+      "credits": "kredi"
+    },
+    "tab": {
+      "list": "Notlarım",
+      "simulator": "Simülatör"
+    },
+    "add": {
+      "title": "Not ekle",
+      "courseName": "Ders adı",
+      "submit": "Ekle"
+    },
+    "list": {
+      "empty": "Henüz not eklenmedi. Yukarıdaki formdan başlayabilirsin.",
+      "credit": "kredi",
+      "delete": "Sil"
+    },
+    "simulator": {
+      "title": "Bu sınavdan X alırsam GPA'ım kaç olur?",
+      "courseName": "Ders adı",
+      "grade": "Tahmini not: {{value}}",
+      "credit": "Kredi",
+      "university": "Not sistemi",
+      "submit": "Hesapla",
+      "result": "Projeksiyon GPA"
+    },
+    "university": {
+      "aydin": "İst. Aydın Ü.",
+      "bogazici": "Boğaziçi Ü.",
+      "odtu": "ODTÜ"
+    }
+  },
+  "courseAdvisor": {
+    "title": "Ders danışmanı",
+    "subtitle": "Yeni dönemin dersleri öncesi — hocanın stili senin DNA'na ne kadar uyuyor?",
+    "search": {
+      "label": "Hoca ara",
+      "placeholder": "Hoca adının bir kısmı yeter (en az 2 harf)"
+    },
+    "insufficient": {
+      "dna": {
+        "title": "DNA için biraz daha veri gerek",
+        "hint": "Şu ana kadar {{count}} soru çözülmüş. En az 40 soruyla daha sağlıklı bir uyum tahmini üretebiliyoruz."
+      },
+      "professor": {
+        "title": "Hoca için henüz yeterli analiz yok",
+        "hint": "Bu hocaya ait {{count}} sınav analizi var — 3+ olduğunda sağlıklı bir karşılaştırma çıkarırız."
+      }
+    },
+    "reasons": {
+      "style-match": "Stilin hocanın sorma biçimiyle uyumlu.",
+      "difficulty-match": "Tercih ettiğin zorluk seviyesi hocanınkine yakın.",
+      "topic-overlap": "Güçlü olduğun {{n}} konu hocanın öne çıkan konularıyla örtüşüyor."
+    },
+    "warnings": {
+      "style-mismatch": "Hocanın stili senin öğrenme tarzınla biraz farklı yönde.",
+      "difficulty-hard": "Hoca zor soru sorma eğiliminde — hazırlık süresini biraz uzun tut.",
+      "no-topic-overlap": "Güçlü konularınla hocanın öne çıkan konuları pek örtüşmüyor.",
+      "no-strengths": "Henüz net bir güçlü konu profilin yok; uyum tahmini bu alanda zayıf kalır."
+    },
+    "disclaimer": "Bu skor bir trend yansıtır, kesin bir söz vermez. Nihai kararı sen ver."
+  },
+  "spacedRepetition": {
+    "title": "Aralıklı tekrar",
+    "subtitle": "Yanlış cevapladığın soruları doğru zamanda tekrar önüne koyarız.",
+    "tab": {
+      "today": "Bugün",
+      "calendar": "Takvim",
+      "settings": "Ayarlar"
+    },
+    "empty": {
+      "title": "Bugün tekrar edilecek bir şey yok",
+      "hint": "Yeni bir deneme sınavı çöz — yanlış çıkan sorular otomatik olarak buraya düşer."
+    },
+    "calendar": {
+      "title": "Önümüzdeki 30 gün"
+    },
+    "settings": {
+      "title": "Bildirim sıklığı",
+      "frequencyLabel": "Hatırlatma sıklığı",
+      "frequency": {
+        "daily": "Günlük",
+        "weekly": "Haftada bir (pazartesi)",
+        "off": "Kapalı"
+      },
+      "disclaimer": "Bildirim yorgunluğu istemiyoruz — istediğin zaman bu ayarı değiştirebilirsin."
+    },
+    "card": {
+      "streak": "Üst üste {{count}} doğru",
+      "lapses": "Geçmiş hata: {{count}}",
+      "fallbackText": "Bu soru metni artık kayıtlı değil — aklından geçirdiğine göre işaretle.",
+      "reveal": "Cevabı göster",
+      "correct": "Doğru",
+      "wrong": "Yanlış"
+    }
+  },
+  "premium": {
+    "lockBadge": "Premium özellik",
+    "upgradeCta": "Premium'a geç",
+    "trust": "Dilediğin zaman iptal edebilirsin.",
+    "featureDisabled": "Bu özellik geçici olarak kapalı. Kısa süre içinde tekrar açılacak.",
+    "courseAdvisor": {
+      "title": "Ders danışmanı",
+      "pitch": "Hocanın stilini seninle eşleştirip yeni dönem seçimlerinde ne kadar uyumlu bir eşleşme olduğunu söyler.",
+      "bullets": {
+        "0": "Kişisel uyum skoru + nedenler",
+        "1": "Uyumsuzluk varsa yapıcı uyarı",
+        "2": "Kalıcı kullanım — istediğin zaman başka hocaları da karşılaştırabilirsin"
+      }
+    },
+    "examReconstruct": {
+      "title": "Sınav yaklaşık özeti",
+      "pitch": "Sınıf raporlarından AI ile yaklaşık bir sınav özeti üretir — yalnızca çalışma amaçlı.",
+      "bullets": {
+        "0": "10+ anonim rapordan özet",
+        "1": "Tekrar üretilebilir — yeni raporlar geldikçe güncellenir",
+        "2": "Sadece çalışma desteği — akademik dürüstlük sınırında kalır"
+      }
     }
   }
 }

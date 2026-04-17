@@ -13,6 +13,9 @@
     "dashboard": "Dashboard",
     "approveExams": "Approve exams",
     "studyGroups": "Study groups",
+    "dnaProfile": "Academic DNA",
+    "grades": "My grades",
+    "reviews": "Review",
     "signIn": "Sign in",
     "signUp": "Sign up",
     "signOut": "Sign out",
@@ -626,6 +629,179 @@
       "insufficient": "We need {{threshold}} high-scorer reports; we have {{count}}/{{threshold}}. Share your grade after your exam to unlock this insight.",
       "noDominantTopics": "No dominant topic yet — reports spread across the syllabus.",
       "disclaimer": "Aggregated anonymously from at least five students. It's a trend, not a guarantee."
+    }
+  },
+  "dna": {
+    "profile": {
+      "title": "Academic DNA",
+      "subtitle": "The shape of what you've been learning — strengths, gaps, style. Visible only to you.",
+      "recompute": "Recompute",
+      "radar": {
+        "title": "Topic map"
+      },
+      "strengths": {
+        "title": "Your strengths",
+        "empty": "No standout strengths yet. A few more mock exams and this will fill in."
+      },
+      "weaknesses": {
+        "title": "Areas to grow",
+        "empty": "Nothing obvious to shore up — nice work."
+      },
+      "learningStyle": {
+        "title": "Learning style",
+        "override": "Set manually",
+        "disclaimer": "This is a guess — you can override it any time.",
+        "values": {
+          "reading": "Reading-heavy — text and definitions stick for you.",
+          "kinesthetic": "Hands-on — you learn by solving problems.",
+          "visual": "Visual — charts and diagrams help you click.",
+          "auditory": "Auditory — coming soon (voice tutor).",
+          "mixed": "Mixed — you're balanced across styles.",
+          "unknown": "Not sure yet — more data needed."
+        }
+      },
+      "kvkkNotice": "Built from {{samples}} answered questions and only visible to you. Export or delete any time from account settings."
+    },
+    "insufficient": {
+      "title": "DNA forming — {{count}}/{{minRequired}} questions",
+      "hint": "Answer {{remaining}} more to see strengths and gaps."
+    }
+  },
+  "confidence": {
+    "title": "Confidence map",
+    "subtitle": "How ready you feel per topic — derived from your recent answers.",
+    "empty": {
+      "title": "No confidence data yet",
+      "hint": "Finish a mock exam or two and per-topic scores will show up here."
+    },
+    "legend": "Green = 70+ ready · amber = 40-69 in-between · red = <40 needs work.",
+    "widget": {
+      "title": "Three topics to study this week",
+      "hint": "Starting with the lowest scores tends to pay off fastest."
+    }
+  },
+  "grades": {
+    "title": "My grades",
+    "subtitle": "Add your course grades to see GPA and run what-if simulations.",
+    "gpa": {
+      "label": "Current GPA",
+      "credits": "credits"
+    },
+    "tab": {
+      "list": "My grades",
+      "simulator": "Simulator"
+    },
+    "add": {
+      "title": "Add grade",
+      "courseName": "Course name",
+      "submit": "Add"
+    },
+    "list": {
+      "empty": "No grades added yet — use the form above to start.",
+      "credit": "credits",
+      "delete": "Delete"
+    },
+    "simulator": {
+      "title": "If I score X in this course, what happens to my GPA?",
+      "courseName": "Course name",
+      "grade": "Estimated grade: {{value}}",
+      "credit": "Credits",
+      "university": "Grading system",
+      "submit": "Calculate",
+      "result": "Projected GPA"
+    },
+    "university": {
+      "aydin": "Istanbul Aydin U.",
+      "bogazici": "Boğaziçi U.",
+      "odtu": "METU"
+    }
+  },
+  "courseAdvisor": {
+    "title": "Course advisor",
+    "subtitle": "Before picking next term's courses — how well does this professor's style match your DNA?",
+    "search": {
+      "label": "Search professor",
+      "placeholder": "Part of the name is enough (2+ letters)"
+    },
+    "insufficient": {
+      "dna": {
+        "title": "Need a bit more DNA data",
+        "hint": "Answered {{count}} questions so far. 40+ gives us a trustworthy compatibility read."
+      },
+      "professor": {
+        "title": "Not enough analyses for this professor yet",
+        "hint": "Only {{count}} analyzed exam(s). Compatibility gets reliable past 3+."
+      }
+    },
+    "reasons": {
+      "style-match": "Your style lines up with how this professor asks.",
+      "difficulty-match": "The difficulty level matches what you prefer.",
+      "topic-overlap": "{{n}} of your strengths overlap with the professor's top topics."
+    },
+    "warnings": {
+      "style-mismatch": "The professor's style leans away from how you study best.",
+      "difficulty-hard": "Professor tends to ask hard questions — budget extra prep time.",
+      "no-topic-overlap": "Your strengths don't overlap with the professor's top topics.",
+      "no-strengths": "No clear strengths identified yet; compatibility is weaker here."
+    },
+    "disclaimer": "A trend, not a promise. Final call is yours."
+  },
+  "spacedRepetition": {
+    "title": "Spaced repetition",
+    "subtitle": "Missed questions come back at the right moment so they stick.",
+    "tab": {
+      "today": "Today",
+      "calendar": "Calendar",
+      "settings": "Settings"
+    },
+    "empty": {
+      "title": "Nothing to review today",
+      "hint": "Wrong answers on a mock exam get queued here automatically."
+    },
+    "calendar": {
+      "title": "Next 30 days"
+    },
+    "settings": {
+      "title": "Reminder frequency",
+      "frequencyLabel": "Reminder frequency",
+      "frequency": {
+        "daily": "Daily",
+        "weekly": "Weekly (Mondays)",
+        "off": "Off"
+      },
+      "disclaimer": "Notification fatigue is the last thing we want — change this any time."
+    },
+    "card": {
+      "streak": "{{count}} in a row",
+      "lapses": "Past lapses: {{count}}",
+      "fallbackText": "Question text no longer saved — mark based on what you remember.",
+      "reveal": "Show answer",
+      "correct": "Correct",
+      "wrong": "Wrong"
+    }
+  },
+  "premium": {
+    "lockBadge": "Premium feature",
+    "upgradeCta": "Upgrade to Premium",
+    "trust": "Cancel any time.",
+    "featureDisabled": "This feature is temporarily disabled. It will be back shortly.",
+    "courseAdvisor": {
+      "title": "Course advisor",
+      "pitch": "Matches a professor's style with your DNA so you know whether to pick the course next term.",
+      "bullets": {
+        "0": "Personal compatibility score + reasons",
+        "1": "Constructive warning on mismatches",
+        "2": "Reusable — compare any professor you're considering"
+      }
+    },
+    "examReconstruct": {
+      "title": "Approximate exam summary",
+      "pitch": "AI-generated approximate summary from aggregated classroom reports — for study only.",
+      "bullets": {
+        "0": "Summary based on 10+ anonymous reports",
+        "1": "Regenerable — refreshes as new reports come in",
+        "2": "Study aid only — stays on the right side of academic integrity"
+      }
     }
   }
 }

@@ -34,11 +34,11 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.20 | Grade tracker + GPA simulator sayfası `/me/grades` — tabs (list/simulator) + add/delete + GPA header + üni formül picker | 4 saat | 5.17 | ✅ Tamam | `d9d67d2` |
 | 5.21 | Course advisor sayfası `/me/course-advisor` — professor search + compatibility card + PremiumLockCard 402 handler + insufficient branches | 3 saat | 5.17 | ✅ Tamam | `f1640f5` |
 | 5.22 | Spaced repetition UI `/me/reviews` — 3 tab (today + 30-day calendar + settings) + optimistic complete mutation; Navbar'da DNA/Grades/Reviews linkleri | 4 saat | 5.17 | ✅ Tamam | `cfb9a14` |
-| 5.23 | i18n TR + EN copy sweep (paralel 2 agent, hibrit ton, `dna.*` / `confidence.*` / `grades.*` / `courseAdvisor.*` / `spacedRepetition.*` / `premium.*` namespace'leri) | 3 saat | 5.18–5.22 | ⏳ Bekliyor | — |
+| 5.23 | i18n TR + EN copy sweep — `dna.*` / `confidence.*` / `grades.*` / `courseAdvisor.*` / `spacedRepetition.*` / `premium.*` (549↔549 key parity; tek oturum manuel sweep) | 3 saat | 5.18–5.22 | ✅ Tamam | `pending` |
 | 5.24 | Playwright MCP visual smoke (DNA / confidence / grades / course-advisor / reviews × 390/1440 × light/dark) + Phase 5 fixture seeder | 2 saat | 5.23 | ⏳ Bekliyor | — |
 | 5.25 | Phase 5 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle + data-model-evolution ekle | 1 saat | Hepsi | ⏳ Bekliyor | — |
 
-**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **22/25 — tüm frontend sayfalar hazır. Polish (i18n + smoke + kapanış) kaldı.**
+**Toplam:** ~74 saat tahmin · Hedef gerçek: Phase 4 ritmi (~10-14 saat tek oturum). **İlerleme:** ⏳ **23/25 — i18n tamam. Visual smoke + kapanış kaldı.**
 
 > Task numaralama 25'e ulaştı (Phase 4: 23); borç sayısı bir fazla (BullMQ + Redis'i ayrı koyduk) + premium tier ayrı task.
 
