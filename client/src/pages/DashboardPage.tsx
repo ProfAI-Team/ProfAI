@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import ProfAvatar from '../components/Avatar';
+import WeakTopicsWidget from '../components/WeakTopicsWidget';
 import { examService } from '../services/examService';
 import { Exam } from '../types';
 import { cn } from '../lib/utils';
@@ -57,6 +58,10 @@ const DashboardPage: React.FC = () => {
           <p className="text-muted-foreground mt-1">{t('dashboard.subtitle')}</p>
         </div>
       </motion.div>
+
+      <div className="mb-6">
+        <WeakTopicsWidget />
+      </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
