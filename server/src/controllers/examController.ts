@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import prisma from "../lib/prisma";
 import { analyzeExam } from "../services/analysisService";
 import { invalidateStyleProfile } from "../services/professorStyleService";
+import { invalidateStudyPacksForProfessor } from "../services/studyPackService";
 
 export const uploadExam = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -83,6 +84,18 @@ export const uploadExam = async (req: Request, res: Response): Promise<void> => 
     } catch (err) {
       console.error(
         "[uploadExam] invalidateStyleProfile failed:",
+        err instanceof Error ? err.message : err
+      );
+    }
+
+    // Same soft-invalidation for Phase 2 study packs — their target
+    // distribution is derived from the aggregated style profile, so any
+    // new exam potentially shifts it.
+    try {
+      await invalidateStudyPacksForProfessor(course.professorId);
+    } catch (err) {
+      console.error(
+        "[uploadExam] invalidateStudyPacksForProfessor failed:",
         err instanceof Error ? err.message : err
       );
     }
