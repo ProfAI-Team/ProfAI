@@ -117,7 +117,7 @@ export async function recomputeConfidence(params: {
   const { userId, topic } = params;
 
   const sessions = await prisma.mockExamSession.findMany({
-    where: { userId, completedAt: { not: null }, topicGaps: { not: null } },
+    where: { userId, completedAt: { not: null } },
     select: { topicGaps: true, completedAt: true },
     take: 30,
     orderBy: { completedAt: "desc" },

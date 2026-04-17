@@ -121,9 +121,8 @@ export function aggregateTopicGaps(
  */
 export async function recomputeDNA(userId: string): Promise<DNAResponse> {
   const sessions = await prisma.mockExamSession.findMany({
-    where: { userId, completedAt: { not: null }, topicGaps: { not: null } },
-    select: {
-      topicGaps: true,
+    where: { userId, completedAt: { not: null } },
+    include: {
       mockExam: { select: { questions: true } },
     },
     take: 100,

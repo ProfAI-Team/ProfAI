@@ -2,6 +2,10 @@ import {
   registerStudyGroupMaintenanceWorker,
   scheduleStudyGroupMaintenance,
 } from "./studyGroupMaintenance";
+import {
+  registerSpacedRepetitionWorker,
+  scheduleSpacedRepetitionDaily,
+} from "./spacedRepetitionScheduler";
 import { closeAll } from "../lib/queue";
 
 /**
@@ -17,7 +21,9 @@ import { closeAll } from "../lib/queue";
  */
 export async function bootJobs(): Promise<void> {
   registerStudyGroupMaintenanceWorker();
+  registerSpacedRepetitionWorker();
   await scheduleStudyGroupMaintenance();
+  await scheduleSpacedRepetitionDaily();
 
   const shutdown = async () => {
     console.log("[jobs] shutting down workers...");

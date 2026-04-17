@@ -21,6 +21,7 @@ model User {
   university        String?
   department        String?
   subscriptionTier  String            @default("free")
+  reviewFrequency   String            @default("daily")
   createdAt         DateTime          @default(now())
   exams             Exam[]
   ratings           ProfessorRating[]

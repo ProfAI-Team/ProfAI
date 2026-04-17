@@ -196,14 +196,19 @@ export async function getCompatibility(params: {
     };
   }
 
-  const profileMetrics = styleResult.profile.metrics;
+  const profileMetrics = styleResult.profile.metrics as unknown as {
+    dominantType?: string | null;
+    avgDifficulty?: number | null;
+  } | null;
   const scored = scoreCompatibility({
     userLearningStyle: dnaResult.dna.learningStyle,
-    professorDominantType: profileMetrics.dominantType ?? null,
+    professorDominantType: profileMetrics?.dominantType ?? null,
     userPreferredDifficulty: dnaResult.dna.preferredDifficulty,
-    professorDifficultyBucket: bucketDifficulty(profileMetrics.avgDifficulty),
+    professorDifficultyBucket: bucketDifficulty(profileMetrics?.avgDifficulty),
     userStrengthTopics: dnaResult.dna.strengths.map((s) => s.topic),
-    professorTopTopics: styleResult.profile.topTopics.map((t) => t.topic),
+    professorTopTopics: (styleResult.profile.topTopics as unknown as Array<{ topic: string }>).map(
+      (t) => t.topic
+    ),
   });
 
   return {
