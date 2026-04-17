@@ -32,7 +32,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.18 | DNA profile sayfası `/me/profile` — radar + strengths/weaknesses + learning style override + KVKK notice + insufficient banner | 4 saat | 5.17 | ✅ Tamam | `413ae5d` |
 | 5.19 | Confidence heatmap sayfası `/me/confidence` + Dashboard `WeakTopicsWidget` | 3 saat | 5.17 | ✅ Tamam | `ea81a1a` |
 | 5.20 | Grade tracker + GPA simulator sayfası `/me/grades` — tabs (list/simulator) + add/delete + GPA header + üni formül picker | 4 saat | 5.17 | ✅ Tamam | `d9d67d2` |
-| 5.21 | Course advisor sayfası `/me/course-advisor` — professor search + compatibility card + PremiumLockCard 402 handler + insufficient branches | 3 saat | 5.17 | ✅ Tamam | `pending` |
+| 5.21 | Course advisor sayfası `/me/course-advisor` — professor search + compatibility card + PremiumLockCard 402 handler + insufficient branches | 3 saat | 5.17 | ✅ Tamam | `f1640f5` |
 | 5.22 | Spaced repetition UI `/me/reviews` — review queue + calendar + notification frequency settings | 4 saat | 5.17 | ⏳ Bekliyor | — |
 | 5.23 | i18n TR + EN copy sweep (paralel 2 agent, hibrit ton, `dna.*` / `confidence.*` / `grades.*` / `courseAdvisor.*` / `spacedRepetition.*` / `premium.*` namespace'leri) | 3 saat | 5.18–5.22 | ⏳ Bekliyor | — |
 | 5.24 | Playwright MCP visual smoke (DNA / confidence / grades / course-advisor / reviews × 390/1440 × light/dark) + Phase 5 fixture seeder | 2 saat | 5.23 | ⏳ Bekliyor | — |
