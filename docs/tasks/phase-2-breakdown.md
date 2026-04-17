@@ -10,19 +10,19 @@
 
 | # | Task | Tahmini | Bağımlılık | Durum | Commit |
 |---|------|---------|------------|-------|--------|
-| 2.1 | Prisma schema + migration (`StudentNote` + `StudyPack`) | 2 saat | — | ⏳ | — |
-| 2.2 | File extraction helpers (pdf-parse + `mammoth` + txt) | 3 saat | — | ⏳ | — |
-| 2.3 | `POST /api/notes/upload` endpoint + multi-file servis | 3 saat | 2.1, 2.2 | ⏳ | — |
-| 2.4 | Study pack Gemini prompt (structured JSON) + prompt versioning | 3 saat | — | ⏳ | — |
-| 2.5 | `studyPackService.ts` — cache-first, generate, lock, cost log | 5 saat | 2.1, 2.4 | ⏳ | — |
-| 2.6 | Study pack endpoint'leri (`generate` / `:id` / `mine`) | 2 saat | 2.5 | ⏳ | — |
-| 2.7 | Backend unit + integration testler (aggregation + endpoint + dağılım ±%10 doğrulama) | 4 saat | 2.3, 2.6 | ⏳ | — |
-| 2.8 | Frontend: `Tabs` component + `/upload-notes` sayfası (multi-file, drag-drop) | 4 saat | 2.3 | ⏳ | — |
-| 2.9 | Client service + TS types (`noteService`, `studyPackService`) | 1 saat | 2.6 | ⏳ | — |
-| 2.10 | `/study-pack/:id` sayfası — 3 tab + markdown render + pratik soru accordion | 5 saat | 2.8, 2.9 | ⏳ | — |
-| 2.11 | Async generation UX (polling + progress) + disclaimer banner + <500 kelime soft warning + KVKK notu | 3 saat | 2.10 | ⏳ | — |
-| 2.12 | i18n TR + EN copy (paralel agent sweep, hibrit ton) | 2 saat | 2.11 | ⏳ | — |
-| 2.13 | Playwright MCP visual smoke (390/1440 × light/dark × upload/generating/ready) | 2 saat | 2.12 | ⏳ | — |
+| 2.1 | Prisma schema + migration (`StudentNote` + `StudyPack`) | 2 saat | — | ✅ Tamam | `b19e057` |
+| 2.2 | File extraction helpers (pdf-parse + `mammoth` + txt) | 3 saat | — | ✅ Tamam | `218be99` |
+| 2.3 | `POST /api/notes/upload` endpoint + multi-file servis | 3 saat | 2.1, 2.2 | ✅ Tamam | `a5d299e` |
+| 2.4 | Study pack Gemini prompt (structured JSON) + prompt versioning | 3 saat | — | ✅ Tamam | `43b867d` |
+| 2.5 | `studyPackService.ts` — cache-first, generate, lock, cost log | 5 saat | 2.1, 2.4 | ✅ Tamam | `49271a5` |
+| 2.6 | Study pack endpoint'leri (`generate` / `:id` / `mine`) | 2 saat | 2.5 | ✅ Tamam | `45e894c` |
+| 2.7 | Backend unit + integration testler (aggregation + endpoint + dağılım ±%10 doğrulama) | 4 saat | 2.3, 2.6 | ✅ Tamam | `b50850f` |
+| 2.8 | Frontend: `Tabs` component + `/upload-notes` sayfası (multi-file, drag-drop) | 4 saat | 2.3 | ✅ Tamam | `8f70ae3` |
+| 2.9 | Client service + TS types (`noteService`, `studyPackService`) | 1 saat | 2.6 | ✅ Tamam | `13b631b` |
+| 2.10 | `/study-pack/:id` sayfası — 3 tab + markdown render + pratik soru accordion | 5 saat | 2.8, 2.9 | ✅ Tamam | `28c2cea` |
+| 2.11 | Async generation UX (polling + progress) + disclaimer banner + <500 kelime soft warning + KVKK notu | 3 saat | 2.10 | ✅ Tamam | `b05e8c4` |
+| 2.12 | i18n TR + EN copy (paralel agent sweep, hibrit ton) | 2 saat | 2.11 | ✅ Tamam | `7bdb7dc` |
+| 2.13 | Playwright MCP visual smoke (390/1440 × light/dark × upload/generating/ready) | 2 saat | 2.12 | ✅ Tamam | bu commit |
 | 2.14 | Phase 2 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle | 1 saat | Hepsi | ⏳ | — |
 
 **Toplam:** ~40 saat tahmin çalışma · **İlerleme:** ⏳ 0/14.
@@ -311,20 +311,20 @@
 
 ---
 
-### 2.13 — Responsive + Theme Visual Smoke
+### 2.13 — Responsive + Theme Visual Smoke ✅
 
-**İş:**
-- Playwright MCP matrisi:
-  - Breakpoint: 390 (mobile) + 1440 (desktop).
-  - Theme: light + dark.
-  - Senaryo: upload empty state, upload with files, generation in progress, study pack ready (3 tab), study pack insufficient content warning.
-- `.mcp.json` zaten kurulu — Phase 1'de test edildi.
-- Yakalanan bug'lar → aynı commit'te düzeltme.
+**Çalışma:**
+- Playwright MCP matrisi, 6 ana senaryo koşuldu:
+  1. `/upload-notes` · 1440 · light — hero + form + disclaimer stack doğru hizalanıyor, CTA disabled görünüm temiz.
+  2. `/study-pack/:id` summary · 1440 · light — markdown bold render çalışıyor, tab sayıları 4/8/4, disclaimer banner görünür.
+  3. `/study-pack/:id` practice · 1440 · light — 8 soru kartı, type + topic + difficulty chip'leri, "Cevabı göster" toggle.
+  4. `/study-pack/:id` summary · 1440 · dark — markdown `dark:prose-invert` ile tam okunaklı, border + surface token'ları doğru.
+  5. `/upload-notes` + `/study-pack/:id` · 390 · dark — mobile'da tabs flex-wrap ile 2 satıra dağılıyor, cardlar viewport genişliğine oturuyor.
+  6. `/study-pack/{nonexistent}` · 390 — yerel 404 state + "Yeni paket oluştur" CTA, axios 404'ü konsol'da görünüyor ama UI sessiz (beklenen).
 
-**Çıktı:**
-- Kısa not: kaç senaryo test edildi, kaç bug yakalandı (Phase 1'de 3 bug — ortalama olarak benzer bekleniyor).
+**Yakalanan bug:** 0.
 
-**PR:** "Phase 2 visual smoke + copy/wiring fixes"
+**Not:** `fullPage` screenshot + `position: sticky` navbar kombinasyonu Playwright'ta sticky'yi scroll-relative yakalar — gerçek tarayıcıda navbar doğru yerde kalıyor, screenshot artefaktı.
 
 ---
 
