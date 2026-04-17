@@ -14,19 +14,21 @@ enum ExamType {
 }
 
 model User {
-  id           String            @id @default(uuid())
-  email        String            @unique
-  password     String
-  name         String
-  university   String?
-  department   String?
-  createdAt    DateTime          @default(now())
-  exams        Exam[]
-  ratings      ProfessorRating[]
-  aiCallLogs   AICallLog[]
-  aiFeedback   AIFeedback[]
-  studentNotes StudentNote[]
-  studyPacks   StudyPack[]
+  id               String            @id @default(uuid())
+  email            String            @unique
+  password         String
+  name             String
+  university       String?
+  department       String?
+  createdAt        DateTime          @default(now())
+  exams            Exam[]
+  ratings          ProfessorRating[]
+  aiCallLogs       AICallLog[]
+  aiFeedback       AIFeedback[]
+  studentNotes     StudentNote[]
+  studyPacks       StudyPack[]
+  mockExams        MockExam[]
+  mockExamSessions MockExamSession[]
 
   @@map("users")
 }
@@ -41,6 +43,7 @@ model Professor {
   ratings      ProfessorRating[]
   styleProfile ProfessorStyleProfile?
   studyPacks   StudyPack[]
+  mockExams    MockExam[]
 
   @@map("professors")
 }
@@ -240,4 +243,78 @@ model StudyPack {
   @@index([professorId])
   @@index([expiresAt])
   @@map("study_packs")
+}
+
+// Phase 3 — Generated mock exam. Cache key is
+// (userId, professorId, noteHash, promptVersion) mirroring StudyPack, so the
+// same student running the same material for the same professor reuses the
+// generated question set for 24h. Per-attempt state lives on MockExamSession.
+model MockExam {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  professorId String
+  professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
+
+  // Source material. studyPackId is a convenience pointer; noteHash is what
+  // actually keys the cache (a mock exam can be generated from raw notes even
+  // if no study pack was persisted).
+  studyPackId String?
+  noteIds     String[]
+  noteHash    String
+
+  title       String
+  // { q, type, options?, correctAnswer, topic, difficulty, rationale, rubric? }[]
+  // Cached answer + rubric fields are never returned to the client while a
+  // session is open; the grading service is the only consumer.
+  questions   Json
+  durationMin Int     @default(90)
+  // [{ title, startIdx, endIdx }] — logical breakdown used on the result page.
+  sectionBreakdown Json?
+
+  geminiVersion String
+  promptVersion String // e.g. "mock-exam-v1"
+
+  generatedAt DateTime @default(now())
+  // Cache TTL — defaulted to generatedAt + 24h.
+  expiresAt   DateTime
+
+  sessions MockExamSession[]
+
+  @@unique([userId, professorId, noteHash, promptVersion])
+  @@index([userId])
+  @@index([professorId])
+  @@index([expiresAt])
+  @@map("mock_exams")
+}
+
+// Phase 3 — Per-attempt state. Never cached: each submission is a fresh row.
+// `answers` / `feedback` / `prediction` / `topicGaps` are all JSON blobs whose
+// shapes are owned by mockExamGradingService + mockExamPredictionService.
+model MockExamSession {
+  id         String   @id @default(uuid())
+  mockExamId String
+  mockExam   MockExam @relation(fields: [mockExamId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // [{ qIdx, answer, timeSpentSec, flagged }]
+  answers   Json
+  score     Float?
+  // [{ qIdx, correct, scoreOutOf100, feedback, suggestedTopic? }]
+  feedback  Json?
+  // { lowerBound, upperBound, confidence, reasoning }
+  prediction Json?
+  // [{ topic, correctCount, totalCount, accuracy, priority }]
+  topicGaps  Json?
+
+  startedAt     DateTime  @default(now())
+  completedAt   DateTime?
+  timeSpentSec  Int?
+  // True when auto-submitted because the timer ran out.
+  autoSubmitted Boolean   @default(false)
+
+  @@index([userId])
+  @@index([mockExamId])
+  @@map("mock_exam_sessions")
 }
