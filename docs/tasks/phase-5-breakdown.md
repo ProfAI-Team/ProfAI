@@ -20,7 +20,7 @@ Phase 4 retro düzeni korundu: **borçlar önce** (6), backend ortada (9), front
 | 5.6 | Demo user credit reset utility — `scripts/reset-demo-user.ts` + `npm run reset:demo`, idempotent, live DB'de doğrulandı | 1 saat | — | ✅ Tamam | `d657ea3` |
 | 5.7 | Prisma schema + migration — 4 DNA tablosu + `User.subscriptionTier`, migrate dev uygulandı, test suite 163/164 | 3 saat | — | ✅ Tamam | `7fa91e6` |
 | 5.8 | DNA aggregation servisi — `recomputeDNA` + `getDNA` (cache-first 6h TTL) + `invalidateDNA`; Exam.verified hook uploader + approvers DNA'larını mark stale | 4 saat | 5.7 | ✅ Tamam | `d5c51e1` |
-| 5.9 | Learning style inference — `inferStyle` (pure) + `inferLearningStyle` (DB) + `updateLearningStyleFromInference`; reading/kinesthetic/mixed/null, min 20 soru + 15pp dominance gap | 3 saat | 5.7, 5.8 | ✅ Tamam | `pending` |
+| 5.9 | Learning style inference — `inferStyle` (pure) + `inferLearningStyle` (DB) + `updateLearningStyleFromInference`; reading/kinesthetic/mixed/null, min 20 soru + 15pp dominance gap | 3 saat | 5.7, 5.8 | ✅ Tamam | `04bee87` |
 | 5.10 | Confidence scoring servisi — per-topic 0-100, mock exam sonrası otomatik update + "bu hafta" öneri aggregation | 3 saat | 5.7, 5.8 | ⏳ Bekliyor | — |
 | 5.11 | Grade record + GPA calculator servisi — 3+ üni formül preset (Aydın, Boğaziçi, ODTÜ) + what-if simulator | 3 saat | 5.7 | ⏳ Bekliyor | — |
 | 5.12 | Course advisor servisi — DNA × style profile cross-fit compatibility score (k-anonim ≥1 dönem veri) | 3 saat | 5.7, 5.8 | ⏳ Bekliyor | — |
