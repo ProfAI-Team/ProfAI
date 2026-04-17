@@ -30,7 +30,7 @@
 | 4.18 | Post-exam report form + `/post-exam-reports/new` + hoca detay sayfasında aggregated view | 4 saat | 4.14 | ✅ Tamam | `1b1db22` |
 | 4.19 | Study group index + hoca detayında "5+ kişi bekliyor" banner + external link input modal | 4 saat | 4.14 | ✅ Tamam | `2112f7b` |
 | 4.20 | "A alanların stratejisi" paneli — `ProfessorDetailPage` yeni section (aggregated, k-anonim) | 2 saat | 4.14 | ✅ Tamam | `ec2da7a` |
-| 4.21 | i18n TR + EN copy sweep (paralel 2 agent, hibrit ton, `community.*` / `credit.*` / `approval.*` / `vote.*` / `postExam.*` / `studyGroup.*` namespace'leri) | 3 saat | 4.15–4.20 | ⏳ | — |
+| 4.21 | i18n TR + EN copy sweep (paralel 2 agent, hibrit ton, `community.*` / `credit.*` / `approval.*` / `vote.*` / `postExam.*` / `studyGroup.*` namespace'leri) | 3 saat | 4.15–4.20 | ✅ Tamam | `5bec181` |
 | 4.22 | Playwright MCP visual smoke (credit / approval / vote / report form / study group × 390/1440 × light/dark) | 2 saat | 4.21 | ⏳ | — |
 | 4.23 | Phase 4 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle | 1 saat | Hepsi | ⏳ | — |
 
