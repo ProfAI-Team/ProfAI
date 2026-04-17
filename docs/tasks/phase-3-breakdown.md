@@ -10,11 +10,11 @@
 
 | # | Task | Tahmini | Bağımlılık | Durum | Commit |
 |---|------|---------|------------|-------|--------|
-| 3.1 | Dev environment refresh — Docker `./server:/app` bind mount + `node_modules` volume override + `npm audit fix` (Phase 1+2 borcu) | 2 saat | — | ⏳ | — |
-| 3.2 | Rate limit middleware (`express-rate-limit`, mock-exam endpoint'ine özel quota, anon vs auth) (Phase 1+2 borcu) | 2 saat | — | ⏳ | — |
-| 3.3 | Analytics kurulumu — Plausible veya eşdeğer + key event stub'ları (upload / generate / exam start / submit) (Phase 1+2 borcu) | 2 saat | — | ⏳ | — |
-| 3.4 | Prisma schema + migration (`MockExam` + `MockExamSession`) | 2 saat | — | ⏳ | — |
-| 3.5 | Mock exam Gemini prompt (structured output schema: questions + answer key + rubric) + prompt versioning | 4 saat | 3.4 | ⏳ | — |
+| 3.1 | Dev environment refresh — Docker `./server:/app` bind mount + `node_modules` volume override + `npm audit fix` (Phase 1+2 borcu) | 2 saat | — | ✅ Tamam | `04b021e` |
+| 3.2 | Rate limit middleware (`express-rate-limit`, mock-exam endpoint'ine özel quota, anon vs auth) (Phase 1+2 borcu) | 2 saat | — | ✅ Tamam | `d2612ca` |
+| 3.3 | Analytics kurulumu — Plausible veya eşdeğer + key event stub'ları (upload / generate / exam start / submit) (Phase 1+2 borcu) | 2 saat | — | ✅ Tamam | `81b1e0d` |
+| 3.4 | Prisma schema + migration (`MockExam` + `MockExamSession`) | 2 saat | — | ✅ Tamam | `c5f4b03` |
+| 3.5 | Mock exam Gemini prompt (structured output schema: questions + answer key + rubric) + prompt versioning | 4 saat | 3.4 | ✅ Tamam | `371138f` |
 | 3.6 | `mockExamService.ts` generate — cache-first (veya session-unique karar) + lock + cost log (`feature: "mock-exam"`) | 5 saat | 3.4, 3.5 | ⏳ | — |
 | 3.7 | Grading servisi — MC/TF rule-based + CLASSIC için Gemini rubric çağrısı + per-question feedback | 5 saat | 3.4, 3.5 | ⏳ | — |
 | 3.8 | Performance prediction servisi — mock skor + hoca ortalaması → range + confidence + konu boşluk detektörü | 3 saat | 3.4 | ⏳ | — |

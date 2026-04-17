@@ -4,6 +4,7 @@ import prisma from "../lib/prisma";
 import { analyzeExam } from "../services/analysisService";
 import { invalidateStyleProfile } from "../services/professorStyleService";
 import { invalidateStudyPacksForProfessor } from "../services/studyPackService";
+import { invalidateMockExamsForProfessor } from "../services/mockExamService";
 
 export const uploadExam = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -96,6 +97,18 @@ export const uploadExam = async (req: Request, res: Response): Promise<void> => 
     } catch (err) {
       console.error(
         "[uploadExam] invalidateStudyPacksForProfessor failed:",
+        err instanceof Error ? err.message : err
+      );
+    }
+
+    // Phase 3 mock exams cache off the same style profile signal; new
+    // exam data can shift the MC/CLASSIC/TF split, so evict everything
+    // for this professor and let the next request regenerate.
+    try {
+      await invalidateMockExamsForProfessor(course.professorId);
+    } catch (err) {
+      console.error(
+        "[uploadExam] invalidateMockExamsForProfessor failed:",
         err instanceof Error ? err.message : err
       );
     }
