@@ -147,14 +147,22 @@ model MockExamSession {
 
 ---
 
-## Phase 4 — Community
+## Phase 4 — Community (migration `20260417133337_phase_4_community`)
+
+Uygulanmış hâli (spec'ten sapmalar migration sırasında alındı):
+
+- `ExamApproval.reason String?` (downvote açıklaması) eklendi.
+- `QuestionVote` için ham alan adı `vote` → `direction Int` olarak isimlendirildi.
+- `PostExamReport` unique `(userId, professorId, examDate)` + `selfReportedGrade / selfReportedLetter` ek alanları + `anonymizedHash String` (salted sha256 → aggregated view yalnız hash üzerinden işler).
+- `StudyGroup` için `status StudyGroupStatus (SUGGESTED | ACTIVE | CLOSED)` enum eklendi; `members` implicit M2M (`@relation("StudyGroupMembers")`).
+- `Exam` modeline `verified Boolean` + `verifiedAt DateTime?` + `flagged Boolean` eklendi; ≥3 pozitif onay verified, ≥3 negatif onay flagged tetikler (approval service).
 
 ```prisma
 model UserCredit {
   userId    String   @id
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   balance   Int      @default(0)
-  history   Json[]
+  history   Json[]   // [{ type: "earn"|"spend", amount, reason, refId?, at }]
   updatedAt DateTime @updatedAt
 }
 
@@ -162,16 +170,21 @@ model ExamApproval {
   examId    String
   exam      Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
   userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   approved  Boolean
+  reason    String?
   createdAt DateTime @default(now())
 
   @@id([examId, userId])
+  @@index([examId])
+  @@index([userId])
 }
 
 model QuestionVote {
-  questionId  String
+  questionId  String   // "studyPack:<id>:q<idx>" | "mockExam:<id>:q<idx>"
   userId      String
-  vote        Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  direction   Int      // -1 | +1
   cameOnExam  Boolean?
   createdAt   DateTime @default(now())
 
@@ -179,29 +192,42 @@ model QuestionVote {
 }
 
 model PostExamReport {
-  id             String   @id @default(uuid())
-  userId         String
-  professorId    String
-  courseId       String?
-  examDate       DateTime
-  reportedTopics Json
-  notes          String?
-  createdAt      DateTime @default(now())
+  id                 String   @id @default(uuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  professorId        String
+  courseId           String?
+  examDate           DateTime
+  reportedTopics     Json     // [{ topic, frequency: "once|few|many", difficulty 1..5 }]
+  notes              String?
+  selfReportedGrade  Int?
+  selfReportedLetter String?
+  anonymizedHash     String   // sha256(userId + examDate + POST_EXAM_SALT)
 
+  createdAt DateTime @default(now())
+
+  @@unique([userId, professorId, examDate])
   @@index([professorId])
+  @@index([examDate])
 }
+
+enum StudyGroupStatus { SUGGESTED ACTIVE CLOSED }
 
 model StudyGroup {
-  id            String    @id @default(uuid())
-  professorId   String
-  courseId      String?
-  examDate      DateTime?
-  members       User[]
-  externalLink  String?
-  createdAt     DateTime  @default(now())
+  id           String           @id @default(uuid())
+  professorId  String
+  courseId     String?
+  examDate     DateTime?
+  externalLink String?
+  status       StudyGroupStatus @default(SUGGESTED)
 
-  @@index([professorId])
+  members      User[]           @relation("StudyGroupMembers")
+
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
 }
+
+// Exam.verified/flagged/verifiedAt added inline on the existing Exam model.
 ```
 
 ---

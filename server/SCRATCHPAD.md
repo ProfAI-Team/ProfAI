@@ -5,7 +5,7 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 > Kök / cross-cutting notlar → [`../SCRATCHPAD.md`](../SCRATCHPAD.md)
 > Frontend notları → [`../client/SCRATCHPAD.md`](../client/SCRATCHPAD.md)
 > Genel backend rehberi → [`./CLAUDE.md`](./CLAUDE.md)
-> Faz 3 arşivi: [`../docs/_archive/scratchpad-server-2026-04-17-phase-3.md`](../docs/_archive/scratchpad-server-2026-04-17-phase-3.md)
+> Faz 4 arşivi: [`../docs/_archive/scratchpad-server-2026-04-17-phase-4.md`](../docs/_archive/scratchpad-server-2026-04-17-phase-4.md)
 
 ---
 
@@ -20,43 +20,43 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 ## Şu An Üzerinde Çalışılan
 
-- Phase 3 tamamlandı. Backend tarafında Phase 4 başlıyor.
-- **Phase 4 scope (backend):** 5 yeni tablo (`UserCredit`, `ExamApproval`, `QuestionVote`, `PostExamReport`, `StudyGroup`); paylaşım + oylama endpoint'leri; exam approval workflow; credit economy.
+- Phase 4 tamamlandı. Backend tarafında Phase 5 başlıyor.
+- **Phase 5 scope (backend):** `AcademicDNA`, `ConfidenceScore`, `GradeRecord`, `SpacedRepetition` tabloları; kullanıcı-başı long-lived vektör; spaced repetition scheduler.
 
 ---
 
-## Phase 4 Hazırlık Notları
+## Phase 5 Hazırlık Notları
 
-- **Rate limit middleware kurulu** — Phase 4 paylaşım + oylama endpoint'lerine aynı factory ile quota ver (muhtemelen daha yüksek: paylaşım günde 10, oy günde 50 gibi).
-- **Prompt versioning pattern hazır** — Phase 4'te Gemini "exam approval summary" veya "post-exam aggregation" call'ları olursa aynı `VERSION` constant + cache key pattern'ı.
-- **Invalidation hook mock exam'a ekli** — Phase 4'te yeni kaynak (approved exam, voted question) eklendiğinde benzer şekilde style profile + study pack + mock exam cache'leri invalidate et.
-- **Zod entegrasyonu** — Phase 4 paylaşım endpoint'lerinin input şeması karmaşıklaşacak (post-exam report çok alanlı), Zod eklemek için ideal an.
+- **Credit middleware + rule-based economy** aktif — Phase 5'te premium tier'ı bu middleware'a feature flag ekleyerek bağlamak kolay.
+- **anonymizedHash + k-anonymity** pattern — Phase 5 `AcademicDNA` cross-feature aggregation'larında aynı hash reuse edilebilir (salted sha256 aynı salt ile).
+- **Zod + `parseOrRespond<S extends ZodTypeAny>` helper** olgunlaştı — Phase 5 endpoint'leri baştan Zod'la gelsin.
+- **Invalidation hook zinciri** (`Exam.verified = true` → style + pack + mock cache invalidation) — Phase 5 DNA da aynı hook'a takılmalı, yoksa yeni sınav verified olduğunda DNA güncellenmez.
+- **BullMQ henüz yok** — node-cron study group matcher yetti. Phase 5 spaced repetition scheduler günlük çalışacaksa BullMQ + Redis şart.
 
 ---
 
 ## Teknik Borç (Geçmiş Fazlardan Kalan)
 
-- **Zod yok**: Phase 4'te eklemek için iyi fırsat.
-- **Error response tutarsız**: Phase 3'te `{ error: { code, message } }` tercih edildi bazı yerlerde, eski endpoint'ler hâlâ `{ error: "..." }` string. Phase 4 endpoint'lerinde standart union response'a geç.
-- **Prisma singleton**: `server/src/lib/prisma.ts` hâlâ global pattern'i yok. Phase 4 scope'una sığar.
-- **`pino` logger**: `console.log` scatter devam ediyor.
-- **bcrypt 5 → 6 major bump** — rate limit + audit borcu Phase 3'te non-breaking kısmı halloldu, bcrypt + vitest + vite upgradeleri kaldı. Phase 4 başında değerlendir.
+- **vitest 2→4 + vite 5→8 spike:** D1 açık, Phase 5 başında bir gün ayrılmalı. bcrypt 5→6 uyguladık, gerisi test/build breaking riski taşıyor.
+- **Per-worker test DB schema:** `singleFork: true` seri çalıştırma şimdilik 1.5sn suite için kabul edilebilir ama 200+ test'e çıkınca yavaşlayacak. Phase 5'te `test_worker_${processId}` schema migration pattern'ı.
+- **Error response tutarsızlığı** — Phase 4 endpoint'leri `{ error: { code, message } }` shape'inde; Phase 0/1 endpoint'leri hâlâ `{ error: "..." }` string. Phase 5'te global middleware'da normalize edilmeli.
+- **Prisma client regeneration Docker workflow** — host'ta migrate dev çalıştığında container `npx prisma generate` olmadan stale kalıyor. CLAUDE.md'ye dev notu eklenebilir.
+- **`pino` logger** — `console.log` dağınık devam ediyor. Phase 5'te structured logging.
 
 ---
 
-## AI Pipeline Notları (Phase 1+2+3'ten kalan + Phase 4 ekleri)
+## AI Pipeline Notları
 
-- **Model:** `gemini-2.5-flash-lite` stabil. Phase 4'te yeni Gemini use case çok değil (paylaşım summary olabilir).
-- **Free tier flag** çalışıyor; Phase 4 analytics ile cost gerçek sayılar gelecek.
-- **Retry/backoff** her yeni provider fonksiyonunda aynı pattern — Phase 4'te yeni eklenecek ise aynı skeleton.
-- **Prompt versioning:** 3 versiyon aktif — `STYLE_SUMMARY_VERSION`, `STUDY_PACK_VERSION="study-pack-v1"`, `MOCK_EXAM_VERSION="mock-exam-v1"`. Phase 4'te 4. eklenebilir.
+- **Gemini call'ları Phase 4'te artmadı:** 3 prompt versiyonu aktif (style-summary, study-pack-v1, mock-exam-v1). Phase 5 `reconstructExam` prompt shape hazır (`postExamReportService`'te skeleton) ama çağrı yok; premium tier açılınca opt-in kullanılacak.
+- **`gradeClassic` injection pattern** test edilebilirlik için ideal — Phase 5'te DNA prompt'ı için de aynı skeleton.
+- **Rate limit quota tablosu güncel:** Phase 4'te 4 yeni limiter eklendi (approval 30/gün, vote 50/gün, report 3/gün, group 5/gün). Phase 5 yeni endpoint'ler aynı factory'ye takılır.
 
 ---
 
 ## Seed / DB Notları
 
-- Phase 4 fixture: topluluk paylaşım mock data Phase 4 entegrasyon testinde inline. Seed'e ekleme zorunda değil — kullanıcı gerçekleştirdikçe oluşur.
-- Mock exam + study pack + student note tabloları production'da boş duracak (user-generated).
+- Phase 4 fixture seeder: `scripts/seed-phase-4-fixture.ts` (idempotent-ish, `phase4fixture-` prefix'li email + professor'ı temizler). Demo user'ın credit ledger'ı birikiyor — Phase 5 admin reset değerlendirilmeli.
+- Post-exam `POST_EXAM_SALT` env'de pin edilmeli (aggregation tutarlılığı sabit hash'e bağlı).
 
 ---
 
@@ -68,10 +68,10 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 ## Bir Sonraki Session İçin (Backend)
 
-1. Phase 4 schema tasarımı: 5 tablo (UserCredit / ExamApproval / QuestionVote / PostExamReport / StudyGroup).
-2. Prompt versioning pattern'ı için 4. versiyon yeri (gerekliyse).
-3. Zod introduction — paylaşım endpoint'leri input validation için.
-4. Rate limit factory'ye Phase 4 quota'larını ekle.
+1. Phase 5 schema tasarımı: `AcademicDNA` (long-lived vektör), `ConfidenceScore`, `GradeRecord`, `SpacedRepetition`.
+2. Prompt versioning pattern — `ACADEMIC_DNA_VERSION` ve `reconstructExam` versiyonu (Phase 4'ten miras shape'i devraldık).
+3. BullMQ + Redis karar noktası — spaced repetition scheduler node-cron'la mı BullMQ'yla mı?
+4. vitest/vite spike (D1 ertelendi).
 
 ---
 
@@ -83,3 +83,4 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 | 2026-04-17 | Phase 1 kapanışı — eski içerik arşive donduruldu, Phase 2 için reset. |
 | 2026-04-17 | Phase 2 kapanışı — içerik arşive donduruldu, Phase 3 için reset. |
 | 2026-04-17 | Phase 3 kapanışı — içerik arşive donduruldu, Phase 4 için reset. |
+| 2026-04-17 | Phase 4 kapanışı — içerik arşive donduruldu, Phase 5 için reset. |
