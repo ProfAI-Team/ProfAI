@@ -30,6 +30,7 @@ const DNAProfilePage = lazy(() => import('./pages/DNAProfilePage'));
 const ConfidencePage = lazy(() => import('./pages/ConfidencePage'));
 const GradesPage = lazy(() => import('./pages/GradesPage'));
 const CourseAdvisorPage = lazy(() => import('./pages/CourseAdvisorPage'));
+const ReviewsPage = lazy(() => import('./pages/ReviewsPage'));
 
 const App: React.FC = () => {
   return (
@@ -171,6 +172,14 @@ const App: React.FC = () => {
                     element={
                       <ProtectedRoute>
                         <CourseAdvisorPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/me/reviews"
+                    element={
+                      <ProtectedRoute>
+                        <ReviewsPage />
                       </ProtectedRoute>
                     }
                   />

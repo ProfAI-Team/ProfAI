@@ -13,6 +13,9 @@ import {
   ShieldCheck,
   UsersRound,
   LayoutDashboard,
+  Brain,
+  GraduationCap,
+  ListChecks,
   Menu,
   X,
   LogOut,
@@ -41,6 +44,9 @@ const NAV_LINKS: NavLink[] = [
   { to: '/approve-exams', labelKey: 'nav.approveExams', icon: ShieldCheck, authRequired: true },
   { to: '/study-groups', labelKey: 'nav.studyGroups', icon: UsersRound, authRequired: true },
   { to: '/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard, authRequired: true },
+  { to: '/me/profile', labelKey: 'nav.dnaProfile', icon: Brain, authRequired: true },
+  { to: '/me/grades', labelKey: 'nav.grades', icon: GraduationCap, authRequired: true },
+  { to: '/me/reviews', labelKey: 'nav.reviews', icon: ListChecks, authRequired: true },
 ];
 
 const Navbar: React.FC = () => {
