@@ -23,7 +23,7 @@
 | 2.11 | Async generation UX (polling + progress) + disclaimer banner + <500 kelime soft warning + KVKK notu | 3 saat | 2.10 | ✅ Tamam | `b05e8c4` |
 | 2.12 | i18n TR + EN copy (paralel agent sweep, hibrit ton) | 2 saat | 2.11 | ✅ Tamam | `7bdb7dc` |
 | 2.13 | Playwright MCP visual smoke (390/1440 × light/dark × upload/generating/ready) | 2 saat | 2.12 | ✅ Tamam | `359fe86` |
-| 2.14 | Phase 2 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle | 1 saat | Hepsi | ✅ Tamam | bu commit |
+| 2.14 | Phase 2 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle | 1 saat | Hepsi | ✅ Tamam | `e44be5a` |
 
 **Toplam:** ~40 saat tahmin çalışma · ~10-12 saat (gerçek tek-oturum). **İlerleme:** ✅ **14/14 task tamam — Phase 2 kapandı.**
 
