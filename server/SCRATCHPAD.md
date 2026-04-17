@@ -5,7 +5,7 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 > Kök / cross-cutting notlar → [`../SCRATCHPAD.md`](../SCRATCHPAD.md)
 > Frontend notları → [`../client/SCRATCHPAD.md`](../client/SCRATCHPAD.md)
 > Genel backend rehberi → [`./CLAUDE.md`](./CLAUDE.md)
-> Faz 2 arşivi: [`../docs/_archive/scratchpad-server-2026-04-17-phase-2.md`](../docs/_archive/scratchpad-server-2026-04-17-phase-2.md)
+> Faz 3 arşivi: [`../docs/_archive/scratchpad-server-2026-04-17-phase-3.md`](../docs/_archive/scratchpad-server-2026-04-17-phase-3.md)
 
 ---
 
@@ -20,46 +20,43 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 ## Şu An Üzerinde Çalışılan
 
-- Phase 2 tamamlandı. Backend tarafında Phase 3 başlıyor.
-- **Phase 3 scope (backend):** `MockExam` + `MockExamSession` schema, `prompts/mock-exam.ts`, `mockExamService.ts`, `POST /api/mock-exam/generate` + `POST /:id/submit` + `GET /:id/result`.
+- Phase 3 tamamlandı. Backend tarafında Phase 4 başlıyor.
+- **Phase 4 scope (backend):** 5 yeni tablo (`UserCredit`, `ExamApproval`, `QuestionVote`, `PostExamReport`, `StudyGroup`); paylaşım + oylama endpoint'leri; exam approval workflow; credit economy.
 
 ---
 
-## Phase 3 Hazırlık Notları
+## Phase 4 Hazırlık Notları
 
-- **Mock exam generation:** Phase 2 study pack pattern'ını birebir izle — cache-first (`userId + professorId + noteHash + promptVersion` benzeri), `aiCallTracker` `feature: "mock-exam"` flag'iyle, advisory lock veya unique-constraint-race-safe upsert.
-- **Gemini prompt:** Phase 2 study pack prompt'u iyi bir şablon. Tek fark: mock exam daha çok soru (15-25), opsiyonel süre limiti, puanlama için answer key detaylı lazım.
-- **Structured output schema:** `{ title, duration, questions: [...], scoring: { totalPoints, passingThreshold } }`. Question shape Phase 2'deki `PracticeQuestion`'ın supersetidir.
-- **Submit/scoring:** Client'tan gelen cevapları backend doğrular; rule-based puanlama (MC/TF kesin, CLASSIC için Gemini'den skor iste). `MockExamSession` tablosuna kaydet.
-- **Session state:** Timed exam için start/end timestamp'leri + per-question timing metrics. Dashboard için kullanışlı.
+- **Rate limit middleware kurulu** — Phase 4 paylaşım + oylama endpoint'lerine aynı factory ile quota ver (muhtemelen daha yüksek: paylaşım günde 10, oy günde 50 gibi).
+- **Prompt versioning pattern hazır** — Phase 4'te Gemini "exam approval summary" veya "post-exam aggregation" call'ları olursa aynı `VERSION` constant + cache key pattern'ı.
+- **Invalidation hook mock exam'a ekli** — Phase 4'te yeni kaynak (approved exam, voted question) eklendiğinde benzer şekilde style profile + study pack + mock exam cache'leri invalidate et.
+- **Zod entegrasyonu** — Phase 4 paylaşım endpoint'lerinin input şeması karmaşıklaşacak (post-exam report çok alanlı), Zod eklemek için ideal an.
 
 ---
 
 ## Teknik Borç (Geçmiş Fazlardan Kalan)
 
-- **Zod yok**: Input validation elle. Phase 3'te yeni endpoint'ler yazarken Zod eklemek için iyi fırsat.
-- **Error response tutarsız**: Bazı endpoint `{ error: "..." }`, bazı `{ status: ..., reason: ... }`. Phase 3'te union response'larda standardize et.
-- **Prisma singleton**: Hot-reload'da yeniden kurulabilir. `server/src/lib/prisma.ts` içinde `globalThis.prisma` pattern'i ekle (küçük refactor).
-- **`pino` logger yerleştirme** — `console.log` scatter devam ediyor.
-- **Rate limit yok** — Phase 3'te mock exam generation daha pahalı; Gemini cost koruma gerçekten lazım. **Phase 3 başı prioritize edilmeli.**
-- **Docker dev workflow bind mount** — Phase 1 + Phase 2'de her code/schema değişikliğinde `docker compose build` + `docker compose cp` gerekti. Phase 3 başı iş verimi için `./server:/app` + `node_modules` override ekle.
+- **Zod yok**: Phase 4'te eklemek için iyi fırsat.
+- **Error response tutarsız**: Phase 3'te `{ error: { code, message } }` tercih edildi bazı yerlerde, eski endpoint'ler hâlâ `{ error: "..." }` string. Phase 4 endpoint'lerinde standart union response'a geç.
+- **Prisma singleton**: `server/src/lib/prisma.ts` hâlâ global pattern'i yok. Phase 4 scope'una sığar.
+- **`pino` logger**: `console.log` scatter devam ediyor.
+- **bcrypt 5 → 6 major bump** — rate limit + audit borcu Phase 3'te non-breaking kısmı halloldu, bcrypt + vitest + vite upgradeleri kaldı. Phase 4 başında değerlendir.
 
 ---
 
-## AI Pipeline Notları (Phase 1+2'den kalan + Phase 3 ekleri)
+## AI Pipeline Notları (Phase 1+2+3'ten kalan + Phase 4 ekleri)
 
-- **Model:** `gemini-2.5-flash-lite` stabil. Phase 3'te mock exam için aynı model; daha uzun çıktı ama schema bağlayıcı.
-- **Free tier flag** (`GEMINI_FREE_TIER=true`) runtime'da. Phase 3 mock exam `costUsd` projection de otomatik hesaplanır (aynı `aiCallTracker`).
-- **Retry:** 503/429 için 3 retry (exponential backoff). Phase 3 mock exam de aynı.
-- **Prompt versioning:** `MOCK_EXAM_VERSION = "mock-exam-v1"` — Phase 2'deki `STUDY_PACK_VERSION` pattern'ını izle.
-- **Cache key:** `(userId, professorId, noteHash, promptVersion)` yeterli mi, yoksa session-bazlı (tek seferlik)? — Mock exam cache'lenmeyebilir (her session unique); önce karar ver.
+- **Model:** `gemini-2.5-flash-lite` stabil. Phase 4'te yeni Gemini use case çok değil (paylaşım summary olabilir).
+- **Free tier flag** çalışıyor; Phase 4 analytics ile cost gerçek sayılar gelecek.
+- **Retry/backoff** her yeni provider fonksiyonunda aynı pattern — Phase 4'te yeni eklenecek ise aynı skeleton.
+- **Prompt versioning:** 3 versiyon aktif — `STYLE_SUMMARY_VERSION`, `STUDY_PACK_VERSION="study-pack-v1"`, `MOCK_EXAM_VERSION="mock-exam-v1"`. Phase 4'te 4. eklenebilir.
 
 ---
 
 ## Seed / DB Notları
 
-- Phase 3'te seed'e mock exam fixture gerekmiyor — user-generated session, test'te inline oluştur.
-- Mevcut seed 30sn, `StudentNote` + `StudyPack` + `MockExam*` tabloları boş duracak.
+- Phase 4 fixture: topluluk paylaşım mock data Phase 4 entegrasyon testinde inline. Seed'e ekleme zorunda değil — kullanıcı gerçekleştirdikçe oluşur.
+- Mock exam + study pack + student note tabloları production'da boş duracak (user-generated).
 
 ---
 
@@ -71,10 +68,10 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 ## Bir Sonraki Session İçin (Backend)
 
-1. Phase 3 schema: `MockExam` + `MockExamSession` modelleri, migration.
-2. `prompts/mock-exam.ts` — structured output schema + hibrit ton.
-3. `mockExamService.ts` — generate + submit + score flow.
-4. Rate limit middleware (en azından mock exam endpoint'inde).
+1. Phase 4 schema tasarımı: 5 tablo (UserCredit / ExamApproval / QuestionVote / PostExamReport / StudyGroup).
+2. Prompt versioning pattern'ı için 4. versiyon yeri (gerekliyse).
+3. Zod introduction — paylaşım endpoint'leri input validation için.
+4. Rate limit factory'ye Phase 4 quota'larını ekle.
 
 ---
 
@@ -85,3 +82,4 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 | 2026-04-16 | Kuruldu. |
 | 2026-04-17 | Phase 1 kapanışı — eski içerik arşive donduruldu, Phase 2 için reset. |
 | 2026-04-17 | Phase 2 kapanışı — içerik arşive donduruldu, Phase 3 için reset. |
+| 2026-04-17 | Phase 3 kapanışı — içerik arşive donduruldu, Phase 4 için reset. |

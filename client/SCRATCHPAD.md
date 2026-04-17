@@ -5,7 +5,7 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 > Kök / cross-cutting notlar → [`../SCRATCHPAD.md`](../SCRATCHPAD.md)
 > Backend notları → [`../server/SCRATCHPAD.md`](../server/SCRATCHPAD.md)
 > Genel frontend rehberi → [`./CLAUDE.md`](./CLAUDE.md)
-> Faz 2 arşivi: [`../docs/_archive/scratchpad-client-2026-04-17-phase-2.md`](../docs/_archive/scratchpad-client-2026-04-17-phase-2.md)
+> Faz 3 arşivi: [`../docs/_archive/scratchpad-client-2026-04-17-phase-3.md`](../docs/_archive/scratchpad-client-2026-04-17-phase-3.md)
 
 ---
 
@@ -20,41 +20,41 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 
 ## Şu An Üzerinde Çalışılan
 
-- Phase 2 tamamlandı. Frontend tarafında Phase 3'e geçiş bekleniyor.
-- **Phase 3 scope (frontend kısmı):** mock exam generate sayfası, timed exam UI (zamanlayıcı + soru navigasyonu), mock exam result sayfası (genel skor + bölüm analizi + soru-bazlı dönüt).
+- Phase 3 tamamlandı. Frontend tarafında Phase 4'e geçiş bekleniyor.
+- **Phase 4 scope (frontend kısmı):** topluluk paylaşım UI (mock exam / study pack share sayfaları), soru oylama UI, exam approval wall, post-exam report form, study group index.
 
 ---
 
-## Phase 3 Hazırlık Notları
+## Phase 4 Hazırlık Notları
 
-- **Tabs component** — Phase 2'de yazıldı, mock exam result'ta yeniden kullanılır (genel skor / bölüm / soru analizi tab'ları).
-- **Markdown render** — `react-markdown` + `remark-gfm` + `@tailwindcss/typography` Phase 2'de eklendi, mock exam soru açıklamaları için hazır.
-- **Zamanlayıcı UI** — yeni component. `Timer` component'i lazım; tick + warning state + pause.
-- **Navigasyon iskeleti** — soru × soru gezinme, flag (şüpheli) işaretleme, mock exam submit dialog.
-- **State yönetimi** — Phase 3'te birden fazla sayfa arası mock exam session state var. TanStack Query eklemeyi ciddi değerlendir (client/SCRATCHPAD phase-2 arşivinde de önerilmişti).
+- **Route-level code split şart** — bundle 348KB gzipped (Phase 3 sonu). `React.lazy` ile pages/**.tsx lazy import'a çevrilecek; Phase 4 yeni sayfalar da baştan lazy.
+- **TanStack Query'ye tekrar bak** — Phase 4 paylaşım feed'i + oylama gerçek-zamanlı update isteyecek. `useEffect + useState + optimistic update` ile gidilebilir ama mutation + invalidation fayda sağlar.
+- **Reusable component'ler hazır:** Tabs (yeniden), ExamQuestionCard (public view mode lazım), ScoreGauge (profile page'te dashboard için), Tabs pattern, PracticeQuestionCard.
+- **Analytics events kayıtlı:** `share_*`, `vote_*` event isimlerini AnalyticsEvents sabitine ekle (Phase 3'te register etmedim).
 
 ---
 
 ## Düşünceler / Keşifler
 
-- Phase 2 StudyPackPage + UploadNotesPage pattern'ları kuruldu — Phase 3 aynı yapı: service + types + page. Hızlı gelecek.
-- `PracticeQuestionCard` yeniden kullanılabilir — mock exam'ın soru UI'ı bunun biraz genişlemiş versiyonu olabilir (timer + flag + nav).
+- Phase 3 session page'in localStorage draft + beforeunload + auto-submit pattern'ı, Phase 4 topluluk "taslak yorum" akışlarında yeniden kullanılabilir.
+- `useCountdown` Phase 4 study group timer'larında veya "oy verme süresi dolmadan" UX'inde kullanılabilir.
+- ReactMarkdown + `prose` her yerde — Phase 4 post-exam report markdown içerik için hazır.
 
 ---
 
-## UI Borçları (Geçmiş Fazlardan — Phase 3+ değerlendir)
+## UI Borçları (Geçmiş Fazlardan — Phase 4+ değerlendir)
 
-- **TanStack Query yok**, `useEffect + useState` devam. Phase 3 mock exam session state için gerçekten lazım olabilir.
-- **Route-level code split** yok. Phase 3 sonu bundle büyüyünce değerlendir.
-- **Recharts** hâlâ yüklü — mock exam result grafiklerinde kullanılabilir.
+- **TanStack Query** — Phase 3'te `useEffect + useState + localStorage` ile gittik; Phase 4 paylaşım feed'i + oylama mutation için daha uygun.
+- **Route-level code split** yok → Phase 4 başında öncelikli.
+- **Recharts** hâlâ yüklü ama Phase 3'te kullanılmadı — Phase 4 topluluk dashboard'u için kullanılabilir. Dynamic import et.
 
 ---
 
 ## Performans Notları
 
-- Phase 2 StudyPackPage cold 22sn (Gemini) · cache hit 14ms. UI tarafı <200ms.
-- Phase 3 mock exam generation muhtemelen 30-60sn sürecek — async job queue veya streaming düşünülebilir.
-- Bundle analiz hâlâ yapılmadı — Phase 3 sonu öncelik.
+- Phase 3 generate cold Gemini-bağımlı (30-60sn beklenti); cache hit 14ms (Phase 2 ile aynı profil).
+- Bundle 348KB gzipped — build uyarı veriyor, code split gerek.
+- Playwright smoke 8 senaryo, 0 bug.
 
 ---
 
@@ -66,9 +66,9 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 
 ## Bir Sonraki Session İçin (Frontend)
 
-1. Phase 3 breakdown'da frontend işlerinin sırası: muhtemelen 3.7+ (backend önce).
-2. `Timer` component pattern belirle (pause/resume, warning threshold).
-3. TanStack Query eklemeye karar ver.
+1. Phase 4 breakdown'da frontend işlerinin sırası (muhtemelen 4.X+).
+2. `React.lazy` + route-level code split tercihli olarak Phase 4 başında.
+3. TanStack Query eklemeye bu fazda karar ver.
 
 ---
 
@@ -79,3 +79,4 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 | 2026-04-16 | Kuruldu. |
 | 2026-04-17 | Phase 1 kapanışı — eski içerik arşive donduruldu, Phase 2 için reset. |
 | 2026-04-17 | Phase 2 kapanışı — içerik arşive donduruldu, Phase 3 için reset. |
+| 2026-04-17 | Phase 3 kapanışı — içerik arşive donduruldu, Phase 4 için reset. |

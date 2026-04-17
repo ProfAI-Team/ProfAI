@@ -4,7 +4,7 @@ Bu dosya **yaşayan çalışma defteridir.** Cross-cutting işler, proje geneli 
 
 > Frontend'e özel notlar → [`client/SCRATCHPAD.md`](./client/SCRATCHPAD.md)
 > Backend'e özel notlar → [`server/SCRATCHPAD.md`](./server/SCRATCHPAD.md)
-> Faz 2 arşivi (tarihsel bağlam): [`docs/_archive/scratchpad-kok-2026-04-17-phase-2.md`](./docs/_archive/scratchpad-kok-2026-04-17-phase-2.md)
+> Faz 3 arşivi (tarihsel bağlam): [`docs/_archive/scratchpad-kok-2026-04-17-phase-3.md`](./docs/_archive/scratchpad-kok-2026-04-17-phase-3.md)
 
 ---
 
@@ -20,15 +20,15 @@ Bu dosya **yaşayan çalışma defteridir.** Cross-cutting işler, proje geneli 
 
 ## Şu An Üzerinde Çalışılan
 
-- Phase 2 tamamlandı (2026-04-17, Phase 1'le aynı gün içinde tek oturum). Phase 3 başlıyor.
-- **Phase 3 — Mock Exam ve Tahminler**: hoca stili + study pack verisiyle simulasyon sınavı üretimi + sonuç analizi. Detay: [`docs/roadmap/phase-3-mock-exams.md`](./docs/roadmap/phase-3-mock-exams.md).
+- Phase 3 tamamlandı (2026-04-17, Phase 1+2'yle aynı gün içinde tek oturum). Phase 4 başlıyor.
+- **Phase 4 — Topluluk Katmanı**: paylaşım, oylama, exam approval, credit sistemi, post-exam report. Detay: [`docs/roadmap/phase-4-community.md`](./docs/roadmap/phase-4-community.md).
 
 ---
 
 ## Düşünceler / Keşifler
 
-- Phase 2'de structured output schema (responseSchema) çok işe yaradı — Phase 3 mock exam de aynı pattern'ı izlemeli.
-- 22 saniyelik sync generate tolere edildi (step progress + ETA UI ile) ama Phase 3 mock exam daha uzun sürebilir (daha çok soru). Async queue Phase 3'te değerlendirilmeli.
+- Phase 3'te rule-based karar (grading, prediction, panic plan) Gemini-only yaklaşımdan daha kontrollü + hızlı + ucuz çıktı. Phase 4'te paylaşım akışları için de rule-based defaults + opt-in Gemini upgrade pattern'ını sürdür.
+- Mock exam flow (generate → session → submit → result) Phase 2 study pack flow'undan daha karmaşık — localStorage draft + timer + sanitize edilmiş question shape + auto-submit gibi yeni primitive'ler ortaya çıktı. Phase 4 paylaşım UX'inde yeniden kullanılır.
 
 ---
 
@@ -42,19 +42,19 @@ Bu dosya **yaşayan çalışma defteridir.** Cross-cutting işler, proje geneli 
 
 Sadece "yeni ortaya çıkan" açık sorular buraya. Olgunlaştığında [`docs/tasks/open-questions.md`](./docs/tasks/open-questions.md)'e taşı.
 
-- **Dependabot: 24+ vulnerability** — Phase 1'den devam. `npm audit fix` ile toplu değerlendir (Phase 3 başı).
-- **Docker server src bind mount eksik** — Phase 1 ve Phase 2'de her schema/kod değişikliğinde `docker compose build` + `cp` workaround'u gerekti. Phase 3 başı iş verimi için ekle (`./server:/app` + `node_modules` override).
-- **Analytics kurulumu bekliyor** — Phase 1 ve Phase 2 retro'da da vurgulandı. Phase 3 öncesi (bu hafta) Plausible veya eşdeğer kurulmalı.
-- **Rate limit Phase 4 öncesi şart** — Phase 3'te mock exam generation daha pahalı; Gemini cost koruma gerçekten lazım.
+- **Bundle size 348KB gzipped** — Phase 2 retrosunda ve Phase 3 retrosunda da vurgulandı. Phase 4 başında route-level code split şart, çünkü Phase 4 paylaşım UI daha fazla component ekleyecek.
+- **Breaking npm audit kalanları** — bcrypt 5→6, vitest 2→4, vite 5→8. Phase 4 başında değerlendir; auth + test + build açısından her biri ayrı risk.
+- **TanStack Query kararı** — Phase 3'te gerekmedi, Phase 4 paylaşım + oylama state'inde tekrar bakıl.
+- **Zod eksik** — Phase 3 controller'larda elle validation yeterli oldu ama Phase 4 paylaşım endpoint'lerinde daha agresif input validation şart olacak.
 
 ---
 
 ## Bir Sonraki Session İçin
 
-1. [`docs/roadmap/phase-3-mock-exams.md`](./docs/roadmap/phase-3-mock-exams.md)'ı oku — schema + endpoint'ler.
-2. [`docs/roadmap/phase-2-study-packs.md`](./docs/roadmap/phase-2-study-packs.md) "Phase 3'e Geçerken Hazır Olanlar" bölümünü oku — altyapı listesi.
-3. `docs/tasks/phase-3-breakdown.md` yaz (Phase 1 + Phase 2 breakdown şablonunu takip et).
-4. İlk task: `MockExam` + `MockExamSession` Prisma schema + migration.
+1. [`docs/roadmap/phase-4-community.md`](./docs/roadmap/phase-4-community.md)'ı oku — scope + schema.
+2. [`docs/roadmap/phase-3-mock-exams.md`](./docs/roadmap/phase-3-mock-exams.md) "Phase 4'e Geçerken Hazır Olanlar" bölümünü oku.
+3. `docs/tasks/phase-4-breakdown.md` yaz (Phase 2+3 breakdown şablonunu takip et).
+4. İlk iş: Phase 4 schema değerlendirmesi (UserCredit, ExamApproval, QuestionVote, PostExamReport, StudyGroup — beş yeni tablo).
 
 ---
 
@@ -65,3 +65,4 @@ Sadece "yeni ortaya çıkan" açık sorular buraya. Olgunlaştığında [`docs/t
 | 2026-04-16 | Kuruldu; doc restructure tamam + Phase 1 planı hazır. |
 | 2026-04-17 | Phase 1 kapanışı — eski içerik `docs/_archive/scratchpad-kok-2026-04-17.md`'ye donduruldu, Phase 2 için reset. |
 | 2026-04-17 | Phase 2 kapanışı — içerik `docs/_archive/scratchpad-kok-2026-04-17-phase-2.md`'ye donduruldu, Phase 3 için reset. |
+| 2026-04-17 | Phase 3 kapanışı — içerik `docs/_archive/scratchpad-kok-2026-04-17-phase-3.md`'ye donduruldu, Phase 4 için reset. |

@@ -27,9 +27,9 @@
 | 3.15 | `PanicModePage` — "sınava kaç saat var?" form + priority study plan çıktısı | 3 saat | 3.11 | ✅ Tamam | `7c14212` |
 | 3.16 | i18n TR + EN copy sweep (paralel 2 agent, hibrit ton, `mockExam.*` namespace) | 3 saat | 3.15 | ✅ Tamam | `58144f5` |
 | 3.17 | Playwright MCP visual smoke (generate / exam / result / panic × 390/1440 × light/dark) | 2 saat | 3.16 | ✅ Tamam | in closeout commit |
-| 3.18 | Phase 3 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle | 1 saat | Hepsi | ⏳ | — |
+| 3.18 | Phase 3 kapanış: doc "gerçekleşen" + scratchpad archive + roadmap README güncelle | 1 saat | Hepsi | ✅ Tamam | (this commit) |
 
-**Toplam:** ~61 saat tahmin · Phase 1+2 retrosu ışığında gerçek: ~18-20 saat (2-3 oturum). **İlerleme:** 0/18.
+**Toplam:** ~61 saat tahmin · Gerçek: **~15-18 saat** tek oturum (Phase 1+2 ritmi korundu). **İlerleme:** ✅ **18/18 task tamam — Phase 3 kapandı.**
 
 ---
 
