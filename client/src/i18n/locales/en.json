@@ -9,6 +9,7 @@
     "upload": "Upload",
     "uploadNotes": "Study pack",
     "mockExam": "Mock exam",
+    "panic": "Panic mode",
     "dashboard": "Dashboard",
     "signIn": "Sign in",
     "signUp": "Sign up",
@@ -440,6 +441,33 @@
         "title": "Result not found",
         "body": "This session may have been deleted, or it belongs to a different account.",
         "cta": "Generate a new mock exam"
+      }
+    }
+  },
+  "panic": {
+    "badge": "Panic mode",
+    "title": "Exam's close. Let's build a plan.",
+    "subtitle": "Tell us how long you've got and which class. We'll split the window by the topics that matter most right now.",
+    "form": {
+      "course": "Course",
+      "hours": "Hours until exam",
+      "hoursValue": "{{hours}} h",
+      "hoursHint": "Min 30 min, max 72 h. Realistic — not optimistic.",
+      "submit": "Build my plan",
+      "submitting": "Building plan…"
+    },
+    "errors": {
+      "noCourse": "Pick a course first.",
+      "generic": "Something went wrong: {{message}}"
+    },
+    "plan": {
+      "title": "Your plan for the next {{hours}} hours",
+      "summary": "{{minutes}} focused minutes across {{steps}} topics. The rest is for breaks, food, and sleep.",
+      "emptySteps": "We don't have enough topic signal yet. Add one more mock exam to sharpen the plan.",
+      "disclaimer": "This is a suggestion, not a syllabus — adjust as you go.",
+      "practiceCta": "Warm up with a mock exam",
+      "step": {
+        "minutes": "{{minutes}} min"
       }
     }
   }

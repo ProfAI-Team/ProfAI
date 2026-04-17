@@ -16,6 +16,7 @@ import StudyPackPage from './pages/StudyPackPage';
 import MockExamGeneratePage from './pages/MockExamGeneratePage';
 import MockExamSessionPage from './pages/MockExamSessionPage';
 import MockExamResultPage from './pages/MockExamResultPage';
+import PanicModePage from './pages/PanicModePage';
 import DashboardPage from './pages/DashboardPage';
 
 const App: React.FC = () => {
@@ -77,6 +78,14 @@ const App: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <MockExamResultPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/panic"
+                element={
+                  <ProtectedRoute>
+                    <PanicModePage />
                   </ProtectedRoute>
                 }
               />

@@ -9,6 +9,7 @@
     "upload": "Yükle",
     "uploadNotes": "Çalışma Paketi",
     "mockExam": "Deneme Sınavı",
+    "panic": "Panik Modu",
     "dashboard": "Panel",
     "signIn": "Giriş Yap",
     "signUp": "Üye ol",
@@ -440,6 +441,33 @@
         "title": "Sonuç bulunamadı",
         "body": "Bu oturum silinmiş veya başka bir hesaba ait olabilir.",
         "cta": "Yeni deneme sınavı oluştur"
+      }
+    }
+  },
+  "panic": {
+    "badge": "Panik modu",
+    "title": "Sınav yakın. Bir plan kuralım.",
+    "subtitle": "Ne kadar zamanın kaldığını ve hangi dersi söyle. Kalan süreyi şu an en çok gereken konulara böleriz.",
+    "form": {
+      "course": "Ders",
+      "hours": "Sınava kaç saat kaldı",
+      "hoursValue": "{{hours}} sa",
+      "hoursHint": "Min 30 dk, maks 72 sa. Gerçekçi ol — iyimser değil.",
+      "submit": "Planımı oluştur",
+      "submitting": "Plan hazırlanıyor…"
+    },
+    "errors": {
+      "noCourse": "Önce dersi seç.",
+      "generic": "Bir şey ters gitti: {{message}}"
+    },
+    "plan": {
+      "title": "Önümüzdeki {{hours}} saat için planın",
+      "summary": "{{minutes}} odaklanmış dakika, {{steps}} konuya bölündü. Geri kalan mola, yemek ve uyku için.",
+      "emptySteps": "Henüz yeterli konu sinyali yok. Bir deneme sınavı daha ekle, plan keskinleşir.",
+      "disclaimer": "Bu bir öneri — müfredat değil. Gidişata göre uyarla.",
+      "practiceCta": "Deneme sınavıyla ısın",
+      "step": {
+        "minutes": "{{minutes}} dk"
       }
     }
   }

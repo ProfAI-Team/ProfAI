@@ -9,6 +9,7 @@ import {
   Upload as UploadIcon,
   Wand2,
   ClipboardCheck,
+  AlarmClockCheck,
   LayoutDashboard,
   Menu,
   X,
@@ -33,6 +34,7 @@ const NAV_LINKS: NavLink[] = [
   { to: '/upload', labelKey: 'nav.upload', icon: UploadIcon, authRequired: true },
   { to: '/upload-notes', labelKey: 'nav.uploadNotes', icon: Wand2, authRequired: true },
   { to: '/mock-exam/generate', labelKey: 'nav.mockExam', icon: ClipboardCheck, authRequired: true },
+  { to: '/panic', labelKey: 'nav.panic', icon: AlarmClockCheck, authRequired: true },
   { to: '/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard, authRequired: true },
 ];
 
