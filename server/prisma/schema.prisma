@@ -30,6 +30,12 @@ model User {
   mockExams        MockExam[]
   mockExamSessions MockExamSession[]
 
+  credit           UserCredit?
+  examApprovals    ExamApproval[]
+  questionVotes    QuestionVote[]
+  postExamReports  PostExamReport[]
+  studyGroups      StudyGroup[]      @relation("StudyGroupMembers")
+
   @@map("users")
 }
 
@@ -73,6 +79,17 @@ model Exam {
   uploadedBy   User          @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
   createdAt    DateTime      @default(now())
   analysis     ExamAnalysis?
+
+  // Phase 4 — community verification.
+  // `verified` flips to true when ≥3 distinct users (not the uploader) cast
+  // approvals; `flagged` flips when ≥3 distinct users cast a downvote.
+  // Verified exams are the only ones the style profile service considers
+  // as canonical — unverified ones still aggregate but with lower trust.
+  verified     Boolean       @default(false)
+  verifiedAt   DateTime?
+  flagged      Boolean       @default(false)
+
+  approvals    ExamApproval[]
 
   @@map("exams")
 }
@@ -317,4 +334,119 @@ model MockExamSession {
   @@index([userId])
   @@index([mockExamId])
   @@map("mock_exam_sessions")
+}
+
+// ========== Phase 4 — Community Layer ==========
+
+// One balance row per user. `history` is a Json[] whose entries look like
+//   { type: "earn" | "spend", amount: number, reason: string, refId?: string, at: ISO }
+// so we don't need a separate ledger table for the spec's cadence (rule-based
+// earn/spend, no partial refunds). Upgrading to a proper ledger is a Phase 5
+// concern once volumes grow or admin adjustments enter the picture.
+model UserCredit {
+  userId    String   @id
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  balance   Int      @default(0)
+  history   Json[]
+  updatedAt DateTime @updatedAt
+
+  @@map("user_credits")
+}
+
+// One approval row per (exam, user) — composite PK enforces the "one vote
+// per person per exam" rule. `approved: true` counts toward the 3-threshold
+// that flips `Exam.verified`; `approved: false` counts toward `Exam.flagged`.
+// The uploader can never vote on their own exam (checked in service layer).
+model ExamApproval {
+  examId    String
+  exam      Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  approved  Boolean
+  // Optional short note captured on a downvote; used by future moderation
+  // (Phase 5) but never surfaced publicly.
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@id([examId, userId])
+  @@index([examId])
+  @@index([userId])
+  @@map("exam_approvals")
+}
+
+// Vote against any AI-generated question. `questionId` is a synthetic key
+// built by the caller:
+//   studyPack:<packId>:q<idx>
+//   mockExam:<examId>:q<idx>
+// `direction` is -1 / +1 (0 is not stored). `cameOnExam` is independent of
+// direction — a student can upvote a useful question AND mark that it
+// appeared on the real exam later. Both signals feed the "verified" pool.
+model QuestionVote {
+  questionId  String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  direction   Int
+  cameOnExam  Boolean?
+  createdAt   DateTime @default(now())
+
+  @@id([questionId, userId])
+  @@index([questionId])
+  @@index([userId])
+  @@map("question_votes")
+}
+
+// Post-exam autopsy. One row per (user, professor, examDate) — unique so a
+// student cannot skew aggregates by resubmitting. `anonymizedHash` is a
+// salted SHA-256 of (userId + examDate + POST_EXAM_SALT) — aggregation
+// views derive from this, never from `userId`.
+model PostExamReport {
+  id                 String   @id @default(uuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  professorId        String
+  courseId           String?
+  examDate           DateTime
+  // [{ topic: string, frequency: "once" | "few" | "many", difficulty: 1..5 }]
+  reportedTopics     Json
+  notes              String?
+  // Optional self-reported final grade (0-100) + letter. Feeds the Phase 4
+  // "A students strategy" aggregation when ≥5 high performers have reported.
+  selfReportedGrade  Int?
+  selfReportedLetter String?
+  anonymizedHash     String
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, professorId, examDate])
+  @@index([professorId])
+  @@index([examDate])
+  @@map("post_exam_reports")
+}
+
+enum StudyGroupStatus {
+  SUGGESTED
+  ACTIVE
+  CLOSED
+}
+
+// Study group — either auto-suggested by the matcher job or manually
+// joined. `members` is an implicit many-to-many via the StudyGroupMembers
+// relation. `externalLink` is opt-in and must pass the whitelist
+// (whatsapp / discord) validated in the service layer.
+model StudyGroup {
+  id           String           @id @default(uuid())
+  professorId  String
+  courseId     String?
+  examDate     DateTime?
+  externalLink String?
+  status       StudyGroupStatus @default(SUGGESTED)
+
+  members      User[]           @relation("StudyGroupMembers")
+
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([professorId])
+  @@index([examDate])
+  @@map("study_groups")
 }
