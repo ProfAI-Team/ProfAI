@@ -14,7 +14,7 @@
 | 4.2 | Zod introduction — `lib/validation.ts` + mock-exam/study-pack endpoint'lerine retrofit (Phase 3 borcu) | 3 saat | — | ✅ Tamam | `a09d52d` |
 | 4.3 | TanStack Query v5 eklenmesi + `QueryClientProvider` + `mockExamService`'e ilk entegrasyon (Phase 3 borcu) | 3 saat | — | ✅ Tamam | `49603c3` |
 | 4.4 | Breaking npm upgrades değerlendirmesi (bcrypt 5→6 ✓; vitest/vite Phase 5'e ertelendi) | 3 saat | — | ✅ Tamam | `5b827ab` |
-| 4.5 | Prisma schema + migration — `UserCredit` + `ExamApproval` + `QuestionVote` + `PostExamReport` + `StudyGroup` (5 tablo) | 3 saat | — | ⏳ | — |
+| 4.5 | Prisma schema + migration — `UserCredit` + `ExamApproval` + `QuestionVote` + `PostExamReport` + `StudyGroup` (5 tablo) | 3 saat | — | ✅ Tamam | `5b3845e` |
 | 4.6 | Credit economy servisi — `earn` / `spend` / `history`, balance middleware, config tablosu | 4 saat | 4.5 | ⏳ | — |
 | 4.7 | Exam approval servisi — `vote` / 3-eşik / verified badge propagation + `Exam.verified` flag | 4 saat | 4.5, 4.6 | ⏳ | — |
 | 4.8 | Question vote servisi — up/down/cameOnExam, `verified` havuz derivation, anti-brigade rate-limit | 3 saat | 4.5, 4.6 | ⏳ | — |
