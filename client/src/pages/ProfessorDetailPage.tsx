@@ -21,6 +21,7 @@ import StyleHero, { StyleHeroSkeleton } from '../components/StyleHero';
 import MetricsCards, { MetricsCardsSkeleton } from '../components/MetricsCards';
 import EvolutionChart, { EvolutionChartSkeleton } from '../components/EvolutionChart';
 import TopicBadges, { TopicBadgesSkeleton } from '../components/TopicBadges';
+import AggregatedExamInsights from '../components/AggregatedExamInsights';
 import {
   professorService,
   type StyleProfileResponse,
@@ -372,6 +373,12 @@ const ProfessorDetailPage: React.FC = () => {
               </motion.div>
             ))}
           </div>
+        </section>
+      )}
+
+      {id && (
+        <section className="mt-8 space-y-4">
+          <AggregatedExamInsights professorId={id} />
         </section>
       )}
     </div>
