@@ -8,6 +8,7 @@
     "professors": "Professors",
     "upload": "Upload",
     "uploadNotes": "Study pack",
+    "mockExam": "Mock exam",
     "dashboard": "Dashboard",
     "signIn": "Sign in",
     "signUp": "Sign up",
@@ -303,5 +304,43 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "back": "Back"
+  },
+  "mockExam": {
+    "generate": {
+      "badge": "Mock exam",
+      "title": "Sit a mock in your professor's style",
+      "subtitle": "Pick the course, optionally point to a study pack, and we'll build a timed practice exam matching their usual shape.",
+      "selectCourse": "Course",
+      "selectCourseHint": "The professor is picked up from the course automatically.",
+      "selectPack": "Study pack (optional)",
+      "packOptionNone": "None — use the professor's style only",
+      "packOption": "{{topicCount}} topics · {{date}}",
+      "noPacks": "No study pack saved for this professor yet — the exam will be built from the professor's style alone.",
+      "advancedShow": "Customise length and duration",
+      "advancedHide": "Hide options",
+      "questionCount": "Questions",
+      "duration": "Duration",
+      "durationValue": "{{minutes}} min",
+      "disclaimer": "This is AI-generated practice, not a real exam. Treat the questions as a warm-up.",
+      "submit": "Generate mock exam",
+      "submitting": "Generating…",
+      "generating": "Building your mock exam",
+      "generatingEta": "Usually 30-60 seconds — we're shaping questions in your professor's style.",
+      "errors": {
+        "noCourse": "Pick a course first.",
+        "styleMissing": "This professor doesn't have enough analyzed exams yet. Add one and try again.",
+        "packNotFound": "That study pack couldn't be found.",
+        "notesNotFound": "The notes linked to that pack can't be found.",
+        "generic": "Something went wrong: {{message}}"
+      }
+    },
+    "session": {
+      "timer": {
+        "ariaLabel": "Time left: {{time}}",
+        "pause": "Pause",
+        "resume": "Resume",
+        "paused": "Paused"
+      }
+    }
   }
 }

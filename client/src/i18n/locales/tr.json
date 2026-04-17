@@ -8,6 +8,7 @@
     "professors": "Profesörler",
     "upload": "Yükle",
     "uploadNotes": "Çalışma Paketi",
+    "mockExam": "Deneme Sınavı",
     "dashboard": "Panel",
     "signIn": "Giriş Yap",
     "signUp": "Üye ol",
@@ -303,5 +304,43 @@
     "cancel": "İptal",
     "delete": "Sil",
     "back": "Geri"
+  },
+  "mockExam": {
+    "generate": {
+      "badge": "Deneme sınavı",
+      "title": "Hocanın tarzında deneme çöz",
+      "subtitle": "Dersi seç, istersen bir çalışma paketine bağla — hocanın alışkın olduğu şekilde, süreli bir deneme sınavı kuralım.",
+      "selectCourse": "Ders",
+      "selectCourseHint": "Hoca dersten otomatik seçilir.",
+      "selectPack": "Çalışma paketi (opsiyonel)",
+      "packOptionNone": "Yok — sadece hocanın stili yeter",
+      "packOption": "{{topicCount}} konu · {{date}}",
+      "noPacks": "Bu hoca için kayıtlı çalışma paketin yok — sınav yalnızca hocanın stiline göre üretilecek.",
+      "advancedShow": "Soru sayısı ve süreyi ayarla",
+      "advancedHide": "Ayarları gizle",
+      "questionCount": "Soru sayısı",
+      "duration": "Süre",
+      "durationValue": "{{minutes}} dk",
+      "disclaimer": "Bu AI üretimi bir deneme — gerçek sınav değil. Soruları ısınma olarak değerlendir.",
+      "submit": "Deneme sınavı oluştur",
+      "submitting": "Oluşturuluyor…",
+      "generating": "Deneme sınavın hazırlanıyor",
+      "generatingEta": "Genelde 30-60 saniye sürer — hocanın stiline göre soruları şekillendiriyoruz.",
+      "errors": {
+        "noCourse": "Önce dersi seç.",
+        "styleMissing": "Bu hoca için henüz yeterince analiz edilmiş sınav yok. Biraz sınav ekle, sonra tekrar dene.",
+        "packNotFound": "Bu çalışma paketi bulunamadı.",
+        "notesNotFound": "Pakete bağlı notlar bulunamadı.",
+        "generic": "Bir şey ters gitti: {{message}}"
+      }
+    },
+    "session": {
+      "timer": {
+        "ariaLabel": "Kalan süre: {{time}}",
+        "pause": "Duraklat",
+        "resume": "Devam",
+        "paused": "Durdu"
+      }
+    }
   }
 }
