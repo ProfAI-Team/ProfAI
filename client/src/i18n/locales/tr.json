@@ -194,6 +194,54 @@
       "summer": "Yaz"
     }
   },
+  "studyPack": {
+    "backToUpload": "Yeni paket oluştur",
+    "headerBadge": "Kişisel çalışma paketi",
+    "headerTitleShort": "Çalışma paketin hazır",
+    "headerSubtitle": "{{count}} konu özeti, {{questionCount}} pratik soru, {{patternCount}} hoca trick'i",
+    "cacheBadge": "Önbellekten geldi",
+    "freshBadge": "Az önce üretildi",
+    "disclaimer": "Bu içerik yapay zeka tarafından üretildi. Önemli tanımları ders materyalinden doğrula.",
+    "toleranceWarning": "Bu pakette soru tipi dağılımı hocanın alışkanlığından biraz kaydı — yine de kullanışlı, ama ders notuyla karşılaştırarak bak.",
+    "tabs": {
+      "summary": "Konu özeti",
+      "practice": "Pratik sorular",
+      "trick": "Hoca trick'leri"
+    },
+    "summary": {
+      "empty": "Bu paket için konu özeti üretilememiş.",
+      "sectionTitle": "Ana konu özeti"
+    },
+    "practice": {
+      "empty": "Bu paket için pratik soru üretilememiş.",
+      "showAnswer": "Cevabı göster",
+      "hideAnswer": "Cevabı gizle",
+      "rationaleLabel": "Neden bu cevap?",
+      "topicLabel": "Konu",
+      "difficultyLabel": "Zorluk",
+      "typeLabels": {
+        "MC": "Çoktan seçmeli",
+        "CLASSIC": "Klasik",
+        "TF": "Doğru/Yanlış"
+      }
+    },
+    "trick": {
+      "empty": "Bu hocaya özgü bir kalıp yakalanamadı. Daha çok sınav biriktikçe netleşir.",
+      "header": "Bu hoca nasıl sorar?",
+      "subtitle": "Geçmiş sınav kalıbından çıkardığımız kısa hatırlatıcılar"
+    },
+    "meta": {
+      "generatedAt": "{{when}} üretildi",
+      "expiresIn": "{{hours}} saat geçerli",
+      "professorLabel": "Hoca"
+    },
+    "notFound": {
+      "title": "Bu paket bulunamadı",
+      "body": "Paket silinmiş ya da sana ait olmayabilir.",
+      "cta": "Yeni paket oluştur"
+    },
+    "loading": "Paketin hazırlanıyor…"
+  },
   "uploadNotes": {
     "badge": "Kişisel çalışma paketi",
     "title": "Kendi notunu hocanın tarzıyla eşle",
