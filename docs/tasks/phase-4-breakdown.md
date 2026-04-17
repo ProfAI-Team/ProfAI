@@ -24,7 +24,7 @@
 | 4.12 | Topluluk endpoint'leri — `/api/credits/*` / `/api/exams/:id/approve` / `/api/questions/:id/vote` / `/api/post-exam-reports` / `/api/study-groups` (Zod + rate-limit + credit middleware) | 4 saat | 4.6–4.11 | ✅ Tamam | `6bc6e8e` |
 | 4.13 | Backend unit + integration testler (credit state machine, 3-eşik verified, cameOnExam precedence, rate-limit brigade, aggregation k-anonymity) | 5 saat | 4.12 | ✅ Tamam | `e319554` |
 | 4.14 | Client types + services + shared components (`VoteButtons`, `CreditBadge`, `VerifiedBadge`, `ShareDialog`) | 4 saat | 4.12 | ✅ Tamam | `6ed253b` |
-| 4.15 | Credit dashboard sayfası + Navbar balance widget + kazanç/harcama history tab | 3 saat | 4.14 | ⏳ | — |
+| 4.15 | Credit dashboard sayfası + Navbar balance widget + kazanç/harcama history tab | 3 saat | 4.14 | ✅ Tamam | `4c75402` |
 | 4.16 | Exam approval wall — upload queue, approve/reject CTA, verified filter switch | 4 saat | 4.14 | ⏳ | — |
 | 4.17 | Question vote UI — `ExamQuestionCard` + study-pack practice soruları içine entegrasyon + "sınavda çıktı" rozeti | 3 saat | 4.14 | ⏳ | — |
 | 4.18 | Post-exam report form + `/post-exam-reports/new` + hoca detay sayfasında aggregated view | 4 saat | 4.14 | ⏳ | — |
