@@ -72,6 +72,8 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       name: user.name,
       university: user.university,
       department: user.department,
+      role: user.role,
+      universityAccountId: user.universityAccountId,
     },
     token,
   });
@@ -104,6 +106,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       name: user.name,
       university: user.university,
       department: user.department,
+      role: user.role,
+      universityAccountId: user.universityAccountId,
     },
     token,
   });
@@ -123,6 +127,10 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
       university: true,
       department: true,
       createdAt: true,
+      // Phase 7 (7.11 + 7.20) — client RoleGuard + Navbar depend on
+      // the role + tenant being present on /me responses.
+      role: true,
+      universityAccountId: true,
     },
   });
 

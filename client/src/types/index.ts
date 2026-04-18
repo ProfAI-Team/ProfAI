@@ -5,6 +5,16 @@ export interface User {
   university: string | null;
   department: string | null;
   createdAt?: string;
+  // Phase 7 (7.20) — role + tenant surface to the client so the Navbar
+  // + RoleGuard can render the right menu. Defaults safely; the server
+  // sends these from /api/auth/me.
+  role?:
+    | 'STUDENT'
+    | 'HOCA'
+    | 'TUTOR'
+    | 'UNIVERSITY_ADMIN'
+    | 'SUPER_ADMIN';
+  universityAccountId?: string | null;
 }
 
 export interface Professor {
