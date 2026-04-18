@@ -12,7 +12,7 @@ Phase 3+4+5+6 retro düzeni korundu: **borçlar önce** (9), backend core ortada
 
 | # | Task | Tahmini | Bağımlılık | Durum | Commit |
 |---|------|---------|------------|-------|--------|
-| 7.1 | Cache strategy karar + Redis singleton'a migrate (T1 kapanışı) — BullMQ Redis instance'ını cache layer'a extend et | 3 saat | — | ✅ Tamam | (commit pending) |
+| 7.1 | Cache strategy karar + Redis singleton'a migrate (T1 kapanışı) — BullMQ Redis instance'ını cache layer'a extend et | 3 saat | — | ✅ Tamam | `c33b1d1` |
 | 7.2 | File storage R2 migration (T2 kapanışı) — `@aws-sdk/client-s3` + R2 credential'ları + signed URL helper + local `/uploads` → R2 migration script + BullMQ GC job | 5 saat | 7.1 | ⬜ | — |
 | 7.3 | pgvector extension + MockExam similarity refactor — 6.13 raw ILIKE path'ini embed + cosine distance'a çevir; tutor matching için de embedding kolonu | 4 saat | — | ⬜ | — |
 | 7.4 | Hesap silme endpoint `/api/users/me/data` + cascade coverage testi (KVKK follow-up) — voice/ocr/lecture/push + yeni Phase 7 tabloları | 2 saat | — | ⬜ | — |
