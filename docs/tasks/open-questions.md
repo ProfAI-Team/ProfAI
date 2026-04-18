@@ -69,14 +69,11 @@ Karar bekleyen konular. **Yaşayan doküman** — karar verildiğinde "✅ Kapat
 
 ## Teknik Kararlar
 
-### T1. Cache strategy — Redis vs in-process
+### ✅ T1. Cache strategy — Redis seçildi (2026-04-19, Phase 7 task 7.1)
 
-- **Durum:** Açık.
-- **Seçenekler:**
-  - A) In-process LRU (tek instance, basit).
-  - B) Redis (scalable, multi-instance hazır).
-- **Eğilim:** A → Phase 3'e kadar; B Phase 3+.
-- **Karar zamanı:** Phase 3 başı.
+- **Karar:** B — Redis-backed `server/src/lib/cache.ts` helper, in-memory Map fallback test + dev ortamları için.
+- **Gerekçe:** Phase 5 BullMQ'nun getirdiği Redis singleton zaten çalışıyordu; cache için ikinci bir runtime dependency eklemek yerine aynı instance'tan (farklı bağlantı, `maxRetriesPerRequest` default) yararlandık. Phase 7 tutor matching + marketplace search hot path'leri multi-instance'ta tutarsız olmasın diye Redis şart. Prisma-backed cache'ler (AcademicDNA, ProfessorStyleProfile, CourseAdvisor) zaten multi-instance safe — oldukları yerde kaldılar.
+- **Etki:** `server/src/lib/cache.ts` (`cacheGet` / `cacheSet` / `cacheDel` / `cacheInvalidate` + `__resetCacheForTests`); `REDIS_URL` yoksa veya `RUN_INLINE_QUEUE=1` test modunda in-memory Map; key prefix `profai:cache:`; pattern invalidation SCAN stream ile; Redis hatası → implicit miss (fetcher çalışır); 6 unit test yeşil.
 
 ### T2. File storage — Local vs S3/R2
 
