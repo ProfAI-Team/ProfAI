@@ -27,9 +27,10 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 ## Teknik Borç (Phase 7 retro'dan gelen)
 
-- **Docker server Prisma generate drift** — migration sonrası container'daki `@prisma/client` güncellenmiyor. Dockerfile `RUN npx prisma generate` eklenmeli; CI'da da aynı sorun. Phase 8 başı 1 saatlik iş.
+- ~~**Docker server Prisma generate drift**~~ ✅ 2026-04-19 `b7be394` — docker-compose server command'a `npx prisma generate &&` prepend; container restart fresh client üretiyor. Prod runner Dockerfile zaten immutable image'a baked generate içeriyor, değişmedi.
 - **App.tsx route mount order** — dnaRoutes + multimodalRoutes global `router.use(authenticate)` nedeniyle mount sırası kritik. Phase 8'de router-level auth yerine endpoint-level authenticate middleware çağrısı daha temiz olabilir.
-- **Parallel test flake** (credit-service + post-exam-report) — Phase 6 retro'dan devam; 2/3 flake. beforeEach cleanup düzeltilmeli ya da DB-backed unit'ler singleFork'a alınmalı. Phase 8 başı.
+- **Parallel test flake** (credit-service + post-exam-report) — ✅ Kısmen 2026-04-19 `14a536d` — `applyDelta` için P2034 (SQLSTATE 40001 serialization_failure) 3 retry + 20/40ms backoff wrapper + 4 yeni DB-free unit test. `parallel spends don't race past zero` artık retry ile stabil.
+- **pgvector test worker schema drift** (YENİ, Phase 7 retro alt-bug'ı) — `tests/globalSetup.ts` her worker schema için `migrate deploy` çalıştırıyor. `CREATE EXTENSION IF NOT EXISTS vector` ilk run sonrası extension public'te kaldığı için subsequent worker schema'larda no-op olur; Prisma `?schema=X` search_path'e public eklemediğinden phase-7 migration `vector(768)` type'ını bulamıyor. Sonuç: `test_worker_1` phase-7 migration'ı `finished_at=null` (failed state), `test_worker_2+` schema'ları hiç yaratılmıyor. Paralel mode'da post-exam-report worker 2'ye düşünce P2003 FK violation (users tablosu public'te, user_credits FK validate edilemiyor). Tek worker modunda 14/14 geçiyor. Phase 8 başı cleanup: `20260419003000_pgvector_extension` migration'ı `CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA public;` + `20260419004500_phase_7_b2b_marketplace` içinde `public.vector(768)` tam nitelikli type. Migration checksum drift için `prisma migrate resolve --rolled-back` önce çalıştırılmalı.
 - **reconstructExamSummary dışı AI call site'lar** — DNA narrative, course advisor, study pack, mock exam, grading hâlâ Gemini-only. Claude structured output API olgunlaşınca Phase 8'de migrate.
 - **`enableOfflineQueue: false`** (`lib/cache.ts`) — Redis bağlantı kopmasında cache write'ları silent drop; get hatası logla + null dön (implicit miss). Production'da Redis uptime monitoring ile birleşik Phase 8'de değerlendirmeli.
 - **Multer memory storage** — upload middleware disk storage'a yazıyor, R2 provider'a stream etmiyor; `lib/storage.ts` abstraction var ama existing controller'lar local path kullanıyor. Phase 8'de Multer → memory storage → storage.put(buffer) pipeline'ı aktifleştir.
@@ -67,9 +68,9 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 ## Bir Sonraki Session İçin (Backend)
 
 1. Phase 8 spec taslağı.
-2. Docker Prisma generate CI/Dockerfile fix (Phase 7 retro borç).
+2. pgvector test worker schema drift — phase-7 migration'da `public.vector(768)` tam nitelikli + `migrate resolve --rolled-back` rehberi. Paralel test suite stabilize olur.
 3. Multer → storage.put() pipeline (Phase 7 retro borç).
-4. Test flake cleanup (Phase 6/7 retro).
+4. App.tsx route mount order — endpoint-level authenticate geçişi (Phase 7 retro borç).
 
 ---
 
@@ -80,3 +81,4 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 | 2026-04-16 | Kuruldu. |
 | 2026-04-17 | Phase 1-5 kapanışları arşive donduruldu. |
 | 2026-04-19 | Phase 6 + Phase 7 kapanışı — içerik arşive donduruldu, Phase 8 için reset. |
+| 2026-04-19 | Phase 7 retro: Docker Prisma drift (`b7be394`) + credit P2034 retry (`14a536d`) kapandı; yeni retro borç pgvector test-schema drift dokümante edildi. |

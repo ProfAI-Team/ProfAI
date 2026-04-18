@@ -26,7 +26,7 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 
 ## UI Borçları (Phase 7 sonundan kalan)
 
-- **TutorListPage auth gate** — `tutorService.match()` logged-out kullanıcı için 401 → login redirect. `isAuthenticated` gate + public preview mode (puan + konu + fiyat aralığı yeterli) Phase 8 başı.
+- ~~**TutorListPage auth gate**~~ ✅ 2026-04-19 `2755ce1` — backend `optionalAuthenticate` + service studentId nullable; logged-out visitor "Giriş yap, DNA uyumunu gör" banner + filtered classical rubric (subject/rating/price). Smoke 3 path 200 (anonymous, logged-in, invalid token).
 - **Navbar overflow** — 16+ link 1440 viewport'ta cramped; Phase 7 smoke'ta "Tekrar" link'i cut off. Menu grouping ("Öğrenci" / "B2B" / "Araçlar") dropdown Phase 8.
 - **Checkout iyzico iframe** — sandbox stub URL şu an basit `<iframe>`; gerçek iyzico'nun cross-origin + postMessage handshake'i Phase 8'de eklenecek.
 - **MarkdownRenderer Suspense fallback** — 7.7'de lazy chunk, fallback `<div>{markdown}</div>` düz metin gösteriyor; Phase 8'de skeleton shimmer daha iyi olabilir.
@@ -70,3 +70,4 @@ Frontend'e özel yaşayan çalışma defteri. UI, component, i18n, theme, perfor
 | 2026-04-16 | Kuruldu. |
 | 2026-04-17 | Phase 1-5 kapanışları arşive donduruldu. |
 | 2026-04-19 | Phase 6 + Phase 7 kapanışı — içerik arşive donduruldu, Phase 8 için reset. |
+| 2026-04-19 | TutorListPage auth gate retro borç kapandı (`2755ce1`); logged-out visitor public preview akışıyla browse edebiliyor. |
