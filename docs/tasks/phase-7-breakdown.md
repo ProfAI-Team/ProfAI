@@ -25,7 +25,7 @@ Phase 3+4+5+6 retro düzeni korundu: **borçlar önce** (9), backend core ortada
 | 7.11 | RBAC middleware — `requireRole(["HOCA", "TUTOR", "UNIVERSITY_ADMIN", "SUPER_ADMIN"])` + hierarchy + authentikator'a role yüklemesi | 2 saat | 7.10 | ✅ Tamam | `9581201` |
 | 7.12 | Premium + feature flag registry extend — `TUTOR_MATCHING` / `MARKETPLACE_PRO` / `UNIVERSITY_ADMIN` / `HOCA_PORTAL` flag'leri + iyzico sandbox kill switch | 1 saat | 7.10 | ✅ Tamam | `4e519fc` |
 | 7.13 | Payment gateway servisi — iyzico primary + Stripe fallback abstraction + webhook handler + retry queue + 3DS flow + e-Fatura stub | 6 saat | 7.10, 7.12 | ✅ Tamam | `45565ef` |
-| 7.14 | Tutor servisi — profile CRUD + availability slot + matching engine (DNA compatibility + subject/level filter + rating) + booking lifecycle | 5 saat | 7.3, 7.10, 7.12 | ⬜ | — |
+| 7.14 | Tutor servisi — profile CRUD + availability slot + matching engine (DNA compatibility + subject/level filter + rating) + booking lifecycle | 5 saat | 7.3, 7.10, 7.12 | ✅ Tamam | `409f303` |
 | 7.15 | Marketplace servisi — MarketplaceItem CRUD + moderation approval queue + commission calc (notes %30 / tutoring %15) + pgvector arama | 4 saat | 7.3, 7.10, 7.12 | ⬜ | — |
 | 7.16 | B2B institutional servisi — hoca portal (verified badge + anonim student feedback + "en çok zorlanan 3 konu" k≥5) + üniversite admin (aggregate insights + seat mgmt + subscription tier) | 5 saat | 7.10, 7.12 | ⬜ | — |
 | 7.17 | REST endpoints — tutor + marketplace + payment + university + hoca (25+ route) + Zod + RBAC + 5 yeni limiter | 5 saat | 7.13–7.16 | ⬜ | — |
