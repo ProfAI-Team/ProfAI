@@ -1,10 +1,16 @@
 import { Request, Response, NextFunction } from "express";
+import { UserRole } from "@prisma/client";
 import jwt from "jsonwebtoken";
 
 interface JwtPayload {
   id: string;
   email: string;
   name: string;
+  // Phase 7 (7.11) — new tokens carry the role + tenant. Old tokens
+  // (pre-rollout) don't — we default to STUDENT on decode, which keeps
+  // existing users logged in without a forced re-login.
+  role?: UserRole;
+  universityAccountId?: string | null;
 }
 
 export const authenticate = (
@@ -28,6 +34,8 @@ export const authenticate = (
       id: decoded.id,
       email: decoded.email,
       name: decoded.name,
+      role: decoded.role ?? UserRole.STUDENT,
+      universityAccountId: decoded.universityAccountId ?? null,
     };
 
     next();

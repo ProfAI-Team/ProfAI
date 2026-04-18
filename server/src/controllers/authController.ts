@@ -7,12 +7,26 @@ import { badRequest, conflict, notFound, unauthorized } from "../lib/AppError";
 const JWT_SECRET = process.env.JWT_SECRET || "default-secret-change-me";
 const JWT_EXPIRATION = process.env.JWT_EXPIRATION || "7d";
 
-function generateToken(user: { id: string; email: string; name: string }): string {
+function generateToken(user: {
+  id: string;
+  email: string;
+  name: string;
+  role?: string;
+  universityAccountId?: string | null;
+}): string {
   const options: jwt.SignOptions = {
     expiresIn: JWT_EXPIRATION as any,
   };
   return jwt.sign(
-    { id: user.id, email: user.email, name: user.name },
+    {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      // Phase 7 (7.11) — role + tenant baked into the JWT so every
+      // request's RBAC check is a decode, not another DB round-trip.
+      role: user.role ?? "STUDENT",
+      universityAccountId: user.universityAccountId ?? null,
+    },
     JWT_SECRET,
     options
   );
