@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { Type } from "@google/genai";
 
 import prisma from "../lib/prisma";
@@ -184,15 +185,21 @@ async function searchMockExamQuestions(
   if (keywords.length === 0) return [];
   // MockExam.questions is a Json column; we do a coarse pre-filter via
   // any-keyword ILIKE against the cast-to-text form so we don't pull
-  // every row into memory. A Phase 7 pgvector move replaces this
-  // path with a real similarity join.
-  const conditions = keywords
-    .map((kw) => `questions::text ILIKE '%${kw.replace(/'/g, "''")}%'`)
-    .join(" OR ");
-  const candidates = await prisma.$queryRawUnsafe<
+  // every row into memory. Phase 7 (7.3) swapped the ad-hoc string
+  // splicing for `Prisma.sql` tagged fragments so the keyword values
+  // bind through the driver — no single-quote escape dance needed.
+  const likeFragments = keywords.map(
+    (kw) => Prisma.sql`questions::text ILIKE ${`%${kw}%`}`
+  );
+  const whereClause = Prisma.join(likeFragments, " OR ");
+  const takeCount = limit * 2;
+  const candidates = await prisma.$queryRaw<
     Array<{ id: string; questions: unknown; professorId: string | null }>
   >(
-    `SELECT id, questions, "professorId" FROM mock_exams WHERE ${conditions} LIMIT ${limit * 2}`
+    Prisma.sql`SELECT id, questions, "professorId"
+               FROM mock_exams
+               WHERE ${whereClause}
+               LIMIT ${takeCount}`
   );
 
   const profIds = Array.from(

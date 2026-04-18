@@ -36,6 +36,15 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 ---
 
+## Test Suite Flake (Phase 7'de Keşfedildi, 2026-04-19)
+
+- **Semptom:** `credit-service.test.ts` "history is returned newest-first" + `post-exam-report-service.test.ts` "refuses to disclose aggregates below k-anonymity" test'leri 2/3 oranında `PrismaClientKnownRequestError: Transaction failed due to a write conflict or a deadlock` ile düşüyor (4 worker paralel çalıştığında).
+- **Kaynak:** Serializable isolation + aynı worker'a denk düşen iki DB-backed test seed collision. Per-worker schema isolation (6.1) farklı worker'lar için tutarsızlığı önlüyor ama aynı worker'da ardışık test'ler arası cleanup eksik.
+- **Durum:** 7.3 öncesinden geliyor (git stash ile kontrol edildi, 2/3 flake oranı aynı). Phase 7 işimi blokluyor değil; backend test yeşil olması beklenen durumlarda tek tek re-run yeterli.
+- **Çözüm önerisi:** `beforeEach` içinde seed'den etkilenen tabloları deleteMany ile temizle, ya da her test kendi user ID'sini üretsin. Phase 7 7.19 (backend test) sırasında ele alınabilir veya Phase 8'e ayrı borç olarak taşınabilir.
+
+---
+
 ## Teknik Borç (Geçmiş Fazlardan Kalan)
 
 - **T1 cache strategy** — in-process LRU vs Redis kararı Phase 7 başında verilecek. Mevcut BullMQ connection Redis'e bağlı; cache için de aynı instance kullanılabilir.

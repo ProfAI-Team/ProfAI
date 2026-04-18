@@ -40,7 +40,11 @@ services:
       - profai-network
 
   db:
-    image: postgres:15
+    # Phase 7 (7.3) swapped postgres:15 for the pgvector-bundled image so
+    # the vector extension can be enabled by Prisma migrations. Existing
+    # volumes are ABI-compatible (same Postgres 15 engine); the extension
+    # install happens on first migrate after container rebuild.
+    image: pgvector/pgvector:pg15
     ports:
       - "5432:5432"
     environment:
