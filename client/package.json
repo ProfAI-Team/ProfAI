@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.99.0",
+    "@types/katex": "^0.16.8",
     "axios": "^1.6.7",
     "boring-avatars": "^2.0.4",
     "class-variance-authority": "^0.7.1",
@@ -17,6 +18,7 @@
     "framer-motion": "^12.38.0",
     "i18next": "^26.0.5",
     "i18next-browser-languagedetector": "^8.2.1",
+    "katex": "^0.16.45",
     "lucide-react": "^1.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
