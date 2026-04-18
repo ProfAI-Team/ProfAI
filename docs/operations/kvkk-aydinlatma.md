@@ -1,6 +1,6 @@
 # KVKK Aydınlatma Metni (Taslak — Avukat Review Bekliyor)
 
-> ⚠️ **Avukat review bekliyor (2026-04-XX).** Bu metin teknik ekip tarafından hazırlanan taslaktır; üretim ortamına alınmadan önce KVKK uzmanı bir avukat tarafından incelenmesi ve onaylanması gerekir. Phase 6 task 6.25.
+> ⚠️ **Avukat review tur 2 bekliyor (2026-04-19).** Bu metin teknik ekip tarafından hazırlanan taslaktır; üretim ortamına alınmadan önce KVKK uzmanı bir avukat tarafından incelenmesi ve onaylanması gerekir. Phase 6 task 6.25 + Phase 7 task 7.29 (B2B + marketplace + payments veri akışı genişletmesi).
 
 ## Amaç
 
@@ -53,6 +53,33 @@ ProfAI (`profai.local` / mobil uygulama, bundan sonra "Platform") üzerinden hiz
 - **Ne toplanıyor:** Tarayıcınızın push endpoint URL'si + p256dh + auth anahtarları + user-agent.
 - **Amaç:** Yalnızca siz opt-in olduğunuzda günlük tekrar bildirimi göndermek.
 - **Saklama süresi:** Siz opt-out olana veya tarayıcı aboneliği iptal edene kadar.
+
+### D. Phase 7 ile Genişleyen Veriler (2026-04-19)
+
+#### D.1. Tutor Marketplace Verileri
+- **Ne toplanıyor:** Tutor başvurusu yaparsanız — biyografi, saatlik ücret, uzmanlık alanları, müsaitlik takvimi, puanlama geçmişi (öğrenciler tarafından verilen), tamamlanan seans sayısı. Öğrenci olarak — booking geçmişi (hangi tutor, ne zaman, ne kadar süre, ödenen miktar, değerlendirme puanı + isteğe bağlı yorum).
+- **3. taraf paylaşımı:** Tutorlar profillerini arama sonuçlarında herkese açık görüntülerler. Öğrencilerin kimlikleri + değerlendirmelerindeki tanımlayıcı bilgiler tutor'a gösterilmez (aggregate rating + anonim yorum).
+- **Saklama süresi:** Hesabınız aktif olduğu sürece. Hesap silme isteğinizle birlikte tamamlanmamış tutoring oturumları iptal edilir ve profil verisi kaldırılır.
+- **Embedding vektörü:** Tutor profili onaylandığında bio + uzmanlık metinlerinin 768-boyutlu anlamsal gösterimi (Gemini text-embedding-004) veritabanında saklanır. Eşleştirme motoru öğrenci sorgusuyla cosine distance hesaplar — orijinal metin zaten kayıtlıdır, embedding tersine çevrilemez bir temsil.
+
+#### D.2. Marketplace Satın Alma ve Notları
+- **Ne toplanıyor:** Satıcı olarak — listelediğiniz notların başlığı + açıklaması + önizleme metni + dosya içeriği + satış sayıları. Alıcı olarak — satın alma geçmişi + inecek olan dosyanın linkine (signed URL) erişim hakkı.
+- **Moderasyon:** Yayınlanmadan önce ProfAI ekibi inceler. Reddedilmiş içerikler kayıtlarda tutulur ama herkese açık aramaya girmez.
+- **Saklama süresi:** Satıcı olarak listeden kaldırana kadar. Satın alındıysa, alıcı indirme hakkını kaybetmez (satıcı listelemeyi kaldırsa bile geçmiş alımlar erişilebilir kalır).
+
+#### D.3. Ödeme Bilgileri
+- **Ne toplanıyor:** Siparişin türü (abonelik / marketplace / tutoring), tutar (kuruş), ödeme sağlayıcının (iyzico) verdiği işlem ID'si, durumu (pending / succeeded / failed / refunded), ödeme tamamlama zamanı.
+- **Kart bilgileri saklanıyor mu?** **Hayır.** Ödeme iyzico'nun 3D Secure akışı üzerinden yapılır; kart numarası, CVV, son kullanma tarihi ProfAI sunucularına hiçbir zaman gelmez.
+- **Saklama süresi:** Phase 7 MVP'de hesabınızı silmeniz durumunda Payment kayıtları cascade olarak kaldırılır. Türk ticari defter tutma yükümlülüğünün gerektirdiği anonimleştirme + ayrı arşiv Phase 8 kapsamında tamamlanacak; bu sürüm avukat review tur 2'de netleştirilmelidir.
+
+#### D.4. Üniversite Hesabı (B2B)
+- **Ne toplanıyor:** Üniversite, öğrenci hesaplarını kendi tenant'ına atayabilir (seat). Üniversite admini aggregate performans görebilir ama bireysel öğrenci verisi üstünde yetki YOKTUR. Aggregate metrikler k≥5 kuralıyla gösterilir; 5 kişiden az veri → "yetersiz" banner.
+- **Saklama süresi:** Tenant sözleşmesi süresince. Seat'i kaldırırsanız, öğrenci hesabınız ProfAI'de B2C (kişisel) kullanıcı olarak devam eder — hesap silinmez.
+- **SSO verileri:** Üniversite adminince yüklenen SAML metadata şimdilik Phase 7'de sadece saklanır; gerçek SSO akışı Phase 8'de aktifleşir.
+
+#### D.5. Hoca Portalı
+- **Ne toplanıyor:** Hoca email doğrulaması için .edu veya .edu.tr domain kontrolü + SUPER_ADMIN manuel inceleme. Onaylanmış hoca, ProfAI'de kendi Professor kaydı olan derslerdeki aggregate performans verilerini görür (öğrenci kimlikleri gösterilmez, min 5 öğrenci şartı).
+- **Saklama süresi:** Hoca hesabı aktif olduğu sürece. Profilini silerseniz, mevcut dersler + öğrenci istatistikleri üstünden hoca ilişkisi kaldırılır.
 
 ## Verilerin İşlenme Amaçları
 
@@ -118,4 +145,5 @@ Bu metin değiştiğinde en üstte tarih güncellenir ve kayıtlı e-postanıza 
 
 | Versiyon | Tarih | Notlar |
 |----------|-------|--------|
-| Taslak | 2026-04-19 | Phase 6 task 6.25 — voice / OCR / lecture / multimodal kapsamları eklendi. Avukat review bekliyor. |
+| Taslak | 2026-04-19 | Phase 6 task 6.25 — voice / OCR / lecture / multimodal kapsamları eklendi. Avukat review tur 1. |
+| Taslak v2 | 2026-04-19 | Phase 7 task 7.29 — D. bölümü (tutor marketplace + marketplace notları + ödeme + üniversite B2B + hoca portalı) genişledi. Avukat review tur 2. Payment retention politikası (hesap silme vs ticari defter yükümlülüğü) Phase 8'e ertelendi. |
