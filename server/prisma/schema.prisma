@@ -13,6 +13,20 @@ enum ExamType {
   MAKEUP
 }
 
+// Phase 7 (task 7.10) — role hierarchy used by the RBAC middleware. The
+// default is STUDENT so every existing user keeps their current access.
+// HOCA + TUTOR are opt-in upgrades (HOCA via email-domain verification,
+// TUTOR via profile application + SUPER_ADMIN approve). UNIVERSITY_ADMIN
+// is provisioned per `UniversityAccount` row. SUPER_ADMIN is internal
+// operator access — set manually via a DB update.
+enum UserRole {
+  STUDENT
+  HOCA
+  TUTOR
+  UNIVERSITY_ADMIN
+  SUPER_ADMIN
+}
+
 model User {
   id               String            @id @default(uuid())
   email            String            @unique
@@ -50,6 +64,22 @@ model User {
   pushDevices   PushDevice[]
   pushOptIn     Boolean        @default(false)
 
+  // Phase 7 (7.10) — role + soft-tenant pointer. Role drives RBAC; a
+  // null `universityAccountId` means the user isn't attached to a B2B
+  // tenant (the standard B2C path). Hard multi-tenancy (separate
+  // schemas per university) is Phase 8+ enterprise work.
+  role                UserRole           @default(STUDENT)
+  universityAccountId String?
+  universityAccount   UniversityAccount? @relation(fields: [universityAccountId], references: [id], onDelete: SetNull)
+
+  tutor                Tutor?
+  tutoringAsStudent    TutoringSession[] @relation("TutoringAsStudent")
+  marketplaceItems     MarketplaceItem[]
+  marketplaceApprovals MarketplaceItem[] @relation("MarketplaceApprovedBy")
+  payments             Payment[]
+
+  @@index([universityAccountId])
+  @@index([role])
   @@map("users")
 }
 
@@ -650,4 +680,140 @@ model PushDevice {
 
   @@index([userId])
   @@map("push_devices")
+}
+
+// ======================================================================
+// Phase 7 — B2B + marketplace + payments (task 7.10)
+// ======================================================================
+
+// A verified tutor on the marketplace. `specializations` + `availability`
+// are Json because the tutor picks arbitrary subject/level tuples; the
+// matching engine (tutorMatchingService) reads them rather than the DB
+// doing the filtering. `embedding` holds the bio+specializations vector
+// used by pgvector cosine search — populated lazily by the marketplace
+// indexing worker (7.18) after approve.
+model Tutor {
+  id              String    @id @default(uuid())
+  userId          String    @unique
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio             String    @db.Text
+  hourlyRate      Int // TL
+  specializations Json // [{ subject, level, tags[] }]
+  availability    Json // [{ dayOfWeek, startHour, endHour }]
+  rating          Float?
+  totalSessions   Int       @default(0)
+  verifiedAt      DateTime?
+  status          String    @default("pending") // pending | active | suspended
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  sessions TutoringSession[]
+
+  @@index([status])
+  @@index([rating])
+  @@map("tutors")
+}
+
+// A single student ↔ tutor booking. Status transitions:
+//   scheduled → completed | cancelled | no_show | disputed
+// `paymentId` links 1:1 to the Payment row that funded the session.
+model TutoringSession {
+  id          String    @id @default(uuid())
+  tutorId     String
+  tutor       Tutor     @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  studentId   String
+  student     User      @relation("TutoringAsStudent", fields: [studentId], references: [id], onDelete: Cascade)
+  scheduledAt DateTime
+  durationMin Int
+  status      String // scheduled | completed | cancelled | disputed | no_show
+  rating      Float?
+  feedback    String?
+  price       Int // TL
+  meetingUrl  String?
+  paymentId   String?   @unique
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  @@index([tutorId, scheduledAt])
+  @@index([studentId, scheduledAt])
+  @@index([status])
+  @@map("tutoring_sessions")
+}
+
+// Marketplace listing — student-authored notes or study guides for sale.
+// `fileUrl` stores the R2 object key (or /uploads path in local mode)
+// produced by storage.put(); the controller converts it to a signed URL
+// only after purchase verification. `embedding` is populated by the
+// indexing worker after approve so the search endpoint can rank via
+// pgvector cosine distance.
+model MarketplaceItem {
+  id           String   @id @default(uuid())
+  sellerId     String
+  seller       User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  type         String // "notes" | "study_guide"
+  title        String
+  description  String   @db.Text
+  price        Int // TL
+  fileUrl      String
+  previewText  String?  @db.Text
+  tags         Json // string[]
+  rating       Float?
+  totalSales   Int      @default(0)
+  approved     Boolean  @default(false)
+  approvedById String?
+  approvedBy   User?    @relation("MarketplaceApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([approved, type])
+  @@index([sellerId])
+  @@map("marketplace_items")
+}
+
+// Payment row — covers subscription, marketplace purchase, tutoring
+// session. `amount` is kuruş (TRY's smallest unit) so we never lose
+// fractional lira to float arithmetic. `externalId` is the iyzico /
+// Stripe transaction id and carries a unique constraint so webhook
+// retries are idempotent. `metadata` stashes the feature-specific link
+// (`marketplaceItemId`, `tutoringSessionId`, `subscriptionPlan`) so
+// the webhook handler can fan out side-effects.
+model Payment {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        String // "subscription" | "marketplace" | "tutoring"
+  amount      Int // kuruş
+  currency    String    @default("TRY")
+  status      String // pending | succeeded | failed | refunded | disputed
+  provider    String // "iyzico" | "stripe"
+  externalId  String?   @unique
+  metadata    Json?
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  @@index([userId, createdAt])
+  @@index([status])
+  @@index([type])
+  @@map("payments")
+}
+
+// B2B tenant. A UniversityAccount groups Users (seats) under a
+// subscription tier. `seats` is the head count the contract paid for;
+// the university admin UI enforces this at add-user time. `ssoMetadata`
+// parks the uploaded SAML XML until 7.25 completes — real SP<->IdP
+// wiring is Phase 8.
+model UniversityAccount {
+  id           String   @id @default(uuid())
+  universityId String   @unique // slug: "aydin" | "bogazici" | ... (matches seed data)
+  contactEmail String
+  tier         String // basic | pro | enterprise
+  seats        Int
+  renewalDate  DateTime
+  ssoMetadata  String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  users User[]
+
+  @@map("university_accounts")
 }
