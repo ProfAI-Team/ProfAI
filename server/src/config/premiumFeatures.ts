@@ -13,12 +13,24 @@
 export type PremiumFeatureKey =
   | "COURSE_ADVISOR"
   | "EXAM_RECONSTRUCT"
-  | "DNA_NARRATIVE_GEMINI";
+  | "DNA_NARRATIVE_GEMINI"
+  // Phase 6 task 6.9 — multimodal + voice.
+  | "VOICE_TUTOR"
+  | "OCR_PRO"
+  | "LECTURE_TRANSCRIBE"
+  | "MULTIMODAL_SEARCH";
 
 interface FeatureConfig {
   key: PremiumFeatureKey;
   description: string;
   enabled: boolean;
+  /**
+   * Default daily cap for the feature. Consumed by the rate-limit
+   * middleware (6.15) + per-feature quota services (e.g. VoiceUsage).
+   * `null` = unlimited at the middleware layer; a feature-specific
+   * service may still enforce a tighter cap.
+   */
+  dailyCap: number | null;
 }
 
 export const PREMIUM_FEATURES: Record<PremiumFeatureKey, FeatureConfig> = {
@@ -26,19 +38,51 @@ export const PREMIUM_FEATURES: Record<PremiumFeatureKey, FeatureConfig> = {
     key: "COURSE_ADVISOR",
     description: "Course compatibility scoring on /me/course-advisor",
     enabled: true,
+    dailyCap: 20,
   },
   EXAM_RECONSTRUCT: {
     key: "EXAM_RECONSTRUCT",
     description: "Gemini reconstruction of post-exam aggregates",
     enabled: true,
+    dailyCap: 5,
   },
   DNA_NARRATIVE_GEMINI: {
     key: "DNA_NARRATIVE_GEMINI",
     description: "AI narrative layer on the DNA profile page",
     enabled: false, // Phase 6 ships the narrative prompt; off by default.
+    dailyCap: 3,
+  },
+  VOICE_TUTOR: {
+    key: "VOICE_TUTOR",
+    description: "Real-time voice tutor chat with Gemini Live (30min/day)",
+    enabled: true,
+    // Minute budget lives in VoiceUsage; this is the session-start cap.
+    dailyCap: 20,
+  },
+  OCR_PRO: {
+    key: "OCR_PRO",
+    description: "Gemini multimodal OCR with LaTeX extraction",
+    enabled: true,
+    dailyCap: 20,
+  },
+  LECTURE_TRANSCRIBE: {
+    key: "LECTURE_TRANSCRIBE",
+    description: "60min lecture audio → transcript + key topics + exam hints",
+    enabled: true,
+    dailyCap: 2,
+  },
+  MULTIMODAL_SEARCH: {
+    key: "MULTIMODAL_SEARCH",
+    description: "Formula photograph → similar exam questions",
+    enabled: true,
+    dailyCap: 10,
   },
 };
 
 export function isFeatureEnabled(key: PremiumFeatureKey): boolean {
   return PREMIUM_FEATURES[key]?.enabled ?? false;
+}
+
+export function getDailyCap(key: PremiumFeatureKey): number | null {
+  return PREMIUM_FEATURES[key]?.dailyCap ?? null;
 }
