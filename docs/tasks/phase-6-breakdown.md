@@ -37,7 +37,7 @@ Phase 3+4+5 retro düzeni korundu: **borçlar önce** (8), backend core ortada (
 | 6.23 | Push notification registration UI — settings drawer + browser prompt + test gönderim | 2 saat | 6.14, 6.17 | ✅ Tamam | `2e32fd6` |
 | 6.24 | i18n TR + EN copy sweep — `voice.*` / `ocr.*` / `lectures.*` / `multimodal.*` / `pushNotifications.*` / `privacy.*` | 3 saat | 6.18–6.23 | ✅ Tamam | `29b2d1d` |
 | 6.25 | KVKK aydınlatma metni güncellemesi (H1) — voice transcript + OCR PII kapsamı; avukat review placeholder | 2 saat | 6.11, 6.10 | ✅ Tamam (avukat review bekliyor) | `6574641` |
-| 6.26 | Playwright MCP visual smoke + `scripts/seed-phase-6-fixture.ts` (+ reset-demo hook) | 3 saat | 6.24 | ⬜ | — |
+| 6.26 | Playwright MCP visual smoke + `scripts/seed-phase-6-fixture.ts` (+ reset-demo hook) | 3 saat | 6.24 | ✅ Tamam | `167e83a` |
 | 6.27 | Phase 6 kapanışı — phase-6-multimodal.md retro + roadmap README + scratchpad archive + open-questions | 1 saat | Hepsi | ⬜ | — |
 
 **Toplam:** ~90 saat tahmin · Phase 1-5 ritmiyle 1-2 tam oturum beklenir.
