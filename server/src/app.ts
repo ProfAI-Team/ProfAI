@@ -18,6 +18,7 @@ import dnaRoutes from "./routes/dnaRoutes";
 import multimodalRoutes from "./routes/multimodalRoutes";
 import pushRoutes from "./routes/pushRoutes";
 import accountRoutes from "./routes/accountRoutes";
+import b2bRoutes from "./routes/b2bRoutes";
 import { errorMiddleware } from "./middleware/errorMiddleware";
 
 export function createApp(): express.Express {
@@ -69,6 +70,14 @@ export function createApp(): express.Express {
   app.use("/api/study-pack", studyPackRoutes);
   app.use("/api/mock-exam", mockExamRoutes);
   app.use("/api", communityRoutes);
+  // Phase 7 task 7.17 — B2B + marketplace + payments sit behind a single
+  // router so the namespace layering (tutors / tutoring / marketplace /
+  // payments / university / hoca) can read from one file. Mounted BEFORE
+  // dnaRoutes + multimodalRoutes because those install `router.use(
+  // authenticate)` globally and would 401 the public browse endpoints
+  // (GET /api/marketplace/items, GET /api/tutors/:id) before they reach
+  // the handler.
+  app.use("/api", b2bRoutes);
   app.use("/api", dnaRoutes);
   app.use("/api", multimodalRoutes);
   app.use("/api/push", pushRoutes);
