@@ -43,6 +43,22 @@ const TutorDetailPage = lazy(() => import('./pages/TutorDetailPage'));
 const TutoringSessionPage = lazy(
   () => import('./pages/TutoringSessionPage')
 );
+const MarketplaceListPage = lazy(
+  () => import('./pages/MarketplaceListPage')
+);
+const MarketplaceItemPage = lazy(
+  () => import('./pages/MarketplaceItemPage')
+);
+const HocaDashboardPage = lazy(() => import('./pages/HocaDashboardPage'));
+const UniversityAdminPage = lazy(
+  () => import('./pages/UniversityAdminPage')
+);
+const CheckoutPageModule = lazy(() => import('./pages/CheckoutPage'));
+const CheckoutCallbackLoader = lazy(() =>
+  import('./pages/CheckoutPage').then((m) => ({
+    default: m.CheckoutCallbackPage,
+  }))
+);
 
 const App: React.FC = () => {
   return (
@@ -235,6 +251,46 @@ const App: React.FC = () => {
                     element={
                       <ProtectedRoute>
                         <TutoringSessionPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/marketplace"
+                    element={<MarketplaceListPage />}
+                  />
+                  <Route
+                    path="/marketplace/:id"
+                    element={<MarketplaceItemPage />}
+                  />
+                  <Route
+                    path="/hoca/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <HocaDashboardPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/university"
+                    element={
+                      <ProtectedRoute>
+                        <UniversityAdminPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/checkout"
+                    element={
+                      <ProtectedRoute>
+                        <CheckoutPageModule />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/checkout/callback"
+                    element={
+                      <ProtectedRoute>
+                        <CheckoutCallbackLoader />
                       </ProtectedRoute>
                     }
                   />
