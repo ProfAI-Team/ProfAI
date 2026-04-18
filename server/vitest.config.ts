@@ -1,4 +1,12 @@
+import os from "node:os";
 import { defineConfig } from "vitest/config";
+
+// Phase 6 (task 6.1): vitest 2→4 upgrade flipped per-worker schema isolation
+// to the default path. Each fork binds to its own `test_worker_<poolId>`
+// Postgres schema so DB-backed tests can run in parallel without the
+// Serializable (40001) retries that drove Phase 4 to singleFork.
+const defaultWorkers = Math.min(os.cpus().length, 4);
+const WORKER_COUNT = Number(process.env.VITEST_WORKER_COUNT) || defaultWorkers;
 
 export default defineConfig({
   test: {
@@ -9,24 +17,12 @@ export default defineConfig({
     // being set at run time — see tests/integration/* for the skip guard.
     testTimeout: 30_000,
     hookTimeout: 60_000,
-    // Phase 5: per-worker Postgres schema isolation is available via the
-    // `VITEST_WORKER_COUNT` env var. When unset (default), we stay on
-    // singleFork — our ~150 test suite runs in ~2s and re-migrating 4
-    // schemas on every run adds ~40s of first-run overhead that is only
-    // worth paying when the suite grows past ~300 tests.
-    //
-    // Set `VITEST_WORKER_COUNT=4` to opt into parallel execution with
-    // schema isolation. Phase 6's vitest v4 upgrade is expected to unlock
-    // this by default.
     pool: "forks",
-    poolOptions: {
-      forks: process.env.VITEST_WORKER_COUNT
-        ? {
-            maxForks: Number(process.env.VITEST_WORKER_COUNT),
-            minForks: 1,
-          }
-        : { singleFork: true },
-    },
+    // vitest 4 reads `maxWorkers` / `minWorkers` at the top level; pool ID
+    // handed to each worker is clamped to `[1, maxWorkers]`, which is what
+    // our per-worker schema setup relies on.
+    maxWorkers: WORKER_COUNT,
+    minWorkers: 1,
     globalSetup: ["./tests/globalSetup.ts"],
     setupFiles: ["./tests/setup.ts"],
   },

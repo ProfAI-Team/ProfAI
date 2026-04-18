@@ -1,12 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock the heavy PDF + DOCX extractors so unit tests run without needing
-// sample binary fixtures — control flow is what we're validating.
+// sample binary fixtures — control flow is what we're validating. vitest 4
+// tightened `vi.mock` factory constructor semantics, so we expose named
+// `vi.fn` handles via `vi.hoisted` and wrap them in a plain class.
+const pdfMocks = vi.hoisted(() => ({
+  getText: vi.fn(),
+  destroy: vi.fn(),
+}));
+
 vi.mock("pdf-parse", () => ({
-  PDFParse: vi.fn().mockImplementation(() => ({
-    getText: vi.fn().mockResolvedValue({ text: "parsed pdf content here" }),
-    destroy: vi.fn().mockResolvedValue(undefined),
-  })),
+  PDFParse: class {
+    getText = pdfMocks.getText;
+    destroy = pdfMocks.destroy;
+  },
 }));
 
 vi.mock("mammoth", () => ({
@@ -64,7 +71,10 @@ describe("hashText", () => {
 
 describe("extractText", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    pdfMocks.getText.mockReset();
+    pdfMocks.destroy.mockReset();
+    pdfMocks.getText.mockResolvedValue({ text: "parsed pdf content here" });
+    pdfMocks.destroy.mockResolvedValue(undefined);
   });
 
   it("extracts UTF-8 plain text", async () => {
@@ -106,14 +116,7 @@ describe("extractText", () => {
   });
 
   it("wraps underlying extraction failures", async () => {
-    const pdfParseModule = await import("pdf-parse");
-    vi.mocked(pdfParseModule.PDFParse).mockImplementationOnce(
-      () =>
-        ({
-          getText: vi.fn().mockRejectedValue(new Error("bad PDF")),
-          destroy: vi.fn().mockResolvedValue(undefined),
-        }) as unknown as InstanceType<typeof pdfParseModule.PDFParse>
-    );
+    pdfMocks.getText.mockRejectedValueOnce(new Error("bad PDF"));
 
     await expect(
       extractText(Buffer.from("x"), "application/pdf")

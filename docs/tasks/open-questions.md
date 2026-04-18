@@ -224,16 +224,16 @@ Karar bekleyen konular. **Yaşayan doküman** — karar verildiğinde "✅ Kapat
 - **Gerekçe:** Flash 503 error veriyordu production testlerde; flash-lite stabil + %40 ucuz.
 - **Etki:** `server/.env`, `GEMINI_MODEL` env var, `current-stack.md`.
 
-### ✅ D1. Breaking npm upgrade kalanları (Phase 5'te kısmen kapatıldı, 2026-04-17)
+### ✅ D1. Breaking npm upgrade kalanları (Phase 6 task 6.1 ile tamamen kapatıldı, 2026-04-19)
 
 - **Uygulanan (Phase 4):** bcrypt 5→6 — hash API aynı, Node 20 LTS minimum karşılanıyor; 86 backend testi yeşil.
 - **Uygulanan (Phase 5, task 5.1):** vite 5→8 + `@vitejs/plugin-react` 4→6 — client `npm run build` + dev server (`vite v8.0.8 ready in 114ms`) smoke geçti. Bonus: initial chunk 546KB/177KB → 124KB/40KB gzipped (v8'in geliştirilmiş tree-shaking'i).
-- **Ertelendi (Phase 6'ya):** **vitest 2→4.** `npm install --save-dev vitest@^4` sonrası 6/153 test kırıldı:
-  - `tests/unit/textExtract.test.ts` — `vi.mock` factory constructor semantics değişmiş (pdf-parse mock'u `TypeError: ... is not a constructor`).
-  - 5 adet DB-backed unit test — `poolOptions.forks.singleFork: true` v4'te serileştirmeyi eskisi gibi sağlamıyor; Serializable 40001 + fixture yarışları tekrar çıkıyor.
-  - Refactor tahmin: `vi.hoisted` + yeni pool config + `test_worker_${pid}` schema (task 5.2) birlikte yapılırsa temiz; ayrı spike Phase 6 başına taşındı.
-- **Risk:** vitest v2 hâlâ aktif maintain ediliyor, sürümü dondurmak kısa vadede güvenli. v4 refactor'u 5.2 tamamlandıktan sonra küçük PR.
-- **Aksiyon:** Phase 6 breakdown'ında "vitest 2→4 (5.2'nin üzerine)" task'ı olarak tut.
+- **Uygulanan (Phase 6, task 6.1):** **vitest 2→4** tamamlandı. Config değişiklikleri:
+  - `maxWorkers` top-level key'e geçildi (vitest 4'te `poolOptions.forks.maxForks` yerine); `VITEST_POOL_ID` 1..maxWorkers clamp'i bu yolla garanti.
+  - Default `pool: "forks"` + per-worker `test_worker_<poolId>` Postgres schema isolation opt-in'den default'a flip; `VITEST_WORKER_COUNT` override hâlâ mümkün.
+  - `textExtract.test.ts` `vi.hoisted` + class-based mock pattern'ına çevrildi (vitest 4 `vi.fn` constructor semantics sıkılaştırması).
+- **Doğrulama:** 229/230 green (1 intentional skip — Phase 5'ten kalan cache-hit, 6.6'da açılacak), 4 worker parallel, duration ~13s (baseline ile tutarlı + paralel headroom).
+- **Bonus:** suite ~300 test'e çıkınca 4-worker paralel = ~4x speedup hazır.
 
 ---
 

@@ -1,17 +1,15 @@
 // Prepares per-worker test schemas once per Vitest run.
 //
-// Why: With `pool: "forks"` + `singleFork: true` (Phase 4), DB-backed tests
-// serialize on the public schema — slow as the suite grows. Isolating each
-// worker to its own schema lets us parallelize safely.
-//
-// How: For each of N parallel workers, create `test_worker_<id>` and run
-// `prisma migrate deploy` against that schema. Workers later (`setup.ts`)
-// bind their `DATABASE_URL` to the matching schema via `VITEST_POOL_ID`.
+// Phase 6 (task 6.1): Default path after the vitest 4 upgrade — the suite
+// runs in parallel forks and each worker gets its own `test_worker_<id>`
+// schema so DB-backed tests don't step on each other. `setup.ts` binds
+// every worker's `DATABASE_URL` to its schema via `VITEST_POOL_ID`.
 
+import os from "node:os";
 import { execSync } from "node:child_process";
 
-// Single-fork mode only needs one schema. Parallel mode needs N.
-const WORKER_COUNT = Number(process.env.VITEST_WORKER_COUNT ?? 1);
+const defaultWorkers = Math.min(os.cpus().length, 4);
+const WORKER_COUNT = Number(process.env.VITEST_WORKER_COUNT) || defaultWorkers;
 
 function schemaUrl(base: string, schema: string): string {
   const url = new URL(base);
