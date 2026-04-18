@@ -75,15 +75,11 @@ Karar bekleyen konular. **Yaşayan doküman** — karar verildiğinde "✅ Kapat
 - **Gerekçe:** Phase 5 BullMQ'nun getirdiği Redis singleton zaten çalışıyordu; cache için ikinci bir runtime dependency eklemek yerine aynı instance'tan (farklı bağlantı, `maxRetriesPerRequest` default) yararlandık. Phase 7 tutor matching + marketplace search hot path'leri multi-instance'ta tutarsız olmasın diye Redis şart. Prisma-backed cache'ler (AcademicDNA, ProfessorStyleProfile, CourseAdvisor) zaten multi-instance safe — oldukları yerde kaldılar.
 - **Etki:** `server/src/lib/cache.ts` (`cacheGet` / `cacheSet` / `cacheDel` / `cacheInvalidate` + `__resetCacheForTests`); `REDIS_URL` yoksa veya `RUN_INLINE_QUEUE=1` test modunda in-memory Map; key prefix `profai:cache:`; pattern invalidation SCAN stream ile; Redis hatası → implicit miss (fetcher çalışır); 6 unit test yeşil.
 
-### T2. File storage — Local vs S3/R2
+### ✅ T2. File storage — Cloudflare R2 seçildi (2026-04-19, Phase 7 task 7.2)
 
-- **Durum:** Açık.
-- **Seçenekler:**
-  - A) Local fs (şu anki, basit).
-  - B) Cloudflare R2 (ucuz, egress free).
-  - C) AWS S3 (standart).
-- **Eğilim:** B.
-- **Karar zamanı:** Phase 3 sonu / Phase 4 başı.
+- **Karar:** B — Cloudflare R2 (S3-compatible, egress free). Local provider (`server/uploads`) development + küçük tek-node deploy için varsayılan fallback olarak kalıyor.
+- **Gerekçe:** B2B ölçekte OCR görsel + lecture audio + marketplace dosyaları tek VM diskini şişiriyor; multi-replica rollout'ta evicted pod dosyayı kaybediyor. R2 egress-free + S3 API → AWS SDK direk kullanılabiliyor, CDN için opsiyonel public base URL. AWS S3'ü seçmemek için gerekçe: egress maliyeti aylık tahmini 50-100 TL fazla (marketplace notes download volume kestirilemez; R2 güvenli).
+- **Etki:** `server/src/lib/storage.ts` (`StorageProvider` interface + local + r2 provider, lazy AWS SDK import); `getStorage()` singleton + `__resetStorageForTests`; public API `put` / `publicUrl` / `delete` / `listOlderThan`; R2 env'leri `server/.env.example`'da documented (`R2_BUCKET` switch'i); signed URL TTL 3600s default + `R2_PUBLIC_BASE_URL` varsa CDN URL'i. Mevcut OCR/voice/lecture controller'ları bu faz için lokal davranışla devam eder; yeni Phase 7 marketplace upload'ları doğrudan `storage.put()` pattern'ı. 5 unit test yeşil.
 
 ### ✅ T3. Background jobs — BullMQ seçildi (2026-04-17, Phase 5 task 5.5)
 

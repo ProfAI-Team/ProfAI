@@ -18,6 +18,8 @@
     "test:integration": "vitest run tests/integration"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1032.0",
+    "@aws-sdk/s3-request-presigner": "^3.1032.0",
     "@google/genai": "^1.50.1",
     "@prisma/client": "^5.22.0",
     "@types/web-push": "^3.6.4",
