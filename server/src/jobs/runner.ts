@@ -6,6 +6,7 @@ import {
   registerSpacedRepetitionWorker,
   scheduleSpacedRepetitionDaily,
 } from "./spacedRepetitionScheduler";
+import { registerLectureWorker } from "../services/lectureAudioService";
 import { closeAll } from "../lib/queue";
 import { featureLogger } from "../lib/logger";
 
@@ -25,6 +26,7 @@ const log = featureLogger("jobs");
 export async function bootJobs(): Promise<void> {
   registerStudyGroupMaintenanceWorker();
   registerSpacedRepetitionWorker();
+  registerLectureWorker();
   await scheduleStudyGroupMaintenance();
   await scheduleSpacedRepetitionDaily();
 
