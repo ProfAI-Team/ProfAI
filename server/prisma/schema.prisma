@@ -14,49 +14,57 @@ enum ExamType {
 }
 
 model User {
-  id                String            @id @default(uuid())
-  email             String            @unique
-  password          String
-  name              String
-  university        String?
-  department        String?
-  subscriptionTier  String            @default("free")
-  reviewFrequency   String            @default("daily")
-  createdAt         DateTime          @default(now())
-  exams             Exam[]
-  ratings           ProfessorRating[]
-  aiCallLogs        AICallLog[]
-  aiFeedback        AIFeedback[]
-  studentNotes      StudentNote[]
-  studyPacks        StudyPack[]
-  mockExams         MockExam[]
-  mockExamSessions  MockExamSession[]
+  id               String            @id @default(uuid())
+  email            String            @unique
+  password         String
+  name             String
+  university       String?
+  department       String?
+  subscriptionTier String            @default("free")
+  reviewFrequency  String            @default("daily")
+  createdAt        DateTime          @default(now())
+  exams            Exam[]
+  ratings          ProfessorRating[]
+  aiCallLogs       AICallLog[]
+  aiFeedback       AIFeedback[]
+  studentNotes     StudentNote[]
+  studyPacks       StudyPack[]
+  mockExams        MockExam[]
+  mockExamSessions MockExamSession[]
 
-  credit            UserCredit?
-  examApprovals     ExamApproval[]
-  questionVotes     QuestionVote[]
-  postExamReports   PostExamReport[]
-  studyGroups       StudyGroup[]      @relation("StudyGroupMembers")
+  credit          UserCredit?
+  examApprovals   ExamApproval[]
+  questionVotes   QuestionVote[]
+  postExamReports PostExamReport[]
+  studyGroups     StudyGroup[]     @relation("StudyGroupMembers")
 
   academicDNA       AcademicDNA?
   confidenceScores  ConfidenceScore[]
   gradeRecords      GradeRecord[]
   spacedRepetitions SpacedRepetition[]
 
+  // Phase 6 (6.8)
+  voiceSessions VoiceSession[]
+  voiceUsage    VoiceUsage[]
+  ocrResults    OCRResult[]
+  pushDevices   PushDevice[]
+  pushOptIn     Boolean        @default(false)
+
   @@map("users")
 }
 
 model Professor {
-  id           String                 @id @default(uuid())
-  name         String
-  department   String
-  university   String
-  createdAt    DateTime               @default(now())
-  courses      Course[]
-  ratings      ProfessorRating[]
-  styleProfile ProfessorStyleProfile?
-  studyPacks   StudyPack[]
-  mockExams    MockExam[]
+  id            String                 @id @default(uuid())
+  name          String
+  department    String
+  university    String
+  createdAt     DateTime               @default(now())
+  courses       Course[]
+  ratings       ProfessorRating[]
+  styleProfile  ProfessorStyleProfile?
+  studyPacks    StudyPack[]
+  mockExams     MockExam[]
+  voiceSessions VoiceSession[]
 
   @@map("professors")
 }
@@ -76,8 +84,8 @@ model Course {
 
 model Exam {
   id           String        @id @default(uuid())
-  courseId      String
-  course        Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId     String
+  course       Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
   examType     ExamType
   year         Int
   semester     String
@@ -92,11 +100,11 @@ model Exam {
   // approvals; `flagged` flips when ≥3 distinct users cast a downvote.
   // Verified exams are the only ones the style profile service considers
   // as canonical — unverified ones still aggregate but with lower trust.
-  verified     Boolean       @default(false)
-  verifiedAt   DateTime?
-  flagged      Boolean       @default(false)
+  verified   Boolean   @default(false)
+  verifiedAt DateTime?
+  flagged    Boolean   @default(false)
 
-  approvals    ExamApproval[]
+  approvals ExamApproval[]
 
   @@map("exams")
 }
@@ -178,6 +186,11 @@ model AICallLog {
   cacheHit     Boolean @default(false)
   success      Boolean
   errorCode    String?
+  // Phase 6 task 6.8: true when a downstream fallback provider served
+  // the response because the primary returned a retryable error. Paired
+  // with `provider` so analytics can see "gemini attempted, claude
+  // succeeded" rows as one entry.
+  fallbackUsed Boolean @default(false)
 
   createdAt DateTime @default(now())
 
@@ -212,16 +225,16 @@ model AIFeedback {
 // plain-text payload fed into the Gemini prompt alongside the professor's
 // style profile.
 model StudentNote {
-  id            String   @id @default(uuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courseId      String?
-  course        Course?  @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  id       String  @id @default(uuid())
+  userId   String
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId String?
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
   title         String
   fileUrl       String
   mimeType      String
-  extractedText String   @db.Text
+  extractedText String @db.Text
   wordCount     Int
 
   createdAt DateTime @default(now())
@@ -287,12 +300,12 @@ model MockExam {
   noteIds     String[]
   noteHash    String
 
-  title       String
+  title            String
   // { q, type, options?, correctAnswer, topic, difficulty, rationale, rubric? }[]
   // Cached answer + rubric fields are never returned to the client while a
   // session is open; the grading service is the only consumer.
-  questions   Json
-  durationMin Int     @default(90)
+  questions        Json
+  durationMin      Int    @default(90)
   // [{ title, startIdx, endIdx }] — logical breakdown used on the result page.
   sectionBreakdown Json?
 
@@ -323,10 +336,10 @@ model MockExamSession {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // [{ qIdx, answer, timeSpentSec, flagged }]
-  answers   Json
-  score     Float?
+  answers    Json
+  score      Float?
   // [{ qIdx, correct, scoreOutOf100, feedback, suggestedTopic? }]
-  feedback  Json?
+  feedback   Json?
   // { lowerBound, upperBound, confidence, reasoning }
   prediction Json?
   // [{ topic, correctCount, totalCount, accuracy, priority }]
@@ -389,12 +402,12 @@ model ExamApproval {
 // direction — a student can upvote a useful question AND mark that it
 // appeared on the real exam later. Both signals feed the "verified" pool.
 model QuestionVote {
-  questionId  String
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  direction   Int
-  cameOnExam  Boolean?
-  createdAt   DateTime @default(now())
+  questionId String
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  direction  Int
+  cameOnExam Boolean?
+  createdAt  DateTime @default(now())
 
   @@id([questionId, userId])
   @@index([questionId])
@@ -448,10 +461,10 @@ model StudyGroup {
   externalLink String?
   status       StudyGroupStatus @default(SUGGESTED)
 
-  members      User[]           @relation("StudyGroupMembers")
+  members User[] @relation("StudyGroupMembers")
 
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([professorId])
   @@index([examDate])
@@ -469,21 +482,21 @@ model StudyGroup {
 // the on-submit trigger in mockExamService. Under 20 answered questions
 // we treat the data as insufficient and skip inference.
 model AcademicDNA {
-  userId                 String   @id
-  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  learningStyle          String?  // "visual" | "reading" | "kinesthetic" | "mixed" | null
-  strengths              Json     // [{topic, score, confidence, sampleSize}]
-  weaknesses             Json     // same shape
-  totalQuestionsAnswered Int      @default(0)
+  learningStyle          String? // "visual" | "reading" | "kinesthetic" | "mixed" | null
+  strengths              Json // [{topic, score, confidence, sampleSize}]
+  weaknesses             Json // same shape
+  totalQuestionsAnswered Int     @default(0)
   correctRate            Float?
-  preferredDifficulty    String?  // "easy" | "medium" | "hard"
+  preferredDifficulty    String? // "easy" | "medium" | "hard"
 
   // Algorithm version. Bumping this in `dnaService` invalidates all
   // stored DNAs (they'll be lazily recomputed on next read).
-  version                Int      @default(1)
-  lastComputedAt         DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  version        Int      @default(1)
+  lastComputedAt DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@map("academic_dna")
 }
@@ -495,9 +508,9 @@ model ConfidenceScore {
   userId            String
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   topic             String
-  score             Float    // 0-100
+  score             Float // 0-100
   lastQuestionCount Int      @default(0)
-  source            String   // "mock_exam" | "practice" | "self_report"
+  source            String // "mock_exam" | "practice" | "self_report"
   updatedAt         DateTime @updatedAt
 
   @@id([userId, topic])
@@ -515,11 +528,11 @@ model GradeRecord {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   courseId    String?
   courseName  String
-  grade       Float    // numeric grade (0-100) or 0-4 depending on system
-  letterGrade String?  // AA / BA / CB / ... — derived if null
+  grade       Float // numeric grade (0-100) or 0-4 depending on system
+  letterGrade String? // AA / BA / CB / ... — derived if null
   credit      Int
-  semester    String   // "2026-Spring" style
-  university  String?  // presets picker — "aydin" / "bogazici" / "odtu" / "custom"
+  semester    String // "2026-Spring" style
+  university  String? // presets picker — "aydin" / "bogazici" / "odtu" / "custom"
   createdAt   DateTime @default(now())
 
   @@index([userId])
@@ -540,7 +553,7 @@ model SpacedRepetition {
   questionId    String
   questionText  String?
   nextReview    DateTime
-  interval      Int       // days until next review
+  interval      Int // days until next review
   easiness      Float     @default(2.5)
   correctStreak Int       @default(0)
   lapseCount    Int       @default(0)
@@ -550,4 +563,91 @@ model SpacedRepetition {
   @@unique([userId, questionId])
   @@index([userId, nextReview])
   @@map("spaced_repetitions")
+}
+
+// ======================================================================
+// Phase 6 — Multimodal + Live AI Tutor (task 6.8)
+// ======================================================================
+
+// A completed voice tutor session. Persisted at end-of-session; while the
+// session is live the transcript lives in memory + a pub/sub stream (see
+// voiceTutorService). `sourceType` distinguishes real-time tutor chats
+// from offline lecture audio uploads so both flows can reuse the same
+// table for analytics while keeping their UX separate.
+model VoiceSession {
+  id             String     @id @default(uuid())
+  userId         String
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  professorId    String?
+  professor      Professor? @relation(fields: [professorId], references: [id], onDelete: SetNull)
+  sourceType     String     @default("live") // "live" | "lecture"
+  durationSec    Int
+  transcript     String     @db.Text
+  topics         Json // [{ topic, startSec, endSec }]
+  provider       String // "gemini-live" | "claude" | "openai-realtime"
+  interruptCount Int        @default(0)
+  fallbackUsed   Boolean    @default(false)
+  costUsd        Decimal?   @db.Decimal(10, 6)
+  createdAt      DateTime   @default(now())
+
+  @@index([userId, createdAt])
+  @@index([professorId])
+  @@map("voice_sessions")
+}
+
+// Per-user rolling window for the 30min/day cap. Keyed on `date` in UTC —
+// `voiceTutorService.startSession` refuses to start when totalSec >=
+// VOICE_DAILY_SEC_CAP. Kept as a separate table (rather than aggregating
+// from VoiceSession on each start) so the cap read is a single indexed
+// lookup even as the session log grows.
+model VoiceUsage {
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date         DateTime @db.Date
+  totalSec     Int      @default(0)
+  sessionCount Int      @default(0)
+  updatedAt    DateTime @updatedAt
+
+  @@id([userId, date])
+  @@map("voice_usage")
+}
+
+// A single OCR extraction job, persisted whether the primary provider
+// succeeded or the fallback kicked in. `latexFormulas` carries an
+// optional per-formula `confidence` so the UI can flag low-confidence
+// formulas for manual review.
+model OCRResult {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileUrl       String
+  mimeType      String
+  extractedText String   @db.Text
+  latexFormulas Json // [{ latex, confidence, bbox? }]
+  confidence    Float // 0-1 overall
+  provider      String // "gemini-multimodal" | "vision-api" | "tesseract"
+  processingMs  Int
+  createdAt     DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@map("ocr_results")
+}
+
+// Web Push subscription handle. One row per browser — `endpoint` is the
+// unique subscription URL returned by PushManager.subscribe; p256dh +
+// auth keys are required to sign payloads. Devices are pruned when the
+// push service replies 410 Gone.
+model PushDevice {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint   String   @unique
+  p256dhKey  String   @db.Text
+  authKey    String   @db.Text
+  userAgent  String?
+  lastSeenAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@map("push_devices")
 }
