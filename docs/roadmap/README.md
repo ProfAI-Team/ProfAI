@@ -15,7 +15,7 @@ Her faz **kullanılabilir bir ürün** ekler. Her fazın net giriş kriterleri, 
 | 4 | [Topluluk Katmanı](./phase-4-community.md) | 3 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-17 | Phase 3 tamam |
 | 5 | [Akademik DNA + Persistent Memory](./phase-5-academic-dna.md) | 2 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-17 | Phase 4 tamam |
 | 6 | [Multimodal + Live AI Tutor](./phase-6-multimodal.md) | 3 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-19 | Phase 5 tamam |
-| 7 | [B2B + Marketplace](./phase-7-b2b-marketplace.md) | 4 hafta | 🎯 **Sıradaki** | Phase 6 tamam |
+| 7 | [B2B + Marketplace](./phase-7-b2b-marketplace.md) | 4 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-19 | Phase 6 tamam |
 
 **Toplam süre:** ~17 hafta (≈4 ay odaklı geliştirme; realistik takvim 9 ay).
 

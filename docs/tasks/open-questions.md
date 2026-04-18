@@ -118,15 +118,11 @@ Karar bekleyen konular. **Yaşayan doküman** — karar verildiğinde "✅ Kapat
 
 ## İş Modeli Kararları
 
-### İ1. İlk hedef üniversite
+### ✅ İ1. İlk hedef üniversite — İstanbul Aydın (2026-04-19, Phase 7 task 7.31)
 
-- **Durum:** Açık.
-- **Seçenekler:**
-  - A) İstanbul Aydın (mevcut user base, gerçek veri hazır).
-  - B) Boğaziçi (prestij, marketing avantajı).
-  - C) Hacettepe / ODTÜ (kalıcı brand).
-- **Eğilim:** A → 0-100 kullanıcı; sonra B veya C.
-- **Karar zamanı:** Phase 4.
+- **Karar:** A — İstanbul Aydın Üniversitesi. Phase 7 fixture seeder `phase7fixture-aydin` tenant slug'ıyla pilot tenant'ı tanımladı (admin@aydin.edu.tr + hoca@aydin.edu.tr).
+- **Gerekçe:** Demo user (`erdemacar1@stu.aydin.edu.tr`) + UYG338 ders bağlamı + seed'de 200 üni arasında Aydın profesörleri zaten populated. Pilot → 100 user → marketing hikayesi → Boğaziçi/ODTÜ Phase 8'de genişleme.
+- **Etki:** Phase 7 seed-phase-7-fixture.ts, roadmap/phase-7-b2b-marketplace retro, KVKK v2 B2B örnekleri hepsi Aydın üstünden; genişleme path'i Phase 8 business roadmap.
 
 ### İ2. Premium fiyat — ₺49 doğru mu?
 
@@ -172,25 +168,17 @@ Karar bekleyen konular. **Yaşayan doküman** — karar verildiğinde "✅ Kapat
 - **Eylem:** Avukatla çalış (Phase 1 öncesi öncelik).
 - **Karar zamanı:** Phase 1'den önce.
 
-### H2. Üniversite ortaklık modeli
+### ✅ H2. Üniversite ortaklık modeli — C (ilk pilot free) → B geçişi (2026-04-19, Phase 7 task 7.32)
 
-- **Durum:** Açık.
-- **Seçenekler:**
-  - A) Revenue share (%30 → üni).
-  - B) Lisans ücreti (₺100K/yıl).
-  - C) Free (karşılığında brand association + data).
-- **Eğilim:** C başlangıçta, sonra B.
-- **Karar zamanı:** Phase 7.
+- **Karar:** C başlangıçta — ilk 3-5 üniversite free pilot (brand association + data). İlk yıl sonunda B geçişi (tier'lı lisans: basic / pro / enterprise, spec'teki ₺50K-200K/yıl).
+- **Gerekçe:** UniversityAccount.tier kolonu 3 tier'ı destekliyor; tier değişimi sadece DB update, kod yeniden deploy yok. Free pilot'lar için tier = "basic" default, commercial hesapları admin manuel upgrade. Brand association değeri Phase 8 growth için kritik.
+- **Etki:** Phase 7 MVP commercial terms yok; ilk B2B kontrat imzalanınca `UniversityAccount.tier = "pro"` + `contactEmail` + `seats` ayarı yeterli. Fatura + billing automation Phase 8.
 
-### H3. Hoca onay süreci
+### ✅ H3. Hoca onay süreci — A (.edu/.edu.tr + SUPER_ADMIN manuel) (2026-04-19, Phase 7 task 7.16)
 
-- **Durum:** Açık.
-- **Seçenekler:**
-  - A) Email + LinkedIn yeterli.
-  - B) + ID kartı fotoğrafı.
-  - C) + üniversite HR onay.
-- **Eğilim:** A başlangıçta, sorun çıkarsa B.
-- **Karar zamanı:** Phase 7.
+- **Karar:** A — .edu veya .edu.tr email domain kontrolü + SUPER_ADMIN manuel review (ileride LinkedIn probe otomatikleşebilir). Phase 7 MVP'de hoca başvurusu `/api/hoca/verify` endpoint'e geliyor, SUPER_ADMIN DB üstünde `User.role = HOCA` flip ediyor.
+- **Gerekçe:** Volume düşük kalırken manuel inceleme yeterli güven sağlıyor (yılda ~100 hoca için 15 dk/başvuru = kabul edilebilir). LinkedIn API + üniversite HR onayı karmaşıklığı Phase 7 scope'unu şişirirdi; ölçek büyüdüğünde Phase 8'de otomatik LinkedIn name+affiliation match + otomatik flip.
+- **Etki:** `server/src/services/hocaPortalService.ts::verifyHocaByEmail` + `server/src/jobs/hocaVerification.ts` placeholder worker; Phase 8'de LinkedIn HTTP call aynı worker'a eklenir.
 
 ---
 

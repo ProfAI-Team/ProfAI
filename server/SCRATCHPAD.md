@@ -5,7 +5,7 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 > Kök / cross-cutting notlar → [`../SCRATCHPAD.md`](../SCRATCHPAD.md)
 > Frontend notları → [`../client/SCRATCHPAD.md`](../client/SCRATCHPAD.md)
 > Genel backend rehberi → [`./CLAUDE.md`](./CLAUDE.md)
-> Faz 6 arşivi: [`../docs/_archive/scratchpad-server-2026-04-19-phase-6.md`](../docs/_archive/scratchpad-server-2026-04-19-phase-6.md)
+> Faz 7 arşivi: [`../docs/_archive/scratchpad-server-2026-04-19-phase-7.md`](../docs/_archive/scratchpad-server-2026-04-19-phase-7.md)
 
 ---
 
@@ -20,55 +20,41 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 ## Şu An Üzerinde Çalışılan
 
-- Phase 6 tamamlandı. Backend tarafında Phase 7 başlıyor.
-- **Phase 7 scope (backend):** `Tutor` + `TutoringSession` + `MarketplaceItem` + `Payment` + `UniversityAccount` tabloları, Stripe/İyzico payment webhook, üniversite admin paneli, tutor matching engine, B2B analytics dashboard.
+- Phase 7 tamamlandı. Backend tarafında Phase 8'e geçiş bekleniyor.
+- **Phase 8 scope (backend, taslak):** iyzico real HTTP + e-Fatura; in-app messaging servisi; SSO gerçek (SAML SP↔IdP); hard multi-tenancy (enterprise); auto-moderation (ML-based); LinkedIn auto-verify; Payment anonymization (KVKK tur 2 sonrası); Stripe international aktivasyon.
 
 ---
 
-## Phase 7 Hazırlık Notları
+## Teknik Borç (Phase 7 retro'dan gelen)
 
-- **Multi-provider registry** (6.3) hazır — Phase 7 tutor matching'de Gemini/Claude rotatif kullanılabilir.
-- **BullMQ + Redis** altyapısı — payment webhook retry + marketplace indexing doğrudan aynı `registerWorker` + `scheduleRepeating` pattern.
-- **Premium flag registry** (6.9) — Phase 7 `TUTOR_MATCHING`, `MARKETPLACE_PRO`, `UNIVERSITY_ADMIN` gibi flag'ler eklenerek gated.
-- **pino logger + request_id** (6.4) — B2B multi-tenant log ayrıştırma için `featureLogger.child({ tenant })` hazır.
-- **anonymizedHash + k-anonymity** — tutor performans metrikleri + marketplace popülarite için reuse.
-- **Zod + parseOrRespond + AppError + asyncHandler** — Phase 7 endpoint'leri baştan doğru stack.
+- **Docker server Prisma generate drift** — migration sonrası container'daki `@prisma/client` güncellenmiyor. Dockerfile `RUN npx prisma generate` eklenmeli; CI'da da aynı sorun. Phase 8 başı 1 saatlik iş.
+- **App.tsx route mount order** — dnaRoutes + multimodalRoutes global `router.use(authenticate)` nedeniyle mount sırası kritik. Phase 8'de router-level auth yerine endpoint-level authenticate middleware çağrısı daha temiz olabilir.
+- **Parallel test flake** (credit-service + post-exam-report) — Phase 6 retro'dan devam; 2/3 flake. beforeEach cleanup düzeltilmeli ya da DB-backed unit'ler singleFork'a alınmalı. Phase 8 başı.
+- **reconstructExamSummary dışı AI call site'lar** — DNA narrative, course advisor, study pack, mock exam, grading hâlâ Gemini-only. Claude structured output API olgunlaşınca Phase 8'de migrate.
+- **`enableOfflineQueue: false`** (`lib/cache.ts`) — Redis bağlantı kopmasında cache write'ları silent drop; get hatası logla + null dön (implicit miss). Production'da Redis uptime monitoring ile birleşik Phase 8'de değerlendirmeli.
+- **Multer memory storage** — upload middleware disk storage'a yazıyor, R2 provider'a stream etmiyor; `lib/storage.ts` abstraction var ama existing controller'lar local path kullanıyor. Phase 8'de Multer → memory storage → storage.put(buffer) pipeline'ı aktifleştir.
 
----
+## Phase 7 Kapanışındaki Test Suite Durumu
 
-## Test Suite Flake (Phase 7'de Keşfedildi, 2026-04-19)
-
-- **Semptom:** `credit-service.test.ts` "history is returned newest-first" + `post-exam-report-service.test.ts` "refuses to disclose aggregates below k-anonymity" test'leri 2/3 oranında `PrismaClientKnownRequestError: Transaction failed due to a write conflict or a deadlock` ile düşüyor (4 worker paralel çalıştığında).
-- **Kaynak:** Serializable isolation + aynı worker'a denk düşen iki DB-backed test seed collision. Per-worker schema isolation (6.1) farklı worker'lar için tutarsızlığı önlüyor ama aynı worker'da ardışık test'ler arası cleanup eksik.
-- **Durum:** 7.3 öncesinden geliyor (git stash ile kontrol edildi, 2/3 flake oranı aynı). Phase 7 işimi blokluyor değil; backend test yeşil olması beklenen durumlarda tek tek re-run yeterli.
-- **Çözüm önerisi:** `beforeEach` içinde seed'den etkilenen tabloları deleteMany ile temizle, ya da her test kendi user ID'sini üretsin. Phase 7 7.19 (backend test) sırasında ele alınabilir veya Phase 8'e ayrı borç olarak taşınabilir.
+- 266 passed / 47 skipped / 1 pre-existing flake (credit-service) / 0 new failure.
+- Phase 7 eklemeleri: 58 unit + 9 integration = 67 yeni test (7.19 hedef 95; yetersiz ama kapsam geniş).
+- 4 worker paralel suite ~3s; Phase 8'de 350+ test'e çıkarken pattern korunabilir.
 
 ---
 
-## Teknik Borç (Geçmiş Fazlardan Kalan)
+## AI Pipeline Notları (Phase 7 sonu)
 
-- **T1 cache strategy** — in-process LRU vs Redis kararı Phase 7 başında verilecek. Mevcut BullMQ connection Redis'e bağlı; cache için de aynı instance kullanılabilir.
-- **T2 file storage** — local fs (/uploads) Phase 6 sonu OCR görsel + lecture audio + exam PDF kalıcı depoluyor. Phase 7 S3/R2 migration şart (disk şişiyor, B2B ölçekte imkansız).
-- **pgvector upgrade** — multimodal search (6.13) pg_trgm + MockExam.questions JSONB ILIKE ile çalışıyor; Phase 7'de vektör benzerlik için pgvector.
-- **MockExam JSONB ILIKE raw SQL** (6.13) — tek tırnak escape'li ama raw query; Phase 7 pgvector refactor'ı bu path'i tamamen temizleyecek.
-- **Hesap silme endpoint** — KVKK taslağında referans verildi ama implemente edilmedi; Phase 7 avukat review sonrası aktif olacak.
+- `withFallback` wrapper 2 call site'ta aktif: `generateStyleSummary` (6.3) + `reconstructExamSummary` (7.8). Phase 8 hedef 4+ call.
+- `embeddingService.embedText` Gemini text-embedding-004 (768-dim); fallback yok, null döner. Phase 8'de Claude embedding veya OpenAI text-embedding-3 eklenebilir (aynı boyut şart).
+- `AICallLog.feature` yeni Phase 7 değerleri: `"tutor-embedding"` (7.14), `"tutor-match-query"` (7.14), `"marketplace-embedding"` (7.15), `"marketplace-search"` (7.15), `"exam-reconstruct"` (7.8 migrate).
 
 ---
 
-## AI Pipeline Notları
+## Seed / DB Notları (Phase 7 sonu)
 
-- **Phase 6'da 4 yeni AI call sitesi:** OCR multimodal (`ocr-multimodal`), voice tutor (live, Gemini Live WebSocket), lecture transcribe (`lecture-transcribe`), multimodal search describe (`multimodal-search`). Hepsi `AICallLog.provider` + `fallbackUsed` telemetrisinde.
-- **providerRegistry** (6.3) — `withFallback` wrapper + lazy Claude SDK. İlk migrated call `generateStyleSummary`; Phase 7'de tutor matching + marketplace özetleme aynı wrapper'dan geçer.
-- **Rate limit quota** güncel: voice 20 start/gün + 30dk toplam, OCR 20/gün, lecture 2/gün, multimodal 10/gün. Phase 7 tutor matching için yeni limiter'lar aynı factory'de.
-
----
-
-## Seed / DB Notları
-
-- Phase 6 fixture seeder: `scripts/seed-phase-6-fixture.ts` (idempotent, phase6fixture-prefix'li OCR + lecture; reset-demo-user öncelik çağırıyor). Demo user pushOptIn=true, subscriptionTier=premium.
-- `scripts/reset-demo-user.ts` — Phase 5'ten devam; Phase 6 için değişiklik yok (fixture seeder çağırıyor).
-- Migration: `20260418202608_phase_6_multimodal` — 4 yeni tablo + User.pushOptIn + AICallLog.fallbackUsed.
-- Docker volume drift Phase 6 içinde 2 kez denendi (BullMQ artığı + pino eksikliği), `./scripts/rebuild-volumes.sh` ikisini de çözdü.
+- `scripts/seed-phase-7-fixture.ts` → Phase 6 fixture'ı önce çalıştırır, sonra Phase 7 rolleri + tutor + marketplace + payment + tenant + session. İdempotent.
+- Migration: `20260419003000_pgvector_extension` (extension only) + `20260419004500_phase_7_b2b_marketplace` (5 tablo + enum + User kolonları + vector kolonları + ivfflat indeksleri).
+- Docker volume drift Phase 7'de 3 kez yaşandı: pgvector image switch (db volume drop gerekti), server container prisma generate race, client container cache (no-cache rebuild gerekti). `./scripts/rebuild-volumes.sh` tüm senaryoları çözdü.
 
 ---
 
@@ -80,10 +66,10 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 
 ## Bir Sonraki Session İçin (Backend)
 
-1. Phase 7 schema tasarımı: `Tutor` (profile + availability), `TutoringSession` (booking), `MarketplaceItem` (listing), `Payment` (Stripe/İyzico webhook), `UniversityAccount` (B2B tenant).
-2. Payment gateway — Stripe Connect vs İyzico (TR ödeme için).
-3. Tutor matching engine — DNA + compatibility (Phase 5) pattern'i öğrenci ↔ tutor yönüne genişletme.
-4. Multi-tenancy — UniversityAccount tenant_id kolonu tüm tablolarda mı, ayrı schema mı? Phase 7 başı karar.
+1. Phase 8 spec taslağı.
+2. Docker Prisma generate CI/Dockerfile fix (Phase 7 retro borç).
+3. Multer → storage.put() pipeline (Phase 7 retro borç).
+4. Test flake cleanup (Phase 6/7 retro).
 
 ---
 
@@ -93,4 +79,4 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 |-------|------------|
 | 2026-04-16 | Kuruldu. |
 | 2026-04-17 | Phase 1-5 kapanışları arşive donduruldu. |
-| 2026-04-19 | Phase 6 kapanışı — içerik arşive donduruldu, Phase 7 için reset. |
+| 2026-04-19 | Phase 6 + Phase 7 kapanışı — içerik arşive donduruldu, Phase 8 için reset. |
