@@ -34,7 +34,7 @@ Phase 3+4+5 retro düzeni korundu: **borçlar önce** (8), backend core ortada (
 | 6.20 | Lecture audio sayfası `/me/lectures` — upload + progress + transcript view + key topic list | 4 saat | 6.17 | ✅ Tamam | `83a3234` |
 | 6.21 | Multimodal search sayfası `/search/multimodal` — formül fotoğrafla benzer soru bul | 3 saat | 6.17 | ✅ Tamam | `a4a9627` |
 | 6.22 | Navbar + Dashboard entegrasyonu — voice quick action + OCR notlar linki + lectures + multimodal | 2 saat | 6.18–6.21 | ✅ Tamam | `2108517` |
-| 6.23 | Push notification registration UI — settings drawer + browser prompt + test gönderim | 2 saat | 6.14, 6.17 | ⬜ | — |
+| 6.23 | Push notification registration UI — settings drawer + browser prompt + test gönderim | 2 saat | 6.14, 6.17 | ✅ Tamam | `2e32fd6` |
 | 6.24 | i18n TR + EN copy sweep — `voice.*` / `ocr.*` / `lectures.*` / `multimodal.*` / `pushNotifications.*` / `privacy.*` | 3 saat | 6.18–6.23 | ⬜ | — |
 | 6.25 | KVKK aydınlatma metni güncellemesi (H1) — voice transcript + OCR PII kapsamı; avukat review placeholder | 2 saat | 6.11, 6.10 | ⬜ | — |
 | 6.26 | Playwright MCP visual smoke + `scripts/seed-phase-6-fixture.ts` (+ reset-demo hook) | 3 saat | 6.24 | ⬜ | — |
