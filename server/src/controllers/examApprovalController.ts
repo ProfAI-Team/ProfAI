@@ -11,6 +11,9 @@ import {
   getApprovalStats,
   ApprovalError,
 } from "../services/examApprovalService";
+import { featureLogger } from "../lib/logger";
+
+const log = featureLogger("examApproval");
 
 export const castApprovalController = async (
   req: Request,
@@ -49,7 +52,7 @@ export const castApprovalController = async (
       });
       return;
     }
-    console.error("castApproval error:", err);
+    log.error({ err }, "castApproval unexpected error");
     res
       .status(500)
       .json({ error: { code: "INTERNAL", message: "Unexpected error." } });

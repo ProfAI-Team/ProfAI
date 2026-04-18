@@ -1,8 +1,10 @@
 import { countDueByUser } from "../services/spacedRepetitionService";
 import prisma from "../lib/prisma";
 import { registerWorker, scheduleRepeating } from "../lib/queue";
+import { featureLogger } from "../lib/logger";
 
 const QUEUE_NAME = "spaced-repetition-daily";
+const log = featureLogger("spacedRepetition");
 
 /**
  * Daily spaced-repetition digest. For each user with due reviews we
@@ -36,23 +38,20 @@ export function registerSpacedRepetitionWorker(): void {
       if (pref === "off") continue;
       if (pref === "weekly" && !isMonday) continue;
 
-      // Phase 6 will replace this with actual delivery. Keeping it
-      // structured so ops / the notifications service can parse.
-      console.log(
-        JSON.stringify({
+      log.info(
+        {
           event: "spacedRepetition.notification",
           userId: row.userId,
           dueCount: row.dueCount,
           frequency: pref,
           sentAt: now.toISOString(),
-        })
+        },
+        "review digest queued"
       );
       notified += 1;
     }
 
-    console.log(
-      `[spacedRepetition] queued ${notified}/${dueCounts.length} digest(s)`
-    );
+    log.info({ notified, total: dueCounts.length }, "daily digest complete");
   });
 }
 

@@ -6,6 +6,9 @@ import { invalidateStyleProfile } from "../services/professorStyleService";
 import { invalidateStudyPacksForProfessor } from "../services/studyPackService";
 import { invalidateMockExamsForProfessor } from "../services/mockExamService";
 import { badRequest, notFound, unauthorized } from "../lib/AppError";
+import { featureLogger } from "../lib/logger";
+
+const log = featureLogger("examUpload");
 
 export const uploadExam = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
@@ -71,28 +74,19 @@ export const uploadExam = async (req: Request, res: Response): Promise<void> => 
   try {
     await invalidateStyleProfile(course.professorId);
   } catch (err) {
-    console.error(
-      "[uploadExam] invalidateStyleProfile failed:",
-      err instanceof Error ? err.message : err
-    );
+    log.error({ err, professorId: course.professorId }, "invalidateStyleProfile failed");
   }
 
   try {
     await invalidateStudyPacksForProfessor(course.professorId);
   } catch (err) {
-    console.error(
-      "[uploadExam] invalidateStudyPacksForProfessor failed:",
-      err instanceof Error ? err.message : err
-    );
+    log.error({ err, professorId: course.professorId }, "invalidateStudyPacksForProfessor failed");
   }
 
   try {
     await invalidateMockExamsForProfessor(course.professorId);
   } catch (err) {
-    console.error(
-      "[uploadExam] invalidateMockExamsForProfessor failed:",
-      err instanceof Error ? err.message : err
-    );
+    log.error({ err, professorId: course.professorId }, "invalidateMockExamsForProfessor failed");
   }
 
   res.status(201).json({

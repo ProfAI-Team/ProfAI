@@ -20,6 +20,9 @@ import {
   type GradeAnswerResult,
 } from "../../prompts/mock-exam";
 import { recordAICall } from "./aiCallTracker";
+import { featureLogger } from "../../lib/logger";
+
+const log = featureLogger("geminiProvider");
 
 const DEFAULT_MODEL = "gemini-2.5-flash";
 
@@ -179,9 +182,9 @@ export async function analyzeWithGemini(
       lastError = error;
       if (attempt === MAX_RETRIES || !isRetryable(error)) throw error;
       const backoffMs = 1000 * Math.pow(2, attempt);
-      console.warn(
-        `[geminiProvider] Attempt ${attempt + 1} failed (retryable), waiting ${backoffMs}ms:`,
-        error instanceof Error ? error.message.slice(0, 120) : error
+      log.warn(
+        { feature: "analyze", attempt: attempt + 1, backoffMs, err: error },
+        "retryable Gemini failure; backing off"
       );
       await sleep(backoffMs);
     }
@@ -307,9 +310,9 @@ export async function generateStyleSummary(
         throw error;
       }
       const backoffMs = 1000 * Math.pow(2, attempt);
-      console.warn(
-        `[geminiProvider:style-summary] Attempt ${attempt + 1} failed (retryable), waiting ${backoffMs}ms:`,
-        error instanceof Error ? error.message.slice(0, 120) : error
+      log.warn(
+        { feature: "style-summary", attempt: attempt + 1, backoffMs, err: error },
+        "retryable Gemini failure; backing off"
       );
       await sleep(backoffMs);
     }
@@ -476,9 +479,9 @@ export async function generateStudyPack(
         throw error;
       }
       const backoffMs = 1000 * Math.pow(2, attempt);
-      console.warn(
-        `[geminiProvider:study-pack] Attempt ${attempt + 1} failed (retryable), waiting ${backoffMs}ms:`,
-        error instanceof Error ? error.message.slice(0, 120) : error
+      log.warn(
+        { feature: "study-pack", attempt: attempt + 1, backoffMs, err: error },
+        "retryable Gemini failure; backing off"
       );
       await sleep(backoffMs);
     }
@@ -631,9 +634,9 @@ export async function generateMockExam(
         throw error;
       }
       const backoffMs = 1000 * Math.pow(2, attempt);
-      console.warn(
-        `[geminiProvider:mock-exam] Attempt ${attempt + 1} failed (retryable), waiting ${backoffMs}ms:`,
-        error instanceof Error ? error.message.slice(0, 120) : error
+      log.warn(
+        { feature: "mock-exam", attempt: attempt + 1, backoffMs, err: error },
+        "retryable Gemini failure; backing off"
       );
       await sleep(backoffMs);
     }
@@ -734,9 +737,9 @@ export async function gradeClassicAnswer(
         throw error;
       }
       const backoffMs = 1000 * Math.pow(2, attempt);
-      console.warn(
-        `[geminiProvider:mock-exam-grade] Attempt ${attempt + 1} failed (retryable), waiting ${backoffMs}ms:`,
-        error instanceof Error ? error.message.slice(0, 120) : error
+      log.warn(
+        { feature: "mock-exam-grade", attempt: attempt + 1, backoffMs, err: error },
+        "retryable Gemini failure; backing off"
       );
       await sleep(backoffMs);
     }

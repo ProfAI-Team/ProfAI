@@ -1,5 +1,8 @@
 import { closeStaleGroups } from "../services/studyGroupService";
 import { registerWorker, scheduleRepeating } from "../lib/queue";
+import { featureLogger } from "../lib/logger";
+
+const log = featureLogger("studyGroupMaintenance");
 
 // Daily maintenance for the study group layer: closes suggested/active
 // groups whose examDate has lapsed more than 30 days ago.
@@ -9,9 +12,7 @@ export function registerStudyGroupMaintenanceWorker(): void {
   registerWorker<Record<string, never>>(QUEUE_NAME, async () => {
     const { closed } = await closeStaleGroups();
     if (closed > 0) {
-      console.log(
-        `[studyGroupMaintenance] closed ${closed} stale group(s)`
-      );
+      log.info({ closed }, "closed stale groups");
     }
   });
 }

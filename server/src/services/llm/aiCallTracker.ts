@@ -1,4 +1,7 @@
 import prisma from "../../lib/prisma";
+import { featureLogger } from "../../lib/logger";
+
+const log = featureLogger("aiCallTracker");
 
 // Approximate Gemini 2.5 Flash Lite pricing (text) as of 2024-12.
 // Refine when Google publishes updates.
@@ -70,9 +73,6 @@ export async function recordAICall(params: RecordCallParams): Promise<void> {
       },
     });
   } catch (err) {
-    console.error(
-      "[aiCallTracker] Failed to record AI call:",
-      err instanceof Error ? err.message : err
-    );
+    log.error({ err }, "failed to record AI call");
   }
 }

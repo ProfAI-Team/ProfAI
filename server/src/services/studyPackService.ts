@@ -2,6 +2,9 @@ import type { Prisma, StudyPack } from "@prisma/client";
 
 import prisma from "../lib/prisma";
 import { hashText } from "../lib/textExtract";
+import { featureLogger } from "../lib/logger";
+
+const log = featureLogger("studyPack");
 import {
   STUDY_PACK_VERSION,
   computeTargetTypeDistribution,
@@ -185,8 +188,9 @@ export async function generateStudyPack(
     target
   );
   if (!withinTolerance) {
-    console.warn(
-      `[studyPackService] Distribution drift: target=${JSON.stringify(target)} actual=${JSON.stringify(actualDistribution)} — persisting anyway (soft miss)`
+    log.warn(
+      { target, actualDistribution },
+      "distribution drift — persisting anyway (soft miss)"
     );
   }
 

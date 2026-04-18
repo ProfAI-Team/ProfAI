@@ -12,6 +12,9 @@ import {
   listSuggestionsForProfessor,
   StudyGroupError,
 } from "../services/studyGroupService";
+import { featureLogger } from "../lib/logger";
+
+const log = featureLogger("studyGroup");
 
 export const joinMatchmakingController = async (
   req: Request,
@@ -74,7 +77,7 @@ export const submitLinkController = async (
       });
       return;
     }
-    console.error("submitLink error:", err);
+    log.error({ err }, "submitLink unexpected error");
     res
       .status(500)
       .json({ error: { code: "INTERNAL", message: "Unexpected error." } });

@@ -3,6 +3,9 @@ import type { MockExam, MockExamSession, Prisma } from "@prisma/client";
 import prisma from "../lib/prisma";
 import type { MockExamQuestion } from "../prompts/mock-exam";
 import { gradeClassicAnswer } from "./llm/geminiProvider";
+import { featureLogger } from "../lib/logger";
+
+const log = featureLogger("mockExamGrading");
 
 // Parallel CLASSIC grading batch size — small enough to stay inside
 // Gemini's burst quota (and the mock-exam rate limit), large enough to
@@ -220,10 +223,7 @@ export async function gradeSession(
           );
           return { job, result: r };
         } catch (err) {
-          console.error(
-            `[gradeSession] CLASSIC grading failed for qIdx=${job.qIdx}:`,
-            err instanceof Error ? err.message : err
-          );
+          log.error({ err, qIdx: job.qIdx }, "CLASSIC grading failed; returning null");
           return { job, result: null as Awaited<ReturnType<typeof classicGrader>> | null };
         }
       })

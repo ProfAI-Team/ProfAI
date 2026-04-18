@@ -4,6 +4,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import path from "path";
 
+import { httpLogger } from "./lib/logger";
 import authRoutes from "./routes/authRoutes";
 import professorRoutes from "./routes/professorRoutes";
 import courseRoutes from "./routes/courseRoutes";
@@ -20,6 +21,7 @@ export function createApp(): express.Express {
   const app = express();
 
   app.use(helmet());
+  app.use(httpLogger);
   app.use(
     cors({
       origin: process.env.CORS_ORIGIN || "http://localhost:3000",

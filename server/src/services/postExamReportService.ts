@@ -2,6 +2,9 @@ import { createHash } from "node:crypto";
 
 import prisma from "../lib/prisma";
 import * as creditService from "./creditService";
+import { featureLogger } from "../lib/logger";
+
+const log = featureLogger("postExamReport");
 
 /**
  * k-anonymity threshold for aggregated views. Fewer than K reports and
@@ -297,7 +300,7 @@ export async function reconstructExamSummary(
       basedOnReports: aggregated.count,
     };
   } catch (err) {
-    console.error("[reconstructExamSummary] fallback after Gemini error:", err);
+    log.error({ err }, "reconstructExamSummary falling back after Gemini error");
     return {
       status: "ready",
       summary: RECONSTRUCT_FALLBACK,

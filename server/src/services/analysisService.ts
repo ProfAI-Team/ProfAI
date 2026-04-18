@@ -1,4 +1,7 @@
 import { analyzeWithGemini } from "./llm/geminiProvider";
+import { featureLogger } from "../lib/logger";
+
+const log = featureLogger("analysisService");
 
 export interface QuestionTypes {
   "Multiple Choice": number;
@@ -88,19 +91,14 @@ export async function analyzeExam(
   mimeType: string
 ): Promise<AnalysisResult> {
   if (!process.env.GEMINI_API_KEY) {
-    console.warn(
-      "[analysisService] GEMINI_API_KEY not set — falling back to mock analysis."
-    );
+    log.warn("GEMINI_API_KEY not set — falling back to mock analysis");
     return generateMockResult();
   }
 
   try {
     return await analyzeWithGemini(filePath, mimeType);
   } catch (error) {
-    console.error(
-      "[analysisService] Gemini analysis failed, using mock fallback:",
-      error instanceof Error ? error.message : error
-    );
+    log.error({ err: error }, "Gemini analysis failed, using mock fallback");
     return generateMockResult();
   }
 }

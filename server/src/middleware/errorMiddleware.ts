@@ -2,6 +2,7 @@ import type { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
 
 import { AppError } from "../lib/AppError";
+import { logger } from "../lib/logger";
 
 /**
  * Global error handler. Normalizes thrown errors (AppError, ZodError,
@@ -36,7 +37,13 @@ export const errorMiddleware: ErrorRequestHandler = (err, _req, res, _next) => {
     return;
   }
 
-  console.error("[errorMiddleware] Unhandled error:", err);
+  logger.error(
+    {
+      err,
+      requestId: (_req as { id?: string }).id,
+    },
+    "Unhandled error reached global error middleware"
+  );
   res.status(500).json({
     error: {
       code: "INTERNAL",

@@ -2,6 +2,9 @@ import type { Request, Response, NextFunction } from "express";
 import { Prisma } from "@prisma/client";
 
 import prisma from "../lib/prisma";
+import { featureLogger } from "../lib/logger";
+
+const log = featureLogger("credit");
 import {
   CREDITS_ENABLED,
   CreditEarn,
@@ -198,7 +201,7 @@ export function requireCredits(reason: CreditSpendReason) {
         });
         return;
       }
-      console.error("requireCredits middleware error:", err);
+      log.error({ err }, "requireCredits middleware failed");
       res.status(500).json({ error: { code: "INTERNAL", message: "Credit check failed." } });
     }
   };

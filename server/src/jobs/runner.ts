@@ -7,6 +7,9 @@ import {
   scheduleSpacedRepetitionDaily,
 } from "./spacedRepetitionScheduler";
 import { closeAll } from "../lib/queue";
+import { featureLogger } from "../lib/logger";
+
+const log = featureLogger("jobs");
 
 /**
  * Boot all background workers + schedule repeating jobs.
@@ -26,7 +29,7 @@ export async function bootJobs(): Promise<void> {
   await scheduleSpacedRepetitionDaily();
 
   const shutdown = async () => {
-    console.log("[jobs] shutting down workers...");
+    log.info("shutting down workers");
     await closeAll();
     process.exit(0);
   };
@@ -34,5 +37,5 @@ export async function bootJobs(): Promise<void> {
   process.on("SIGTERM", shutdown);
   process.on("SIGINT", shutdown);
 
-  console.log("[jobs] workers registered + scheduled");
+  log.info("workers registered + scheduled");
 }

@@ -1,5 +1,8 @@
 import { Queue, Worker, type JobsOptions, type WorkerOptions } from "bullmq";
 import IORedis, { type Redis } from "ioredis";
+import { featureLogger } from "./logger";
+
+const queueLog = featureLogger("queue");
 
 /**
  * Queue + worker registry backed by BullMQ + Redis.
@@ -95,9 +98,9 @@ export function registerWorker<T>(
     { connection: getConnection(), ...options }
   );
   worker.on("failed", (job, err) => {
-    console.error(
-      `[queue:${queueName}] job ${job?.id} failed:`,
-      err instanceof Error ? err.message : err
+    queueLog.error(
+      { queue: queueName, jobId: job?.id, err },
+      "job failed"
     );
   });
   workers.set(queueName, worker);

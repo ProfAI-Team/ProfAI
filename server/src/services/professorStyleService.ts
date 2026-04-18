@@ -9,6 +9,9 @@ import {
 } from "./llm/claudeProvider";
 import { buildStyleSummaryPrompt } from "../prompts/style-summary";
 import { STYLE_SUMMARY_VERSION } from "../prompts/style-summary";
+import { featureLogger } from "../lib/logger";
+
+const log = featureLogger("professorStyle");
 
 // ExamAnalysis JSON shapes (authored on write via analysisService).
 // Keys are preserved as-is across the codebase.
@@ -270,9 +273,7 @@ async function buildAndPersist(
   let isStale: boolean;
 
   if (!process.env.GEMINI_API_KEY) {
-    console.warn(
-      "[professorStyleService] GEMINI_API_KEY not set — using fallback summary."
-    );
+    log.warn("GEMINI_API_KEY not set — using fallback summary");
     summary = FALLBACK_SUMMARY;
     version = FALLBACK_VERSION;
     isStale = true; // retry next request
@@ -305,9 +306,9 @@ async function buildAndPersist(
       version = `${STYLE_SUMMARY_VERSION}:${provider}:${generated.model}${fallbackUsed ? ":fallback" : ""}`;
       isStale = false;
     } catch (error) {
-      console.error(
-        "[professorStyleService] style summary failed (primary + fallback), persisting fallback:",
-        error instanceof Error ? error.message : error
+      log.error(
+        { err: error, professorId },
+        "style summary failed (primary + fallback) — persisting fallback"
       );
       summary = FALLBACK_SUMMARY;
       version = FALLBACK_VERSION;
