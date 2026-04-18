@@ -53,14 +53,14 @@ export function createApp(): express.Express {
 
   app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
-  // Health check is intentionally mounted before the /api routers below —
-  // dnaRoutes / multimodalRoutes install `router.use(authenticate)` on
-  // every /api/* path, which would otherwise swallow /api/health with a
-  // 401 before it reaches this handler.
   app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
   });
 
+  // All /api routers attach `authenticate` per-route, so mount order is
+  // no longer load-bearing — previously dnaRoutes installed auth at the
+  // router level and had to sit last, which 401'd b2b's public browse
+  // endpoints when it sat first.
   app.use("/api/auth", authRoutes);
   app.use("/api/professors", professorRoutes);
   app.use("/api/courses", courseRoutes);
@@ -70,13 +70,6 @@ export function createApp(): express.Express {
   app.use("/api/study-pack", studyPackRoutes);
   app.use("/api/mock-exam", mockExamRoutes);
   app.use("/api", communityRoutes);
-  // Phase 7 task 7.17 — B2B + marketplace + payments sit behind a single
-  // router so the namespace layering (tutors / tutoring / marketplace /
-  // payments / university / hoca) can read from one file. Mounted BEFORE
-  // dnaRoutes + multimodalRoutes because those install `router.use(
-  // authenticate)` globally and would 401 the public browse endpoints
-  // (GET /api/marketplace/items, GET /api/tutors/:id) before they reach
-  // the handler.
   app.use("/api", b2bRoutes);
   app.use("/api", dnaRoutes);
   app.use("/api", multimodalRoutes);

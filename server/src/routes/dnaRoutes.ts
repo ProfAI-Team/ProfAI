@@ -45,8 +45,12 @@ import {
 
 const router = Router();
 
-// All DNA endpoints require auth. Paywall gating is handled per-route.
-router.use(authenticate);
+// Every handler in this file takes `authenticate` explicitly. The earlier
+// version used `router.use(authenticate)` at module scope, which meant the
+// mount order in app.ts became load-bearing: any router mounted on the same
+// `/api` prefix AFTER this one would inherit the global middleware and 401
+// its own public endpoints. Attaching auth per-route removes that coupling
+// — paywall gating + rate limiters chain on top.
 
 function requireUserId(req: { user?: { id: string } }): string {
   if (!req.user?.id) throw badRequest("Missing authenticated user.");
@@ -55,7 +59,7 @@ function requireUserId(req: { user?: { id: string } }): string {
 
 // ---------------- DNA ----------------
 
-router.get("/dna/me", async (req, res, next) => {
+router.get("/dna/me", authenticate, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
     const result = await getDNA(userId);
@@ -67,6 +71,7 @@ router.get("/dna/me", async (req, res, next) => {
 
 router.post(
   "/dna/me/recompute",
+  authenticate,
   dnaRecomputeDailyLimiter,
   async (req, res, next) => {
     try {
@@ -80,7 +85,7 @@ router.post(
   }
 );
 
-router.patch("/dna/me/learning-style", async (req, res, next) => {
+router.patch("/dna/me/learning-style", authenticate, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
     const parsed = learningStyleSchema.safeParse(req.body);
@@ -103,7 +108,7 @@ router.patch("/dna/me/learning-style", async (req, res, next) => {
 
 // ---------------- Confidence ----------------
 
-router.get("/confidence/me", async (req, res, next) => {
+router.get("/confidence/me", authenticate, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
     const map = await getConfidenceMap(userId);
@@ -113,7 +118,7 @@ router.get("/confidence/me", async (req, res, next) => {
   }
 });
 
-router.get("/confidence/me/weakest", async (req, res, next) => {
+router.get("/confidence/me/weakest", authenticate, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
     const n = Number(req.query.n ?? 3);
@@ -126,7 +131,7 @@ router.get("/confidence/me/weakest", async (req, res, next) => {
 
 // ---------------- Grades ----------------
 
-router.post("/grades", gradeWriteDailyLimiter, async (req, res, next) => {
+router.post("/grades", authenticate, gradeWriteDailyLimiter, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
     const parsed = addGradeSchema.safeParse(req.body);
@@ -138,7 +143,7 @@ router.post("/grades", gradeWriteDailyLimiter, async (req, res, next) => {
   }
 });
 
-router.get("/grades/me", async (req, res, next) => {
+router.get("/grades/me", authenticate, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
     const semester =
@@ -150,10 +155,10 @@ router.get("/grades/me", async (req, res, next) => {
   }
 });
 
-router.delete("/grades/:id", async (req, res, next) => {
+router.delete("/grades/:id", authenticate, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
-    const ok = await deleteGrade(userId, req.params.id);
+    const ok = await deleteGrade(userId, String(req.params.id));
     if (!ok) throw notFound("Grade not found or not yours.");
     res.status(204).send();
   } catch (err) {
@@ -161,7 +166,7 @@ router.delete("/grades/:id", async (req, res, next) => {
   }
 });
 
-router.get("/grades/me/gpa", async (req, res, next) => {
+router.get("/grades/me/gpa", authenticate, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
     const semester =
@@ -177,7 +182,7 @@ router.get("/grades/me/gpa", async (req, res, next) => {
   }
 });
 
-router.post("/grades/me/simulate", async (req, res, next) => {
+router.post("/grades/me/simulate", authenticate, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
     const parsed = simulateGradeSchema.safeParse(req.body);
@@ -189,7 +194,7 @@ router.post("/grades/me/simulate", async (req, res, next) => {
   }
 });
 
-router.post("/grades/me/target", async (req, res, next) => {
+router.post("/grades/me/target", authenticate, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
     const parsed = whatIfTargetSchema.safeParse(req.body);
@@ -205,6 +210,7 @@ router.post("/grades/me/target", async (req, res, next) => {
 
 router.get(
   "/course-advisor/:professorId",
+  authenticate,
   requirePremium("COURSE_ADVISOR"),
   advisorDailyLimiter,
   async (req, res, next) => {
@@ -223,6 +229,7 @@ router.get(
 
 router.get(
   "/exam-reconstruct/:professorId",
+  authenticate,
   requirePremium("EXAM_RECONSTRUCT"),
   advisorDailyLimiter,
   async (req, res, next) => {
@@ -238,7 +245,7 @@ router.get(
 
 // ---------------- Spaced Repetition ----------------
 
-router.get("/spaced-repetition/me/due", async (req, res, next) => {
+router.get("/spaced-repetition/me/due", authenticate, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
     const untilParam = req.query.until;
@@ -256,6 +263,7 @@ router.get("/spaced-repetition/me/due", async (req, res, next) => {
 
 router.post(
   "/spaced-repetition/me/:questionId/complete",
+  authenticate,
   async (req, res, next) => {
     try {
       const userId = requireUserId(req);
@@ -263,7 +271,7 @@ router.post(
       if (!parsed.success) return next(parsed.error);
       const result = await completeReview({
         userId,
-        questionId: req.params.questionId,
+        questionId: String(req.params.questionId),
         correct: parsed.data.correct,
       });
       if (!result) throw notFound("Review row not found.");
@@ -274,7 +282,7 @@ router.post(
   }
 );
 
-router.patch("/users/me/review-frequency", async (req, res, next) => {
+router.patch("/users/me/review-frequency", authenticate, async (req, res, next) => {
   try {
     const userId = requireUserId(req);
     const parsed = reviewFrequencySchema.safeParse(req.body);
