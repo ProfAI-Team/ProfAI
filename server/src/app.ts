@@ -17,6 +17,7 @@ import communityRoutes from "./routes/communityRoutes";
 import dnaRoutes from "./routes/dnaRoutes";
 import multimodalRoutes from "./routes/multimodalRoutes";
 import pushRoutes from "./routes/pushRoutes";
+import accountRoutes from "./routes/accountRoutes";
 import { errorMiddleware } from "./middleware/errorMiddleware";
 
 export function createApp(): express.Express {
@@ -71,6 +72,7 @@ export function createApp(): express.Express {
   app.use("/api", dnaRoutes);
   app.use("/api", multimodalRoutes);
   app.use("/api/push", pushRoutes);
+  app.use("/api/users", accountRoutes);
 
   app.use(errorMiddleware);
 
