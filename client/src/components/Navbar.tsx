@@ -23,6 +23,10 @@ import {
   Menu,
   X,
   LogOut,
+  UserRoundCheck,
+  ShoppingBag,
+  Briefcase,
+  Building2,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
@@ -31,16 +35,26 @@ import ProfAvatar from './Avatar';
 import CreditBadge from './CreditBadge';
 import { cn } from '../lib/utils';
 
+type UserRole =
+  | 'STUDENT'
+  | 'HOCA'
+  | 'TUTOR'
+  | 'UNIVERSITY_ADMIN'
+  | 'SUPER_ADMIN';
+
 interface NavLink {
   to: string;
   labelKey: string;
   icon: React.ComponentType<{ className?: string }>;
   authRequired?: boolean;
+  roles?: UserRole[]; // Phase 7 (7.27) — only show when user has this role.
 }
 
 const NAV_LINKS: NavLink[] = [
   { to: '/', labelKey: 'nav.home', icon: Home },
   { to: '/professors', labelKey: 'nav.professors', icon: Users },
+  { to: '/tutors', labelKey: 'nav.tutors', icon: UserRoundCheck },
+  { to: '/marketplace', labelKey: 'nav.marketplace', icon: ShoppingBag },
   { to: '/upload', labelKey: 'nav.upload', icon: UploadIcon, authRequired: true },
   { to: '/upload-notes', labelKey: 'nav.uploadNotes', icon: Wand2, authRequired: true },
   { to: '/mock-exam/generate', labelKey: 'nav.mockExam', icon: ClipboardCheck, authRequired: true },
@@ -55,6 +69,21 @@ const NAV_LINKS: NavLink[] = [
   { to: '/me/ocr', labelKey: 'nav.ocr', icon: ScanLine, authRequired: true },
   { to: '/me/lectures', labelKey: 'nav.lectures', icon: Headphones, authRequired: true },
   { to: '/search/multimodal', labelKey: 'nav.multimodalSearch', icon: Camera, authRequired: true },
+  // Phase 7 (7.27) — role-scoped entries.
+  {
+    to: '/hoca/dashboard',
+    labelKey: 'nav.hocaDashboard',
+    icon: Briefcase,
+    authRequired: true,
+    roles: ['HOCA'],
+  },
+  {
+    to: '/admin/university',
+    labelKey: 'nav.universityAdmin',
+    icon: Building2,
+    authRequired: true,
+    roles: ['UNIVERSITY_ADMIN'],
+  },
 ];
 
 const Navbar: React.FC = () => {
@@ -70,7 +99,14 @@ const Navbar: React.FC = () => {
     setMobileOpen(false);
   };
 
-  const visibleLinks = NAV_LINKS.filter((l) => !l.authRequired || isAuthenticated);
+  const userRole = (user?.role ?? 'STUDENT') as UserRole;
+  const visibleLinks = NAV_LINKS.filter((l) => {
+    if (l.authRequired && !isAuthenticated) return false;
+    if (l.roles && !l.roles.includes(userRole) && userRole !== 'SUPER_ADMIN') {
+      return false;
+    }
+    return true;
+  });
 
   const isActive = (to: string) => {
     if (to === '/') return location.pathname === '/';
