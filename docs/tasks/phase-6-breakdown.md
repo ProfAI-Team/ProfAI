@@ -16,7 +16,7 @@ Phase 3+4+5 retro düzeni korundu: **borçlar önce** (8), backend core ortada (
 | 6.2 | Phase 0/1 error shape migration — 6 controller + client `api.ts` interceptor (50+ call) | 4 saat | 5.3 infra | ✅ Tamam | `1985d30` |
 | 6.3 | Multi-provider AI abstraction (T4 kapanışı) — Gemini primary + Claude fallback interface | 3 saat | — | ✅ Tamam | `bc24edf` |
 | 6.4 | pino structured logging — console.log/warn → pino + request_id + AI call log | 3 saat | — | ✅ Tamam | `57a8ee3` |
-| 6.5 | Prisma JSON field Zod parse helpers — 3 `as unknown as X` cast'i temizle | 2 saat | — | ⬜ | — |
+| 6.5 | Prisma JSON field Zod parse helpers — 3 `as unknown as X` cast'i temizle | 2 saat | — | ✅ Tamam | `e5e0dcf` |
 | 6.6 | Style-profile cache-hit integration test — cache warmup hook + 5.16 skip'i aç | 2 saat | 6.1 | ⬜ | — |
 | 6.7 | Docker rebuild workflow standardize — `.dockerignore` + `scripts/rebuild-volumes.sh` | 1 saat | — | ⬜ | — |
 | 6.8 | Prisma schema — `VoiceSession` + `OCRResult` + `PushDevice` + `VoiceUsage` tabloları + migration | 3 saat | — | ⬜ | — |
