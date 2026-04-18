@@ -18,7 +18,13 @@ export type PremiumFeatureKey =
   | "VOICE_TUTOR"
   | "OCR_PRO"
   | "LECTURE_TRANSCRIBE"
-  | "MULTIMODAL_SEARCH";
+  | "MULTIMODAL_SEARCH"
+  // Phase 7 task 7.12 — B2B + marketplace + payments.
+  | "TUTOR_MATCHING"
+  | "MARKETPLACE_PRO"
+  | "UNIVERSITY_ADMIN"
+  | "HOCA_PORTAL"
+  | "PAYMENT_SANDBOX";
 
 interface FeatureConfig {
   key: PremiumFeatureKey;
@@ -76,6 +82,45 @@ export const PREMIUM_FEATURES: Record<PremiumFeatureKey, FeatureConfig> = {
     description: "Formula photograph → similar exam questions",
     enabled: true,
     dailyCap: 10,
+  },
+  // Phase 7 task 7.12 ---------------------------------------------------
+  TUTOR_MATCHING: {
+    key: "TUTOR_MATCHING",
+    description:
+      "DNA + pgvector matching engine on /tutors — ranks tutors by style+subject+rating compatibility",
+    enabled: true,
+    dailyCap: 60, // search calls; booking itself is a separate flow
+  },
+  MARKETPLACE_PRO: {
+    key: "MARKETPLACE_PRO",
+    description:
+      "Seller-side marketplace features (listing items, managing approvals). Browsing stays free.",
+    enabled: true,
+    dailyCap: null,
+  },
+  UNIVERSITY_ADMIN: {
+    key: "UNIVERSITY_ADMIN",
+    description:
+      "B2B tenant admin dashboard, seat management, aggregate insights (k-anonymity ≥5)",
+    enabled: true,
+    dailyCap: 100,
+  },
+  HOCA_PORTAL: {
+    key: "HOCA_PORTAL",
+    description:
+      "Verified hoca dashboard, anonymised student feedback, struggling-topics insight",
+    enabled: true,
+    dailyCap: null,
+  },
+  PAYMENT_SANDBOX: {
+    key: "PAYMENT_SANDBOX",
+    description:
+      "Toggle iyzico sandbox mode. When true, paymentService routes through stubbed provider responses.",
+    // Default off — production safety; dev envs flip to true via env override
+    // (`PREMIUM_FEATURES_OVERRIDE_PAYMENT_SANDBOX=true`) once iyzico creds
+    // are loaded.
+    enabled: false,
+    dailyCap: null,
   },
 };
 
