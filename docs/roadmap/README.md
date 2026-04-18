@@ -14,8 +14,8 @@ Her faz **kullanılabilir bir ürün** ekler. Her fazın net giriş kriterleri, 
 | 3 | [Mock Exam ve Tahminler](./phase-3-mock-exams.md) | 2 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-17 | Phase 2 tamam |
 | 4 | [Topluluk Katmanı](./phase-4-community.md) | 3 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-17 | Phase 3 tamam |
 | 5 | [Akademik DNA + Persistent Memory](./phase-5-academic-dna.md) | 2 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-17 | Phase 4 tamam |
-| 6 | [Multimodal + Live AI Tutor](./phase-6-multimodal.md) | 3 hafta | 🎯 **Sıradaki** | Phase 5 tamam |
-| 7 | [B2B + Marketplace](./phase-7-b2b-marketplace.md) | 4 hafta | Planlı | Phase 6 tamam |
+| 6 | [Multimodal + Live AI Tutor](./phase-6-multimodal.md) | 3 hafta (tahmin) · 1 gün (gerçek) | ✅ Tamamlandı 2026-04-19 | Phase 5 tamam |
+| 7 | [B2B + Marketplace](./phase-7-b2b-marketplace.md) | 4 hafta | 🎯 **Sıradaki** | Phase 6 tamam |
 
 **Toplam süre:** ~17 hafta (≈4 ay odaklı geliştirme; realistik takvim 9 ay).
 
@@ -71,7 +71,7 @@ Phase 0 (MVP)
 | Phase 3 | `MockExam`, `MockExamSession` |
 | Phase 4 | `UserCredit`, `ExamApproval`, `QuestionVote`, `PostExamReport`, `StudyGroup` |
 | Phase 5 | `AcademicDNA`, `ConfidenceScore`, `GradeRecord`, `SpacedRepetition` |
-| Phase 6 | `VoiceSession`, `OCRResult` |
+| Phase 6 | `VoiceSession`, `VoiceUsage`, `OCRResult`, `PushDevice` + `User.pushOptIn` + `AICallLog.fallbackUsed` |
 | Phase 7 | `Tutor`, `TutoringSession`, `MarketplaceItem`, `Payment`, `UniversityAccount` |
 
 Detay: [`../architecture/data-model-evolution.md`](../architecture/data-model-evolution.md).
@@ -101,5 +101,6 @@ Detay: [`../operations/kpis.md`](../operations/kpis.md).
 - Task breakdown (Phase 3): [`../tasks/phase-3-breakdown.md`](../tasks/phase-3-breakdown.md)
 - Task breakdown (Phase 4): [`../tasks/phase-4-breakdown.md`](../tasks/phase-4-breakdown.md)
 - Task breakdown (Phase 5): [`../tasks/phase-5-breakdown.md`](../tasks/phase-5-breakdown.md)
+- Task breakdown (Phase 6): [`../tasks/phase-6-breakdown.md`](../tasks/phase-6-breakdown.md)
 - Mimari evrim: [`../architecture/data-model-evolution.md`](../architecture/data-model-evolution.md)
 - Risk matrisi: [`../operations/risks.md`](../operations/risks.md)

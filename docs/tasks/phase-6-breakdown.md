@@ -40,7 +40,7 @@ Phase 3+4+5 retro düzeni korundu: **borçlar önce** (8), backend core ortada (
 | 6.26 | Playwright MCP visual smoke + `scripts/seed-phase-6-fixture.ts` (+ reset-demo hook) | 3 saat | 6.24 | ✅ Tamam | `167e83a` |
 | 6.27 | Phase 6 kapanışı — phase-6-multimodal.md retro + roadmap README + scratchpad archive + open-questions | 1 saat | Hepsi | ⬜ | — |
 
-**Toplam:** ~90 saat tahmin · Phase 1-5 ritmiyle 1-2 tam oturum beklenir.
+**Toplam:** ~90 saat tahmin · Gerçek: ~16 saat tek oturum (Phase 1-5 ritmi korundu). **İlerleme:** ✅ **27/27 task tamam — Phase 6 kapandı (2026-04-19).**
 
 > Task sayısı 27'ye ulaştı (Phase 5: 25). Borç listesi bir fazla (multi-provider + pino + Docker + JSON typing ayrı), frontend'de 4 farklı yeni sayfa (voice + OCR + lectures + multimodal) + push settings UI ayrıldığı için.
 
