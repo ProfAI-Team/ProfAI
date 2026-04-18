@@ -12,7 +12,7 @@ Phase 3+4+5 retro düzeni korundu: **borçlar önce** (8), backend core ortada (
 
 | # | Task | Tahmini | Bağımlılık | Durum | Commit |
 |---|------|---------|------------|-------|--------|
-| 6.1 | vitest 2→4 upgrade + per-worker schema default flip (D1 kapanışı) | 4 saat | — | ✅ | _pending commit_ |
+| 6.1 | vitest 2→4 upgrade + per-worker schema default flip (D1 kapanışı) | 4 saat | — | ✅ Tamam | `b96522a` |
 | 6.2 | Phase 0/1 error shape migration — 6 controller + client `api.ts` interceptor (50+ call) | 4 saat | 5.3 infra | ⬜ | — |
 | 6.3 | Multi-provider AI abstraction (T4 kapanışı) — Gemini primary + Claude fallback interface | 3 saat | — | ⬜ | — |
 | 6.4 | pino structured logging — console.log/warn → pino + request_id + AI call log | 3 saat | — | ⬜ | — |
