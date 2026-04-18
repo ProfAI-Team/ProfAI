@@ -20,10 +20,150 @@
     "ocr": "OCR Not",
     "lectures": "Ders Kayıtları",
     "multimodalSearch": "Görselle Ara",
+    "tutors": "Tutorlar",
+    "marketplace": "Marketplace",
+    "hocaDashboard": "Hoca Paneli",
+    "universityAdmin": "Üniversite Paneli",
     "signIn": "Giriş Yap",
     "signUp": "Üye ol",
     "signOut": "Çıkış Yap",
     "menu": "Menü"
+  },
+  "tutoring": {
+    "list": {
+      "title": "Tutor bul",
+      "subtitle": "Hangi konuda takıldıysan yaz; profiline uyan tutorları buluyoruz.",
+      "subjectLabel": "Konu",
+      "subjectPlaceholder": "Calculus, Organik Kimya, Veri Yapıları…",
+      "levelLabel": "Seviye",
+      "priceLabel": "Max. saatlik (₺)",
+      "submit": "Ara",
+      "empty": "Henüz bu filtrelerle eşleşen tutor yok. Farklı bir konu dene ya da fiyat aralığını genişlet."
+    },
+    "levels": {
+      "beginner": "Başlangıç",
+      "intermediate": "Orta",
+      "advanced": "İleri",
+      "all": "Hepsi"
+    },
+    "detail": {
+      "bookTitle": "Ders al",
+      "dateLabel": "Tarih + saat",
+      "durationLabel": "Süre (dakika)",
+      "book": "Rezerve et",
+      "total": "toplam",
+      "pendingBanner": "Moderasyondayız.",
+      "specializations": "Uzmanlık alanları"
+    },
+    "session": {
+      "title": "Tutoring oturumu",
+      "meet": "Google Meet'e git",
+      "meetPending": "Meet linki oturum saatinden 30 dakika önce tutor tarafından paylaşılacak.",
+      "reviewTitle": "Derste nasıl gitti?",
+      "reviewPlaceholder": "Neler iyi gittiğini / geliştirilebilecekleri yaz (isteğe bağlı)",
+      "submitReview": "Değerlendirmeyi gönder",
+      "reviewSubmitted": "Değerlendirmen",
+      "status": {
+        "scheduled": "Planlandı",
+        "completed": "Tamamlandı",
+        "cancelled": "İptal edildi",
+        "disputed": "İtirazlı",
+        "no_show": "Katılım yok"
+      }
+    }
+  },
+  "marketplace": {
+    "title": "Mezun notları ve çalışma rehberleri",
+    "subtitle": "ProfAI topluluğunun paylaştığı materyaller. Satış başına %30 komisyon alınır.",
+    "searchLabel": "Ara",
+    "searchPlaceholder": "Matematik, organik kimya, veri yapıları…",
+    "typeLabel": "Tür",
+    "typeAll": "Hepsi",
+    "typeNotes": "Notlar",
+    "typeStudyGuide": "Çalışma rehberi",
+    "sortLabel": "Sırala",
+    "sort": {
+      "recent": "Yeni",
+      "popular": "Popüler",
+      "priceAsc": "Ucuz → pahalı",
+      "priceDesc": "Pahalı → ucuz"
+    },
+    "submit": "Ara",
+    "empty": {
+      "title": "Sonuç yok",
+      "body": "Arama ifadeni genişlet ya da tür filtresini kaldır."
+    },
+    "detail": {
+      "description": "Açıklama",
+      "preview": "Önizleme",
+      "safeTitle": "Güvenli satın alma",
+      "safeBody": "Ödeme iyzico 3D Secure üzerinden alınır. Kart bilgin bizde saklanmaz. Satın alma sonrası indirme linkini hesabından alırsın.",
+      "buy": "Satın al"
+    }
+  },
+  "checkout": {
+    "title": "Ödeme ekranı",
+    "subtitle": "iyzico 3D Secure. Kart bilgileri bizde saklanmaz.",
+    "preparing": "Ödeme oturumu hazırlanıyor…",
+    "invoiceNote": "Ödeme tamamlanınca otomatik olarak hesabına yönlendirileceksin. Faturan e-posta ile gelir.",
+    "missingParams": {
+      "title": "Ödeme parametreleri eksik",
+      "body": "Bu sayfaya ilgili ürün sayfasından ulaşman gerek."
+    },
+    "callback": {
+      "failTitle": "Ödeme tamamlanamadı",
+      "failBody": "Paran güvende. Tekrar denemek ister misin?",
+      "retry": "Geri dön",
+      "successTitle": "Ödeme tamamlandı",
+      "pendingTitle": "Doğrulanıyor…",
+      "continue": "Dashboard'a git"
+    }
+  },
+  "payment": {
+    "status": {
+      "pending": "Bekliyor",
+      "succeeded": "Başarılı",
+      "failed": "Başarısız",
+      "refunded": "İade edildi",
+      "disputed": "İtirazlı"
+    }
+  },
+  "university": {
+    "title": "Üniversite paneli",
+    "subtitle": "Koltuklar, aggregate performans, SSO entegrasyonu.",
+    "overview": "Genel bakış",
+    "activeStudents": "Aktif öğrenci",
+    "completedSessions": "Tamamlanan mock sınav",
+    "avgScore": "Ortalama skor",
+    "struggling": "En çok zorlanılan konular",
+    "insufficient": "Aggregate veri için ≥5 aktif öğrenci gerekli",
+    "insufficientBody": "Koltukları ekleyin; öğrenciler mock sınav çözdükçe grafikler burada görünmeye başlar.",
+    "addSeat": "Koltuk ekle",
+    "emailLabel": "Öğrenci e-postası",
+    "addButton": "Ekle",
+    "seatsFull": "Koltuk doldu — yeni öğrenci eklemek için planınızı yükseltin.",
+    "seatsAlmostFull": "Kapasitenin %90'ı kullanıldı."
+  },
+  "hoca": {
+    "title": "Hoca paneli",
+    "subtitle": "Öğrencilerinin ProfAI metriklerindeki aggregate görünümü. Her ölçüm k≥5 öğrenci üstünde hesaplanır.",
+    "insufficientTitle": "Henüz yeterli veri yok",
+    "insufficientBody": "Raporlar için en az 5 öğrenci gerekli. Derslerini ekle, mock sınav çözüldükçe veriler burada görünmeye başlayacak.",
+    "struggling": "En çok zorlanılan konular",
+    "perTopicInsufficient": "Konu bazlı yeterli örnek yok (k≥5 şartı).",
+    "studentCount": "{{count}} öğrenci"
+  },
+  "roles": {
+    "STUDENT": "Öğrenci",
+    "HOCA": "Hoca",
+    "TUTOR": "Tutor",
+    "UNIVERSITY_ADMIN": "Üniversite Admin",
+    "SUPER_ADMIN": "Süper Admin",
+    "deniedTitle": "Bu bölüm senin için değil",
+    "deniedBody": "Farklı bir hesapla giriş yapmak gerekebilir. Sorunu çözemezsen destek ekibine yaz.",
+    "loginRequired": "Giriş gerekli",
+    "loginRequiredBody": "Bu sayfayı görüntülemek için hesabına giriş yap.",
+    "goHome": "Ana sayfaya dön"
   },
   "footer": {
     "tagline": "Hocanın nasıl soru sorduğunu çöz. Geçmiş sınavları yükle, yapay zekayla kalıbı gör.",

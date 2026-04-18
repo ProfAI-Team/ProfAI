@@ -20,10 +20,150 @@
     "ocr": "OCR Notes",
     "lectures": "Lectures",
     "multimodalSearch": "Image Search",
+    "tutors": "Tutors",
+    "marketplace": "Marketplace",
+    "hocaDashboard": "Instructor Dashboard",
+    "universityAdmin": "University Admin",
     "signIn": "Sign in",
     "signUp": "Sign up",
     "signOut": "Sign out",
     "menu": "Menu"
+  },
+  "tutoring": {
+    "list": {
+      "title": "Find a tutor",
+      "subtitle": "Tell us what you're stuck on; we match tutors to your profile.",
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "Calculus, Organic Chemistry, Data Structures…",
+      "levelLabel": "Level",
+      "priceLabel": "Max hourly (₺)",
+      "submit": "Search",
+      "empty": "No tutors match these filters yet. Try a different subject or widen the price range."
+    },
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "all": "All"
+    },
+    "detail": {
+      "bookTitle": "Book a session",
+      "dateLabel": "Date + time",
+      "durationLabel": "Duration (minutes)",
+      "book": "Reserve",
+      "total": "total",
+      "pendingBanner": "Under moderation.",
+      "specializations": "Specializations"
+    },
+    "session": {
+      "title": "Tutoring session",
+      "meet": "Open Google Meet",
+      "meetPending": "The meet link appears here 30 minutes before the session; your tutor will share it.",
+      "reviewTitle": "How did it go?",
+      "reviewPlaceholder": "Tell us what went well and what could improve (optional)",
+      "submitReview": "Submit review",
+      "reviewSubmitted": "Your review",
+      "status": {
+        "scheduled": "Scheduled",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "disputed": "Disputed",
+        "no_show": "No show"
+      }
+    }
+  },
+  "marketplace": {
+    "title": "Alumni notes and study guides",
+    "subtitle": "Materials shared by the ProfAI community. 30% commission per sale.",
+    "searchLabel": "Search",
+    "searchPlaceholder": "Math, organic chemistry, data structures…",
+    "typeLabel": "Type",
+    "typeAll": "All",
+    "typeNotes": "Notes",
+    "typeStudyGuide": "Study guide",
+    "sortLabel": "Sort",
+    "sort": {
+      "recent": "Newest",
+      "popular": "Popular",
+      "priceAsc": "Cheapest first",
+      "priceDesc": "Most expensive first"
+    },
+    "submit": "Search",
+    "empty": {
+      "title": "No results",
+      "body": "Widen your search or drop the type filter."
+    },
+    "detail": {
+      "description": "Description",
+      "preview": "Preview",
+      "safeTitle": "Secure checkout",
+      "safeBody": "Payments run over iyzico 3D Secure. Your card is never stored with us. After checkout the download link lands in your account.",
+      "buy": "Buy"
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "subtitle": "iyzico 3D Secure. Your card is never stored with us.",
+    "preparing": "Preparing your payment…",
+    "invoiceNote": "You'll be redirected to your account after the payment completes. The invoice goes to your email.",
+    "missingParams": {
+      "title": "Missing checkout parameters",
+      "body": "Reach this page from the product you want to buy."
+    },
+    "callback": {
+      "failTitle": "Payment did not complete",
+      "failBody": "Your money is safe. Want to try again?",
+      "retry": "Go back",
+      "successTitle": "Payment complete",
+      "pendingTitle": "Verifying…",
+      "continue": "Go to dashboard"
+    }
+  },
+  "payment": {
+    "status": {
+      "pending": "Pending",
+      "succeeded": "Succeeded",
+      "failed": "Failed",
+      "refunded": "Refunded",
+      "disputed": "Disputed"
+    }
+  },
+  "university": {
+    "title": "University admin",
+    "subtitle": "Seats, aggregate performance, SSO integration.",
+    "overview": "Overview",
+    "activeStudents": "Active students",
+    "completedSessions": "Completed mock exams",
+    "avgScore": "Average score",
+    "struggling": "Most challenging topics",
+    "insufficient": "Aggregate view needs ≥5 active students",
+    "insufficientBody": "Add seats; charts appear once students take mock exams.",
+    "addSeat": "Add seat",
+    "emailLabel": "Student email",
+    "addButton": "Add",
+    "seatsFull": "Seats full — upgrade your plan to add more students.",
+    "seatsAlmostFull": "You're at 90% capacity."
+  },
+  "hoca": {
+    "title": "Instructor dashboard",
+    "subtitle": "Aggregate view of how your students perform on ProfAI. Every metric needs k≥5 students.",
+    "insufficientTitle": "Not enough data yet",
+    "insufficientBody": "Reports need at least 5 students. Your data will start showing as students take mock exams.",
+    "struggling": "Most challenging topics",
+    "perTopicInsufficient": "Not enough per-topic samples yet (k≥5 rule).",
+    "studentCount": "{{count}} students"
+  },
+  "roles": {
+    "STUDENT": "Student",
+    "HOCA": "Instructor",
+    "TUTOR": "Tutor",
+    "UNIVERSITY_ADMIN": "University admin",
+    "SUPER_ADMIN": "Super admin",
+    "deniedTitle": "This section isn't for your role",
+    "deniedBody": "You may need to sign in with a different account. If you can't sort it out, ping support.",
+    "loginRequired": "Sign in required",
+    "loginRequiredBody": "Sign in to view this page.",
+    "goHome": "Back to home"
   },
   "footer": {
     "tagline": "Upload past exams. See how your professor asks. Study where it counts.",
