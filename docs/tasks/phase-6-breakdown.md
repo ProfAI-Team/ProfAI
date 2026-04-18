@@ -22,7 +22,7 @@ Phase 3+4+5 retro düzeni korundu: **borçlar önce** (8), backend core ortada (
 | 6.8 | Prisma schema — `VoiceSession` + `OCRResult` + `PushDevice` + `VoiceUsage` tabloları + migration | 3 saat | — | ✅ Tamam | `ab1b8d0` |
 | 6.9 | Premium feature flag registry extend — `VOICE_TUTOR` / `OCR_PRO` / `LECTURE_TRANSCRIBE` / `MULTIMODAL_SEARCH` | 1 saat | 6.8 | ✅ Tamam | `5b6b5d5` |
 | 6.10 | OCR servisi — Gemini multimodal + Vision fallback + LaTeX formül çıkarımı + rate limit | 5 saat | 6.3, 6.8, 6.9 | ✅ Tamam | `a42fed1` |
-| 6.11 | Voice session servisi — Gemini Live API provider + transcript aggregation + usage cap (30dk/gün) | 6 saat | 6.3, 6.8, 6.9 | ⬜ | — |
+| 6.11 | Voice session servisi — Gemini Live API provider + transcript aggregation + usage cap (30dk/gün) | 6 saat | 6.3, 6.8, 6.9 | ✅ Tamam | `2cd2488` |
 | 6.12 | Lecture audio analiz — BullMQ queue + Gemini multimodal audio + 60dk < 5dk target | 5 saat | 6.3, 6.8, 6.9 | ⬜ | — |
 | 6.13 | Multimodal similarity search — image embedding + nearest question lookup | 4 saat | 6.3, 6.8, 6.9 | ⬜ | — |
 | 6.14 | Push notification altyapısı — FCM web push + `PushDevice` registration + spaced rep delivery | 4 saat | 6.8 | ⬜ | — |
