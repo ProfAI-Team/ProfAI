@@ -45,13 +45,15 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const match = async (req: Request, res: Response): Promise<void> => {
-  if (!req.user) throw unauthorized();
+  // Public preview: anonymous callers get classic filtering (subject +
+  // rating + price); signed-in students layer DNA embedding scoring on
+  // top. See tutorService.matchTutors for the rubric split.
   const parsed = matchTutorSchema.safeParse(req.body);
   if (!parsed.success) {
     throw badRequest("Invalid filters", parsed.error.issues);
   }
   const results = await matchTutors({
-    studentId: req.user.id,
+    studentId: req.user?.id ?? null,
     ...parsed.data,
   });
   res.json({ data: { results } });

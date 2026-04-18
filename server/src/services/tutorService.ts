@@ -49,7 +49,8 @@ export interface CreateTutorInput {
 }
 
 export interface MatchFilters {
-  studentId: string;
+  // null = anonymous public preview (classic filtering only, no DNA score).
+  studentId: string | null;
   subject?: string;
   level?: string;
   priceMinTl?: number;
@@ -74,7 +75,9 @@ function tutorProfileCacheKey(userId: string): string {
 function tutorMatchCacheKey(filters: MatchFilters): string {
   // Quick deterministic fingerprint for repeated searches — we don't
   // care about ordering inside filters because there are so few keys.
-  return `tutor:match:${filters.studentId}:${filters.subject ?? "_"}:${
+  // Anonymous callers share a single cache bucket (`public`) because
+  // there's no per-user vector in play.
+  return `tutor:match:${filters.studentId ?? "public"}:${filters.subject ?? "_"}:${
     filters.level ?? "_"
   }:${filters.priceMinTl ?? "_"}:${filters.priceMaxTl ?? "_"}:${
     filters.minRating ?? "_"
@@ -278,12 +281,16 @@ async function fetchCandidates(
   // pulled from the student's free-text query; when that's absent we
   // fall back to DB filtering only (distance stays null).
   const query = filters.subject ?? filters.level ?? null;
-  const studentVector = query
-    ? await embedText(query, {
-        userId: filters.studentId,
-        feature: "tutor-match-query",
-      })
-    : null;
+  // Skip the embedding lookup for anonymous visitors — the DNA layer
+  // is 20% of the rubric and only meaningful once we have a studentId
+  // to attribute the AI call cost back to.
+  const studentVector =
+    query && filters.studentId
+      ? await embedText(query, {
+          userId: filters.studentId,
+          feature: "tutor-match-query",
+        })
+      : null;
 
   if (studentVector) {
     const vectorLiteral = toPgVectorLiteral(studentVector);

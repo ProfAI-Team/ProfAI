@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { authenticate } from "../middleware/authMiddleware";
+import { authenticate, optionalAuthenticate } from "../middleware/authMiddleware";
 import { requireRole } from "../middleware/rbacMiddleware";
 import { asyncHandler } from "../lib/asyncHandler";
 import {
@@ -44,7 +44,10 @@ const router = Router();
 router.post("/tutors", authenticate, asyncHandler(tutorApply));
 router.get("/tutors/me", authenticate, asyncHandler(tutorGetMe));
 router.get("/tutors/:id", asyncHandler(tutorGetById));
-router.post("/tutors/match", authenticate, asyncHandler(tutorMatch));
+// Public preview: anonymous visitors can browse tutors with subject +
+// rating + price filters. Signed-in students get the 20% DNA-embedding
+// contribution on top of the classical rubric.
+router.post("/tutors/match", optionalAuthenticate, asyncHandler(tutorMatch));
 
 // --- Tutoring sessions ---------------------------------------------------
 router.post(

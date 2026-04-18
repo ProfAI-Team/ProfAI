@@ -43,3 +43,39 @@ export const authenticate = (
     res.status(401).json({ error: "Invalid or expired token." });
   }
 };
+
+/**
+ * Authenticate-if-present. Decodes a valid Bearer token into `req.user`;
+ * missing or invalid tokens leave `req.user` undefined and the request
+ * continues. Use for endpoints that serve both anonymous visitors and
+ * signed-in users (e.g. tutor browse — public preview vs. DNA-scored
+ * match). The handler is responsible for branching on `req.user`.
+ */
+export const optionalAuthenticate = (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+): void => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    next();
+    return;
+  }
+
+  const token = authHeader.split(" ")[1];
+  const secret = process.env.JWT_SECRET || "default-secret-change-me";
+
+  try {
+    const decoded = jwt.verify(token, secret) as JwtPayload;
+    req.user = {
+      id: decoded.id,
+      email: decoded.email,
+      name: decoded.name,
+      role: decoded.role ?? "STUDENT",
+      universityAccountId: decoded.universityAccountId ?? null,
+    };
+  } catch {
+    // Fall through as anonymous — the handler decides what to show.
+  }
+  next();
+};

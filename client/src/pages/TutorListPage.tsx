@@ -1,9 +1,11 @@
 import React, { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Search, Loader2, BadgeInfo } from 'lucide-react';
+import { Search, Loader2, BadgeInfo, LogIn } from 'lucide-react';
 
 import { tutorService, type MatchFilters } from '../services/tutorService';
 import TutorCard from '../components/b2b/TutorCard';
+import { useAuth } from '../context/AuthContext';
 import { cn } from '../lib/utils';
 
 const LEVELS: Array<'beginner' | 'intermediate' | 'advanced'> = [
@@ -19,6 +21,7 @@ const LEVEL_LABELS: Record<string, string> = {
 };
 
 const TutorListPage: React.FC = () => {
+  const { isAuthenticated } = useAuth();
   const [filters, setFilters] = useState<MatchFilters>({});
   const [subjectDraft, setSubjectDraft] = useState('');
 
@@ -36,7 +39,7 @@ const TutorListPage: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <header className="mb-8">
+      <header className="mb-6">
         <h1 className="font-display text-2xl sm:text-3xl font-bold">
           Tutor bul
         </h1>
@@ -44,6 +47,21 @@ const TutorListPage: React.FC = () => {
           Hangi konuda takıldıysan yaz; profiline uyan tutorları buluyoruz.
         </p>
       </header>
+
+      {!isAuthenticated && (
+        <div className="mb-6 rounded-xl border border-primary/30 bg-primary/5 p-4 flex items-start gap-3">
+          <LogIn className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+          <div className="text-sm">
+            <p className="font-medium">Giriş yap, DNA uyumunu gör.</p>
+            <p className="text-muted-foreground mt-0.5">
+              Şu an konu, puan ve fiyat üzerinden önizleme görüyorsun. Profilinle birlikte öğrenme stilin skora eklenir.{' '}
+              <Link to="/login" className="text-primary underline underline-offset-2 font-medium">
+                Giriş yap
+              </Link>
+            </p>
+          </div>
+        </div>
+      )}
 
       <form
         className="flex flex-wrap gap-3 mb-6 items-end"

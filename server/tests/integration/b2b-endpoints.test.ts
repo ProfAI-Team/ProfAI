@@ -103,4 +103,21 @@ describeIfDb("B2B endpoints (smoke)", () => {
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body.data)).toBe(true);
   });
+
+  it("POST /api/tutors/match is accessible without auth (public preview)", async () => {
+    const res = await request(app)
+      .post("/api/tutors/match")
+      .send({ subject: "Calculus" });
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body.data.results)).toBe(true);
+  });
+
+  it("POST /api/tutors/match ignores an invalid token instead of 401ing", async () => {
+    const res = await request(app)
+      .post("/api/tutors/match")
+      .set("Authorization", "Bearer not-a-real-token")
+      .send({});
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body.data.results)).toBe(true);
+  });
 });
