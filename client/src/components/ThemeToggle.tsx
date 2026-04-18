@@ -15,6 +15,11 @@ const ThemeToggle: React.FC<Props> = ({ className }) => {
   return (
     <button
       onClick={toggleTheme}
+      // `data-testid` is picked up by Playwright smoke helpers (see
+      // scripts/playwright-helpers.ts) — Phase 6 tried flipping theme via
+      // document.documentElement.classList evaluate, which didn't trigger
+      // a React re-render. Clicking the button is the reliable path.
+      data-testid="theme-toggle"
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       className={cn(
         'relative inline-flex items-center justify-center h-9 w-9 rounded-lg',
