@@ -51,6 +51,14 @@ export function createApp(): express.Express {
 
   app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
+  // Health check is intentionally mounted before the /api routers below —
+  // dnaRoutes / multimodalRoutes install `router.use(authenticate)` on
+  // every /api/* path, which would otherwise swallow /api/health with a
+  // 401 before it reaches this handler.
+  app.get("/api/health", (_req, res) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
+  });
+
   app.use("/api/auth", authRoutes);
   app.use("/api/professors", professorRoutes);
   app.use("/api/courses", courseRoutes);
@@ -63,10 +71,6 @@ export function createApp(): express.Express {
   app.use("/api", dnaRoutes);
   app.use("/api", multimodalRoutes);
   app.use("/api/push", pushRoutes);
-
-  app.get("/api/health", (_req, res) => {
-    res.json({ status: "ok", timestamp: new Date().toISOString() });
-  });
 
   app.use(errorMiddleware);
 

@@ -20,3 +20,4 @@ uploads/*
 *.png
 !client/public/**/*.png
 !server/public/**/*.png
+!docs/operations/phase-*-smoke/*.png
