@@ -1,4 +1,7 @@
+import { z } from "zod";
+
 import prisma from "../lib/prisma";
+import { parseJsonField, stringifyJsonField } from "../lib/jsonField";
 
 /**
  * Academic DNA — per-user aggregation of topic strengths/weaknesses,
@@ -26,6 +29,14 @@ export interface DNAScoredTopic {
   confidence: number; // 0-1, based on sampleSize
   sampleSize: number;
 }
+
+const DNAScoredTopicSchema = z.object({
+  topic: z.string(),
+  score: z.number(),
+  confidence: z.number(),
+  sampleSize: z.number(),
+});
+const DNAScoredTopicListSchema = z.array(DNAScoredTopicSchema);
 
 export interface DNAResult {
   userId: string;
@@ -214,8 +225,8 @@ export async function recomputeDNA(userId: string): Promise<DNAResponse> {
     where: { userId },
     update: {
       learningStyle: null, // populated by learningStyleService in 5.9
-      strengths: strengths as unknown as object,
-      weaknesses: weaknesses as unknown as object,
+      strengths: stringifyJsonField(strengths),
+      weaknesses: stringifyJsonField(weaknesses),
       totalQuestionsAnswered: totalQuestions,
       correctRate,
       preferredDifficulty,
@@ -225,8 +236,8 @@ export async function recomputeDNA(userId: string): Promise<DNAResponse> {
     create: {
       userId,
       learningStyle: null,
-      strengths: strengths as unknown as object,
-      weaknesses: weaknesses as unknown as object,
+      strengths: stringifyJsonField(strengths),
+      weaknesses: stringifyJsonField(weaknesses),
       totalQuestionsAnswered: totalQuestions,
       correctRate,
       preferredDifficulty,
@@ -270,8 +281,14 @@ export async function getDNA(userId: string): Promise<DNAResponse> {
       dna: {
         userId,
         learningStyle: cached.learningStyle,
-        strengths: cached.strengths as unknown as DNAScoredTopic[],
-        weaknesses: cached.weaknesses as unknown as DNAScoredTopic[],
+        strengths: parseJsonField(cached.strengths, DNAScoredTopicListSchema, [], {
+          field: "strengths",
+          userId,
+        }),
+        weaknesses: parseJsonField(cached.weaknesses, DNAScoredTopicListSchema, [], {
+          field: "weaknesses",
+          userId,
+        }),
         totalQuestionsAnswered: cached.totalQuestionsAnswered,
         correctRate: cached.correctRate,
         preferredDifficulty: cached.preferredDifficulty,

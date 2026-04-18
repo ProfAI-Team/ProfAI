@@ -1,6 +1,20 @@
+import { z } from "zod";
+
 import prisma from "../lib/prisma";
+import { parseJsonField } from "../lib/jsonField";
 import { getDNA } from "./dnaService";
 import { getOrBuildStyleProfile } from "./professorStyleService";
+
+const ProfileMetricsSchema = z
+  .object({
+    dominantType: z.string().nullable().optional(),
+    avgDifficulty: z.number().nullable().optional(),
+  })
+  .passthrough();
+
+const TopTopicsSchema = z.array(
+  z.object({ topic: z.string() }).passthrough()
+);
 
 /**
  * Course compatibility scoring — "how well does this professor's style
@@ -196,19 +210,26 @@ export async function getCompatibility(params: {
     };
   }
 
-  const profileMetrics = styleResult.profile.metrics as unknown as {
-    dominantType?: string | null;
-    avgDifficulty?: number | null;
-  } | null;
+  const profileMetrics = parseJsonField(
+    styleResult.profile.metrics as Parameters<typeof parseJsonField>[0],
+    ProfileMetricsSchema,
+    {},
+    { field: "professorStyleProfile.metrics" }
+  );
+  const topTopics = parseJsonField(
+    styleResult.profile.topTopics as Parameters<typeof parseJsonField>[0],
+    TopTopicsSchema,
+    [],
+    { field: "professorStyleProfile.topTopics" }
+  );
+
   const scored = scoreCompatibility({
     userLearningStyle: dnaResult.dna.learningStyle,
-    professorDominantType: profileMetrics?.dominantType ?? null,
+    professorDominantType: profileMetrics.dominantType ?? null,
     userPreferredDifficulty: dnaResult.dna.preferredDifficulty,
-    professorDifficultyBucket: bucketDifficulty(profileMetrics?.avgDifficulty),
+    professorDifficultyBucket: bucketDifficulty(profileMetrics.avgDifficulty ?? null),
     userStrengthTopics: dnaResult.dna.strengths.map((s) => s.topic),
-    professorTopTopics: (styleResult.profile.topTopics as unknown as Array<{ topic: string }>).map(
-      (t) => t.topic
-    ),
+    professorTopTopics: topTopics.map((t) => t.topic),
   });
 
   return {
