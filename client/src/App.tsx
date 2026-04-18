@@ -33,6 +33,7 @@ const CourseAdvisorPage = lazy(() => import('./pages/CourseAdvisorPage'));
 const ReviewsPage = lazy(() => import('./pages/ReviewsPage'));
 const VoiceTutorPage = lazy(() => import('./pages/VoiceTutorPage'));
 const OCRPage = lazy(() => import('./pages/OCRPage'));
+const LecturesPage = lazy(() => import('./pages/LecturesPage'));
 
 const App: React.FC = () => {
   return (
@@ -198,6 +199,14 @@ const App: React.FC = () => {
                     element={
                       <ProtectedRoute>
                         <OCRPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/me/lectures"
+                    element={
+                      <ProtectedRoute>
+                        <LecturesPage />
                       </ProtectedRoute>
                     }
                   />
