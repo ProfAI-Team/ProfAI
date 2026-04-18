@@ -16,6 +16,10 @@ import {
   Brain,
   GraduationCap,
   ListChecks,
+  Mic,
+  ScanLine,
+  Headphones,
+  Camera,
   Menu,
   X,
   LogOut,
@@ -47,6 +51,10 @@ const NAV_LINKS: NavLink[] = [
   { to: '/me/profile', labelKey: 'nav.dnaProfile', icon: Brain, authRequired: true },
   { to: '/me/grades', labelKey: 'nav.grades', icon: GraduationCap, authRequired: true },
   { to: '/me/reviews', labelKey: 'nav.reviews', icon: ListChecks, authRequired: true },
+  { to: '/tutor', labelKey: 'nav.voiceTutor', icon: Mic, authRequired: true },
+  { to: '/me/ocr', labelKey: 'nav.ocr', icon: ScanLine, authRequired: true },
+  { to: '/me/lectures', labelKey: 'nav.lectures', icon: Headphones, authRequired: true },
+  { to: '/search/multimodal', labelKey: 'nav.multimodalSearch', icon: Camera, authRequired: true },
 ];
 
 const Navbar: React.FC = () => {

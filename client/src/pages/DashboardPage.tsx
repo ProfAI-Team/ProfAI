@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import {
   Upload, Star, BarChart3, FileText, ArrowRight, Inbox, Gauge,
-  Calendar,
+  Calendar, Mic, ScanLine, Camera,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import ProfAvatar from '../components/Avatar';
@@ -61,6 +61,58 @@ const DashboardPage: React.FC = () => {
 
       <div className="mb-6">
         <WeakTopicsWidget />
+      </div>
+
+      {/* Phase 6 quick actions — voice / OCR / multimodal entry points. */}
+      <div className="mb-8 grid gap-3 sm:grid-cols-3">
+        <Link
+          to="/tutor"
+          className="card-base flex items-center gap-3 p-4 transition hover:bg-secondary"
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-chart-5/10 text-chart-5">
+            <Mic className="h-5 w-5" />
+          </span>
+          <div>
+            <div className="font-display text-sm font-semibold text-foreground">
+              {t('dashboard.quickVoice')}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              {t('dashboard.quickVoiceHelp')}
+            </div>
+          </div>
+        </Link>
+        <Link
+          to="/me/ocr"
+          className="card-base flex items-center gap-3 p-4 transition hover:bg-secondary"
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-chart-2/10 text-chart-2">
+            <ScanLine className="h-5 w-5" />
+          </span>
+          <div>
+            <div className="font-display text-sm font-semibold text-foreground">
+              {t('dashboard.quickOcr')}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              {t('dashboard.quickOcrHelp')}
+            </div>
+          </div>
+        </Link>
+        <Link
+          to="/search/multimodal"
+          className="card-base flex items-center gap-3 p-4 transition hover:bg-secondary"
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-chart-3/10 text-chart-3">
+            <Camera className="h-5 w-5" />
+          </span>
+          <div>
+            <div className="font-display text-sm font-semibold text-foreground">
+              {t('dashboard.quickMultimodal')}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              {t('dashboard.quickMultimodalHelp')}
+            </div>
+          </div>
+        </Link>
       </div>
 
       {/* Stats */}
