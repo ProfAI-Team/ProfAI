@@ -58,7 +58,7 @@ Açık kalanlar: Q1 (AI tone), Q2 (free tier), Q3 (hoca opt-out), Q4 (answer key
 ## Bir Sonraki Session İçin
 
 1. Phase 8 spec taslağı (`docs/roadmap/phase-8-*.md`) — kapsam + süreç + acceptance criteria.
-2. Phase 7 retro'sundan kalan teknik borçlar — **Docker Prisma ✅, /tutors auth gate ✅, credit P2034 retry ✅, parallel test flake ✅** (2026-04-19, `b7be394` + `2755ce1` + `14a536d` + `0e94ab1` + `8a14f82`); hâlâ açık: worker schema isolation silent no-op (globalSetup migrate deploy schema yaratmıyor), App.tsx route mount order, Multer → storage.put() pipeline, reconstructExamSummary dışı AI migrations, Navbar 16+ link overflow, in-app messaging.
+2. Phase 7 retro'sundan kalan teknik borçlar — **Docker Prisma ✅, /tutors auth gate ✅, credit P2034 retry ✅, parallel test flake ✅, App.tsx mount order ✅** (2026-04-19, `b7be394` + `2755ce1` + `14a536d` + `0e94ab1` + `8a14f82` + `35fc827`); hâlâ açık: worker schema isolation silent no-op (globalSetup migrate deploy schema yaratmıyor), Multer → storage.put() pipeline, reconstructExamSummary dışı AI migrations, Navbar 16+ link overflow, in-app messaging.
 3. Go-to-market hazırlığı düşünülürse: demo video + pitch deck + first 100 user outreach.
 
 ---
@@ -72,3 +72,4 @@ Açık kalanlar: Q1 (AI tone), Q2 (free tier), Q3 (hoca opt-out), Q4 (answer key
 | 2026-04-19 | Phase 6 + Phase 7 aynı gün içinde kapandı; içerik `docs/_archive/scratchpad-kok-2026-04-19-phase-7.md`'ye donduruldu, Phase 8 için reset. |
 | 2026-04-19 | Phase 7 retro borçlarından 3 tanesi kapandı (Docker Prisma fix `b7be394`, /tutors public preview `2755ce1`, credit P2034 retry `14a536d`). Yeni retro borç dokümante edildi: pgvector test-schema drift. |
 | 2026-04-19 | Parallel test flake gerçek root cause (email prefix collision) bulundu ve kapandı — `0e94ab1` (cleanup startsWith) + `8a14f82` (pgvector public qualification). Yeni retro: worker schema isolation silent no-op. |
+| 2026-04-19 | App.tsx mount order retro borç kapandı (`35fc827`) — dnaRoutes per-route auth, mount order artık load-bearing değil. |
