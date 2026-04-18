@@ -94,15 +94,11 @@ Karar bekleyen konular. **Yaşayan doküman** — karar verildiğinde "✅ Kapat
 - **Gerekçe:** Phase 5 spaced repetition scheduler günlük tetiklenmeli + multi-instance'ta duplicate job koruması şart. node-cron multi-worker'da aynı cron'u iki kez çalıştırırdı. BullMQ repeat + Redis lock bu sorunu temiz çözüyor. Ayrıca mevcut `studyGroupService.closeStaleGroups` hiç tetiklenmiyordu — BullMQ wiring onu da canlandırdı.
 - **Etki:** `docker-compose.yml`'a `redis:7-alpine` servisi + healthcheck; `server/src/lib/queue.ts` abstraction (prod BullMQ / test `RUN_INLINE_QUEUE=1` inline handler); `server/src/jobs/runner.ts` worker registration; `REDIS_URL` + `RUN_JOBS` env flag'ları; ilk BullMQ job `studyGroupMaintenance` (cron `0 2 * * *`). Test suite inline mode'da Redis'siz çalışıyor.
 
-### T4. AI provider stratejisi
+### ✅ T4. AI provider stratejisi — Gemini primary + Claude fallback (2026-04-19, Phase 6 task 6.3)
 
-- **Durum:** Açık.
-- **Seçenekler:**
-  - A) Sadece Gemini (basit, tek vendor risk).
-  - B) Gemini + Claude fallback.
-  - C) Multi-provider load balance.
-- **Eğilim:** B — Phase 4+.
-- **Karar zamanı:** Phase 4.
+- **Karar:** B — Gemini 2.5 Flash Lite primary, Claude 4.7 Opus text fallback.
+- **Gerekçe:** Phase 6 voice tutor + lecture transcribe Gemini Live'a bağımlı, geo-restriction riski spec'te yüksek. `withFallback` wrapper her AI call'a tek satırda fallback hook'u veriyor; Claude provider lazy (`@anthropic-ai/sdk` dynamic import, `CLAUDE_API_KEY` set değilse hiç yüklenmez). OpenAI Realtime slot'u voice tutor için ayrıldı (6.11).
+- **Etki:** `server/src/services/llm/providerRegistry.ts` (withFallback + isProviderRetryable + getConfiguredProviders); `server/src/services/llm/claudeProvider.ts` (lazy SDK, generateText + generateStructured); `AICallLog.provider` kolonu zaten vardı, `fallbackUsed` flag 6.8 migration'ında eklenecek. İlk migrated call: `generateStyleSummary` (professorStyleService.ts). Diğer Gemini call'ları faz boyunca aynı pattern'le genişleyecek.
 
 ### T5. Mobile — React Native / Flutter / Native
 

@@ -2,6 +2,12 @@ import type { ExamAnalysis, ProfessorStyleProfile } from "@prisma/client";
 
 import prisma from "../lib/prisma";
 import { generateStyleSummary } from "./llm/geminiProvider";
+import { withFallback } from "./llm/providerRegistry";
+import {
+  generateText as claudeGenerateText,
+  isClaudeConfigured,
+} from "./llm/claudeProvider";
+import { buildStyleSummaryPrompt } from "../prompts/style-summary";
 import { STYLE_SUMMARY_VERSION } from "../prompts/style-summary";
 
 // ExamAnalysis JSON shapes (authored on write via analysisService).
@@ -271,19 +277,36 @@ async function buildAndPersist(
     version = FALLBACK_VERSION;
     isStale = true; // retry next request
   } else {
+    const input = {
+      aggregated: result.aggregated,
+      topTopics: result.topTopics,
+      evolution: result.evolution,
+      metrics: result.metrics,
+    };
+
     try {
-      const generated = await generateStyleSummary({
-        aggregated: result.aggregated,
-        topTopics: result.topTopics,
-        evolution: result.evolution,
-        metrics: result.metrics,
-      });
+      const { data: generated, provider, fallbackUsed } = await withFallback(
+        () => generateStyleSummary(input),
+        isClaudeConfigured()
+          ? async () => {
+              const { systemInstruction, userPrompt } = buildStyleSummaryPrompt(input);
+              const res = await claudeGenerateText({
+                feature: "style-summary",
+                systemInstruction,
+                prompt: userPrompt,
+                temperature: 0.4,
+              });
+              return { text: res.text, model: res.model };
+            }
+          : null,
+        { feature: "style-summary", primary: "gemini", fallback: "claude" }
+      );
       summary = generated.text;
-      version = `${STYLE_SUMMARY_VERSION}:${generated.model}`;
+      version = `${STYLE_SUMMARY_VERSION}:${provider}:${generated.model}${fallbackUsed ? ":fallback" : ""}`;
       isStale = false;
     } catch (error) {
       console.error(
-        "[professorStyleService] Gemini summary failed, persisting fallback:",
+        "[professorStyleService] style summary failed (primary + fallback), persisting fallback:",
         error instanceof Error ? error.message : error
       );
       summary = FALLBACK_SUMMARY;
