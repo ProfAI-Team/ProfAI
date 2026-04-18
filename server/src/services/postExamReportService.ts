@@ -263,44 +263,76 @@ export async function reconstructExamSummary(
     };
   }
 
+  const prompt =
+    `You are ProfAI reconstructing a professor's likely exam ` +
+    `coverage from anonymized student reports. Produce 2 short ` +
+    `paragraphs in Turkish — first describes frequent topics, ` +
+    `second lists 3 areas students should focus on. Tone: calm, ` +
+    `factual, no guarantees. Data:\n\n${topicLines}`;
+
+  // Phase 7 task 7.8 — runs through the multi-provider registry now.
+  // Gemini primary + Claude text fallback when CLAUDE_API_KEY is set.
+  // The canned `RECONSTRUCT_FALLBACK` string still acts as the final
+  // safety net if both providers throw (matching the pre-7.8 behaviour
+  // the UI expects).
   try {
-    // Lazy-import the Gemini client so test environments without the
-    // key don't pay the module-load cost.
     const { getClient } = await import("./llm/geminiProvider");
-    const client = getClient();
-    const model = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+    const { withFallback } = await import("./llm/providerRegistry");
+    const { generateText: claudeGenerateText, isClaudeConfigured } =
+      await import("./llm/claudeProvider");
+    const { recordAICall } = await import("./llm/aiCallTracker");
 
-    const response = await client.models.generateContent({
-      model,
-      contents: [
-        {
-          role: "user",
-          parts: [
-            {
-              text:
-                `You are ProfAI reconstructing a professor's likely exam ` +
-                `coverage from anonymized student reports. Produce 2 short ` +
-                `paragraphs in Turkish — first describes frequent topics, ` +
-                `second lists 3 areas students should focus on. Tone: calm, ` +
-                `factual, no guarantees. Data:\n\n${topicLines}`,
-            },
-          ],
-        },
-      ],
-      config: { temperature: 0.4, responseMimeType: "text/plain" },
-    });
+    const { data, provider, fallbackUsed } = await withFallback(
+      async () => {
+        const client = getClient();
+        const model = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+        const startedAt = Date.now();
+        const response = await client.models.generateContent({
+          model,
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          config: { temperature: 0.4, responseMimeType: "text/plain" },
+        });
+        const text = response.text?.trim();
+        if (!text) throw new Error("Gemini returned empty reconstruction");
+        await recordAICall({
+          feature: "exam-reconstruct",
+          provider: "gemini",
+          model,
+          inputTokens: response.usageMetadata?.promptTokenCount ?? 0,
+          outputTokens: response.usageMetadata?.candidatesTokenCount ?? 0,
+          latencyMs: Date.now() - startedAt,
+          success: true,
+        });
+        return { text, model };
+      },
+      isClaudeConfigured()
+        ? async () => {
+            const res = await claudeGenerateText({
+              feature: "exam-reconstruct",
+              prompt,
+              temperature: 0.4,
+            });
+            return { text: res.text, model: res.model };
+          }
+        : null,
+      { feature: "exam-reconstruct", primary: "gemini", fallback: "claude" }
+    );
 
-    const text = response.text?.trim();
-    if (!text) throw new Error("Gemini returned empty reconstruction");
-
+    log.info(
+      { professorId, provider, fallbackUsed },
+      "exam reconstruct succeeded"
+    );
     return {
       status: "ready",
-      summary: text,
+      summary: data.text,
       source: "gemini",
       basedOnReports: aggregated.count,
     };
   } catch (err) {
-    log.error({ err }, "reconstructExamSummary falling back after Gemini error");
+    log.error(
+      { err },
+      "reconstructExamSummary falling back — both providers failed"
+    );
     return {
       status: "ready",
       summary: RECONSTRUCT_FALLBACK,
