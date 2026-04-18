@@ -15,6 +15,8 @@ import studyPackRoutes from "./routes/studyPackRoutes";
 import mockExamRoutes from "./routes/mockExamRoutes";
 import communityRoutes from "./routes/communityRoutes";
 import dnaRoutes from "./routes/dnaRoutes";
+import multimodalRoutes from "./routes/multimodalRoutes";
+import pushRoutes from "./routes/pushRoutes";
 import { errorMiddleware } from "./middleware/errorMiddleware";
 
 export function createApp(): express.Express {
@@ -59,6 +61,8 @@ export function createApp(): express.Express {
   app.use("/api/mock-exam", mockExamRoutes);
   app.use("/api", communityRoutes);
   app.use("/api", dnaRoutes);
+  app.use("/api", multimodalRoutes);
+  app.use("/api/push", pushRoutes);
 
   app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });

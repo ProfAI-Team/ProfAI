@@ -142,3 +142,40 @@ export const advisorDailyLimiter = rateLimit(
     message: "Daily course advisor limit reached.",
   })
 );
+
+// Phase 6 — multimodal + voice (task 6.15).
+export const voiceSessionDailyLimiter = rateLimit(
+  rateLimited({
+    name: "voice-session:daily",
+    windowMs: DAY_MS,
+    max: 20,
+    message: "Günlük canlı tutor başlatma limiti doldu.",
+  })
+);
+
+export const ocrUploadDailyLimiter = rateLimit(
+  rateLimited({
+    name: "ocr-upload:daily",
+    windowMs: DAY_MS,
+    max: 20,
+    message: "Günlük OCR yükleme limiti doldu.",
+  })
+);
+
+export const lectureUploadDailyLimiter = rateLimit(
+  rateLimited({
+    name: "lecture-upload:daily",
+    windowMs: DAY_MS,
+    max: 2,
+    message: "Günlük ders kaydı yükleme limiti doldu.",
+  })
+);
+
+export const multimodalSearchDailyLimiter = rateLimit(
+  rateLimited({
+    name: "multimodal-search:daily",
+    windowMs: DAY_MS,
+    max: 10,
+    message: "Günlük görselle arama limiti doldu.",
+  })
+);

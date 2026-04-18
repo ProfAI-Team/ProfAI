@@ -208,7 +208,9 @@ export async function handleLectureJob(
 }
 
 export function registerLectureWorker(): void {
-  registerWorker<LectureJobPayload>(QUEUE_NAME, handleLectureJob);
+  registerWorker<LectureJobPayload>(QUEUE_NAME, async (payload) => {
+    await handleLectureJob(payload);
+  });
 }
 
 export async function getLectureById(

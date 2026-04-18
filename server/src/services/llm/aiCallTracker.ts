@@ -25,7 +25,7 @@ function estimateCostUsd(
 export interface RecordCallParams {
   userId?: string | null;
   feature: string;
-  provider: "gemini" | "claude" | "openai";
+  provider: "gemini" | "claude" | "openai" | "openai-realtime" | "fallback";
   model: string;
   inputTokens: number;
   outputTokens: number;
