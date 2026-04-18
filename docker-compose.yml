@@ -15,7 +15,12 @@ services:
       context: ./server
       dockerfile: Dockerfile
       target: builder
-    command: sh -c "npx prisma migrate deploy && npm run dev"
+    # `prisma generate` runs on every boot so the container's generated client
+    # tracks the current schema.prisma. Without it, a host-side migration
+    # updates the DB but the bind-mount + anonymous node_modules volume keep
+    # the old client inside the container, producing type drift (Phase 7 hit
+    # this three times — UserRole enum ghost column was the most visible).
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm run dev"
     ports:
       - "5000:5000"
     depends_on:
