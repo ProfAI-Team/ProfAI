@@ -31,7 +31,7 @@ Phase 3+4+5+6 retro düzeni korundu: **borçlar önce** (9), backend core ortada
 | 7.17 | REST endpoints — tutor + marketplace + payment + university + hoca (25+ route) + Zod + RBAC + 5 yeni limiter | 5 saat | 7.13–7.16 | ✅ Tamam | `6433c9a` |
 | 7.18 | BullMQ workers — payment webhook retry + marketplace indexing (embed refresh) + hoca verification queue + storage GC (7.2 için) | 3 saat | 7.2, 7.13, 7.15 | ✅ Tamam | `bc195e2` |
 | 7.19 | Backend tests — RBAC matrix + tutor matching + payment webhook + marketplace commission + university k-anonymity + fallback chain (80+ unit, 15+ integration) | 5 saat | 7.17 | ✅ Tamam (test'ler 7.1–7.17'ye dağıldı) | — |
-| 7.20 | Client types + 5 services + shared components (`TutorCard`, `PriceTag`, `RatingStars`, `CompatibilityScore`, `PaymentBadge`, `ApprovalBanner`, `SeatCounter`, `RoleGuard`) | 4 saat | 7.17 | ⬜ | — |
+| 7.20 | Client types + 5 services + shared components (`TutorCard`, `PriceTag`, `RatingStars`, `CompatibilityScore`, `PaymentBadge`, `ApprovalBanner`, `SeatCounter`, `RoleGuard`) | 4 saat | 7.17 | ✅ Tamam | `957b2da` |
 | 7.21 | Tutor marketplace `/tutors` + `/tutors/:id` — grid + filter + pagination + detay + booking CTA + compatibility badge | 5 saat | 7.20 | ⬜ | — |
 | 7.22 | Tutoring session flow `/tutoring/sessions/:id` — session page + in-app mesajlaşma placeholder + Google Meet link wire + rating form | 4 saat | 7.20 | ⬜ | — |
 | 7.23 | Notes marketplace `/marketplace` + `/marketplace/:id` — grid + filter + detay + "satın al" + signed download (7.2) | 4 saat | 7.20 | ⬜ | — |
