@@ -38,7 +38,7 @@ Phase 3+4+5+6 retro düzeni korundu: **borçlar önce** (9), backend core ortada
 | 7.24 | Hoca portal `/hoca/dashboard` + `/hoca/profile` + `/hoca/feedback` — verified badge + student performance + profil edit + anonim feedback liste | 4 saat | 7.20 | ✅ Tamam | `018a6c3` |
 | 7.25 | Üniversite admin `/admin/university` — dashboard + seats + subscription tier + SSO stub (SAML metadata upload placeholder) + aggregate insights grafiği | 4 saat | 7.20 | ✅ Tamam | `018a6c3` |
 | 7.26 | Payment checkout `/checkout` — iyzico 3DS iframe + success/fail callback route + e-Fatura indir placeholder + Stripe fallback shim | 4 saat | 7.20, 7.13 | ✅ Tamam | `018a6c3` |
-| 7.27 | Navbar + Dashboard + role-aware navigation — HOCA/UNIVERSITY_ADMIN/TUTOR/STUDENT rollerine göre menu; B2B entry points | 2 saat | 7.21–7.26 | ⬜ | — |
+| 7.27 | Navbar + Dashboard + role-aware navigation — HOCA/UNIVERSITY_ADMIN/TUTOR/STUDENT rollerine göre menu; B2B entry points | 2 saat | 7.21–7.26 | ✅ Tamam | `720135e` |
 | 7.28 | i18n TR + EN copy sweep — `tutoring.*` / `marketplace.*` / `payment.*` / `university.*` / `hoca.*` / `roles.*` namespace | 3 saat | 7.21–7.27 | ⬜ | — |
 | 7.29 | KVKK v2 + `/privacy` update — B2B veri akışı (üniversite × öğrenci) + account deletion full wire + avukat review tur 2 placeholder | 2 saat | 7.4, 7.16 | ⬜ | — |
 | 7.30 | Account deletion UI — settings tab + confirm dialog (çifte onay, parola re-entry) + cascade toast | 2 saat | 7.4 | ⬜ | — |
