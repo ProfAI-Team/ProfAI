@@ -13,9 +13,7 @@ import {
   Menu as MenuIcon,
 } from 'lucide-react';
 
-import { mockExamService } from '../services/mockExamService';
 import type {
-  MockExam,
   MockExamClientQuestion,
   StudentAnswer,
 } from '../types/mockExam';
@@ -23,6 +21,7 @@ import Timer from '../components/Timer';
 import QuestionNavigator from '../components/QuestionNavigator';
 import ExamQuestionCard from '../components/ExamQuestionCard';
 import { useCountdown } from '../hooks/useCountdown';
+import { useMockExam, useSubmitMockExam } from '../hooks/useMockExam';
 import { cn } from '../lib/utils';
 import { track, AnalyticsEvents } from '../lib/analytics';
 
@@ -76,16 +75,34 @@ const MockExamSessionPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [exam, setExam] = useState<MockExam | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState<'not_found' | 'generic' | null>(null);
+  // Phase 7 task 7.5 — exam fetch is TanStack-driven now. The page keeps
+  // its own draft/timer/UI state; server state (the exam + the submit
+  // response) lives in the query cache so 7.22 can copy this shape for
+  // the tutoring session page.
+  const examQuery = useMockExam(id);
+  const exam = examQuery.data ?? null;
+  const loading = examQuery.isLoading;
+  const loadError: 'not_found' | 'generic' | null = examQuery.isError
+    ? (examQuery.error as { response?: { status?: number } } | undefined)
+        ?.response?.status === 404
+      ? 'not_found'
+      : 'generic'
+    : null;
+
+  const submitMutation = useSubmitMockExam(id);
+  const submitting = submitMutation.isPending;
+  const submitError = submitMutation.isError
+    ? t('mockExam.session.submitError', {
+        message:
+          (submitMutation.error as Error | undefined)?.message || '—',
+      })
+    : null;
+
   const [draft, setDraft] = useState<DraftState>({});
   const [startedAt, setStartedAt] = useState<number>(() => Date.now());
   const [currentIdx, setCurrentIdx] = useState(0);
   const [navOpen, setNavOpen] = useState(false);
   const [submitConfirm, setSubmitConfirm] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Track whether submission succeeded — used to bypass beforeunload + nav
   // guards during the success redirect.
@@ -108,44 +125,40 @@ const MockExamSessionPage: React.FC = () => {
     onExpire,
   });
 
+  const hydratedIdRef = useRef<string | null>(null);
   useEffect(() => {
-    if (!id) return;
-    setLoading(true);
-    setLoadError(null);
-    mockExamService
-      .getById(id)
-      .then((data) => {
-        setExam(data);
-        const savedDraft = loadDraft(data.id);
-        if (savedDraft) {
-          setDraft(savedDraft.state);
-          setStartedAt(savedDraft.startedAt);
-          const elapsed = Math.max(
-            0,
-            Math.round((Date.now() - savedDraft.startedAt) / 1000)
-          );
-          const remaining = Math.max(1, data.durationMin * 60 - elapsed);
-          countdown.reset(remaining);
-          countdown.start();
-        } else {
-          const now = Date.now();
-          setStartedAt(now);
-          countdown.reset(data.durationMin * 60);
-          countdown.start();
-          track(AnalyticsEvents.MockExamStarted, {
-            mock_exam_id: data.id,
-            question_count: data.questions.length,
-            duration_min: data.durationMin,
-          });
-        }
-      })
-      .catch((err) => {
-        const status = err?.response?.status;
-        setLoadError(status === 404 ? 'not_found' : 'generic');
-      })
-      .finally(() => setLoading(false));
+    if (!exam) return;
+    // Only hydrate once per exam load — re-renders (including react-query
+    // refetch) shouldn't reset the student's draft or reshuffle the
+    // timer. The previous effect gated on `id` alone; we now gate on the
+    // exam row so the draft picks up correctly after a cache refetch.
+    if (hydratedIdRef.current === exam.id) return;
+    hydratedIdRef.current = exam.id;
+
+    const savedDraft = loadDraft(exam.id);
+    if (savedDraft) {
+      setDraft(savedDraft.state);
+      setStartedAt(savedDraft.startedAt);
+      const elapsed = Math.max(
+        0,
+        Math.round((Date.now() - savedDraft.startedAt) / 1000)
+      );
+      const remaining = Math.max(1, exam.durationMin * 60 - elapsed);
+      countdown.reset(remaining);
+      countdown.start();
+    } else {
+      const now = Date.now();
+      setStartedAt(now);
+      countdown.reset(exam.durationMin * 60);
+      countdown.start();
+      track(AnalyticsEvents.MockExamStarted, {
+        mock_exam_id: exam.id,
+        question_count: exam.questions.length,
+        duration_min: exam.durationMin,
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [exam]);
 
   useEffect(() => {
     if (!exam || completedRef.current) return;
@@ -213,10 +226,8 @@ const MockExamSessionPage: React.FC = () => {
   const handleSubmit = useCallback(
     async (autoSubmitted: boolean) => {
       if (!exam || submitting) return;
-      setSubmitting(true);
-      setSubmitError(null);
       try {
-        const res = await mockExamService.submit(exam.id, {
+        const res = await submitMutation.mutateAsync({
           answers: buildSubmitPayload(),
           autoSubmitted,
         });
@@ -233,16 +244,11 @@ const MockExamSessionPage: React.FC = () => {
           }
         );
         navigate(`/mock-exam/session/${res.sessionId}/result`);
-      } catch (err) {
-        setSubmitError(
-          t('mockExam.session.submitError', {
-            message: (err as Error).message || '—',
-          })
-        );
-        setSubmitting(false);
+      } catch {
+        // Surfaced through submitMutation.isError; nothing else to do.
       }
     },
-    [exam, submitting, buildSubmitPayload, answeredCount, t, navigate]
+    [exam, submitting, submitMutation, buildSubmitPayload, answeredCount, navigate]
   );
 
   if (loading) {
