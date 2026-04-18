@@ -9,6 +9,7 @@ import { Calendar, ListChecks, Settings } from 'lucide-react';
 
 import { spacedRepetitionService } from '../services/spacedRepetitionService';
 import ReviewCard from '../components/ReviewCard';
+import PushPermissionCard from '../components/push/PushPermissionCard';
 import type { SpacedRepetitionReview } from '../types/dna';
 
 type FrequencyValue = 'daily' | 'weekly' | 'off';
@@ -207,6 +208,7 @@ const ReviewsPage: React.FC = () => {
           <p className="text-xs text-muted-foreground">
             {t('spacedRepetition.settings.disclaimer')}
           </p>
+          <PushPermissionCard />
         </section>
       )}
     </div>
