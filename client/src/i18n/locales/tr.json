@@ -16,6 +16,10 @@
     "dnaProfile": "Akademik DNA",
     "grades": "Notlarım",
     "reviews": "Tekrar",
+    "voiceTutor": "Canlı Tutor",
+    "ocr": "OCR Not",
+    "lectures": "Ders Kayıtları",
+    "multimodalSearch": "Görselle Ara",
     "signIn": "Giriş Yap",
     "signUp": "Üye ol",
     "signOut": "Çıkış Yap",
@@ -290,7 +294,13 @@
       "date": "Tarih"
     },
     "empty": "Henüz yükleme yok. İlk sınavını yükle, hocanın kalıbını gör.",
-    "emptyCta": "Sınav yükle"
+    "emptyCta": "Sınav yükle",
+    "quickVoice": "Canlı tutor aç",
+    "quickVoiceHelp": "Sesli konuş, hocanın stiliyle anlatayım.",
+    "quickOcr": "Defter OCR",
+    "quickOcrHelp": "Not fotoğrafını çek, metne çeviriyorum.",
+    "quickMultimodal": "Görselle ara",
+    "quickMultimodalHelp": "Formül fotoğrafla benzer soruları bul."
   },
   "rating": {
     "title": "Bu hocayı değerlendir",
@@ -803,5 +813,119 @@
         "2": "Sadece çalışma desteği — akademik dürüstlük sınırında kalır"
       }
     }
+  },
+  "voice": {
+    "heading": "Canlı AI Tutor",
+    "subheading": "Hocanın sınav stiliyle sesli anlatım. Seninle karşılıklı, senin hızında.",
+    "idleHelp": "Başlat'a bas, mikrofon iznine karşı çıkma yok — konuşma verisi kullanım için saklanıyor, bitince silme hakkın var.",
+    "start": "Tutoru başlat",
+    "starting": "Hazırlanıyor…",
+    "interrupt": "Durdur",
+    "resume": "Devam et",
+    "end": "Oturumu bitir",
+    "ending": "Kaydediliyor…",
+    "restart": "Yeni oturum",
+    "tryAgain": "Tekrar dene",
+    "endedHeading": "Oturum kaydedildi",
+    "endedDuration": "Toplam süre: {{duration}}",
+    "errorHeading": "Bir şey ters gitti",
+    "welcomeTurn": "Merhaba. Hangi konuyu anlatmamı istersin?",
+    "usage": "Bugün {{used}} / {{total}} dakika",
+    "errors": {
+      "quota": "Bugünlük süren doldu. Yarın tekrar bekliyorum.",
+      "premium": "Canlı tutor Premium özelliği. Yükseltmek için /credits sayfasına bak.",
+      "micDenied": "Mikrofon izni verilmedi. Tarayıcı ayarlarından izin verip tekrar dene.",
+      "micUnavailable": "Mikrofona ulaşılamıyor. Cihazını kontrol edip yeniden deneyebilirsin.",
+      "generic": "Şu an oturum başlatılamadı. Biraz bekleyip tekrar dene."
+    }
+  },
+  "ocr": {
+    "heading": "Defter OCR",
+    "subheading": "El yazısı fotoğrafını çek, metne çeviriyorum. Matematik formüllerini LaTeX olarak veriyorum.",
+    "uploadHeading": "Yeni tarama",
+    "uploadHelper": "En fazla 10MB. PNG, JPG, WEBP, HEIC kabul ediyorum.",
+    "pickLabel": "Fotoğraf seç / çek",
+    "pickHelper": "Mobilde çek, masaüstünde yükle.",
+    "upload": "Gönder ve çıkart",
+    "uploading": "İşleniyor…",
+    "resultHeading": "Son sonuç",
+    "confidence": "%{{value}} güven",
+    "lowConfidenceHelp": "Güven düşük — metin bozuk olabilir, lütfen gözden geçirip düzelt.",
+    "latexHeading": "Bulunan formüller",
+    "sendToNotes": "Notlarıma ekle",
+    "useForStudyPack": "Çalışma paketi üret",
+    "historyHeading": "Geçmiş taramalar",
+    "loadingHistory": "Yükleniyor…",
+    "emptyHistory": "Henüz tarama yok. İlk fotoğrafını yukarıdan gönder.",
+    "emptyText": "(Boş metin)",
+    "delete": "Sil",
+    "errors": {
+      "premium": "OCR Pro Premium özelliği. Yükseltmek için /credits sayfasına bak.",
+      "rateLimit": "Günlük tarama limitine ulaştın. Yarın tekrar bekliyorum.",
+      "generic": "Şu an tarama yapılamadı. Lütfen tekrar dene."
+    }
+  },
+  "lectures": {
+    "heading": "Ders kayıtları",
+    "subheading": "Ses dosyasını yükle, transkript + konu başlıkları + 'bu sınavda çıkar' ipuçlarını çıkarıyorum.",
+    "uploadHeading": "Yeni kayıt yükle",
+    "uploadHelper": "En fazla 200MB. MP3, M4A, WAV kabul ediyorum. 60dk kayıt için ~5dk işleme süresi.",
+    "upload": "Yükle ve işle",
+    "uploading": "Gönderiliyor…",
+    "historyHeading": "Kayıtlarım",
+    "loading": "Yükleniyor…",
+    "empty": "Henüz kayıt yok. Yukarıdan birini yükle.",
+    "pickHelper": "Soldan bir kayıt seç, detaylar burada görünsün.",
+    "processing": "İşleniyor",
+    "examHints": "Bu sınavda çıkar ipuçları",
+    "keyTopics": "Ana konular",
+    "transcriptHeading": "Tam transkript",
+    "transcriptPending": "Transkript henüz hazır değil — işleme birkaç dakika sürebilir.",
+    "duplicateNotice": "Bu ses daha önce yüklenmişti. Mevcut transkripte bak.",
+    "errors": {
+      "premium": "Ders kaydı analizi Premium özelliği.",
+      "rateLimit": "Günlük yükleme limitine ulaştın. Yarın tekrar dene.",
+      "generic": "Yükleme başarısız. Dosya biçimini kontrol edip tekrar dene."
+    }
+  },
+  "multimodal": {
+    "heading": "Görselle benzer soru bul",
+    "subheading": "Formül ya da sorunun fotoğrafını çek — mevcut sınav arşivinde ve mock sınavlarda en yakın örnekleri getiriyorum.",
+    "pickLabel": "Fotoğraf seç / çek",
+    "pickHelper": "Formül net görünsün — net fotoğraf = net sonuç.",
+    "search": "Benzer soruları bul",
+    "searching": "Aranıyor…",
+    "resultsHeading": "{{count}} benzer öğe",
+    "emptyHeading": "Benzer soru bulamadım",
+    "emptyHelper": "Daha net bir fotoğraf çekip tekrar dene, ya da farklı açıdan dene.",
+    "detectedKeywords": "Tespit edilen konular: {{list}}",
+    "sourceExam": "Sınav arşivi",
+    "sourceMock": "Mock sınav",
+    "disclaimer": "Sonuçlar anahtar kelime eşleşmesine dayanır — kesin benzerlik değildir.",
+    "errors": {
+      "premium": "Görselle arama Premium özelliği.",
+      "rateLimit": "Günlük arama limitine ulaştın. Yarın tekrar dene.",
+      "generic": "Arama yapılamadı. Lütfen tekrar dene."
+    }
+  },
+  "pushNotifications": {
+    "title": "Günlük tekrar bildirimleri",
+    "helper": "Açarsan sadece sabah 9'da günün tekrar listesi için bildirim gönderiyoruz. İstediğin zaman kapatabilirsin.",
+    "enable": "Bildirimleri aç",
+    "enabling": "Açılıyor…",
+    "close": "Kapat",
+    "active": "Aktif",
+    "unsupported": "Tarayıcın push bildirimlerini desteklemiyor. Chrome, Firefox veya Safari 17+ önerilir.",
+    "notConfigured": "Bildirim altyapısı şu an yapılandırılmamış. Lütfen daha sonra tekrar dene.",
+    "blocked": "Tarayıcı izni engellendi. Adres çubuğundaki kilit ikonundan izin ver ve sayfayı yenile."
+  },
+  "privacy": {
+    "title": "Gizlilik ve KVKK",
+    "voiceTranscripts": "Canlı tutor konuşma transkriptleri 30 gün saklanır, sonra otomatik silinir. Ses dosyası depolanmaz; yalnızca metin transkript.",
+    "ocrImages": "Yüklediğin defter fotoğrafları sadece senin hesabına kayıtlı kalır ve istediğin an silebilirsin.",
+    "lectureAudio": "Ders kayıtlarında 3. şahıslar konuşuyor olabilir — sadece senin çalışman için kullan, paylaşma.",
+    "multimodalSearch": "Görselle arama için yüklediğin fotoğraflar analiz sonrası diske kaydedilmez.",
+    "deleteAll": "Tüm verilerimi sil",
+    "contact": "Sorularını kvkk@profai.local adresine yazabilirsin."
   }
 }

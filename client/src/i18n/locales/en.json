@@ -16,6 +16,10 @@
     "dnaProfile": "Academic DNA",
     "grades": "My grades",
     "reviews": "Review",
+    "voiceTutor": "Voice Tutor",
+    "ocr": "OCR Notes",
+    "lectures": "Lectures",
+    "multimodalSearch": "Image Search",
     "signIn": "Sign in",
     "signUp": "Sign up",
     "signOut": "Sign out",
@@ -290,7 +294,13 @@
       "date": "Date"
     },
     "empty": "No uploads yet — add your first exam to get started.",
-    "emptyCta": "Upload an exam"
+    "emptyCta": "Upload an exam",
+    "quickVoice": "Open voice tutor",
+    "quickVoiceHelp": "Talk it out — I'll explain in your professor's style.",
+    "quickOcr": "Scan notes",
+    "quickOcrHelp": "Photograph a handwritten page and I'll digitize it.",
+    "quickMultimodal": "Search by photo",
+    "quickMultimodalHelp": "Snap a formula, find similar exam questions."
   },
   "rating": {
     "title": "Rate this professor",
@@ -803,5 +813,119 @@
         "2": "Study aid only — stays on the right side of academic integrity"
       }
     }
+  },
+  "voice": {
+    "heading": "Live AI tutor",
+    "subheading": "A voice tutor tuned to your professor's style. Interruptible, paced to you.",
+    "idleHelp": "Tap Start and grant mic permission — only the transcript is stored, and you can delete it whenever.",
+    "start": "Start the tutor",
+    "starting": "Connecting…",
+    "interrupt": "Interrupt",
+    "resume": "Resume",
+    "end": "End session",
+    "ending": "Saving…",
+    "restart": "New session",
+    "tryAgain": "Try again",
+    "endedHeading": "Session saved",
+    "endedDuration": "Total duration: {{duration}}",
+    "errorHeading": "Something went wrong",
+    "welcomeTurn": "Hi. Which topic should I walk you through?",
+    "usage": "Today {{used}} / {{total}} min",
+    "errors": {
+      "quota": "Your daily voice budget is used up. See you tomorrow.",
+      "premium": "Voice tutor is a Premium feature. Check /credits to upgrade.",
+      "micDenied": "Microphone permission denied. Allow it in the browser and try again.",
+      "micUnavailable": "Couldn't reach the microphone. Check your device and retry.",
+      "generic": "Couldn't start a session right now. Please retry in a moment."
+    }
+  },
+  "ocr": {
+    "heading": "Notebook OCR",
+    "subheading": "Photograph handwritten notes — I'll extract the text and turn formulas into LaTeX.",
+    "uploadHeading": "New scan",
+    "uploadHelper": "Up to 10MB. PNG, JPG, WEBP, HEIC accepted.",
+    "pickLabel": "Pick / take a photo",
+    "pickHelper": "On mobile the camera opens; desktop falls back to file picker.",
+    "upload": "Send & extract",
+    "uploading": "Processing…",
+    "resultHeading": "Latest result",
+    "confidence": "{{value}}% confidence",
+    "lowConfidenceHelp": "Confidence is low — review and edit the text before you use it.",
+    "latexHeading": "Detected formulas",
+    "sendToNotes": "Add to notes",
+    "useForStudyPack": "Generate a study pack",
+    "historyHeading": "Past scans",
+    "loadingHistory": "Loading…",
+    "emptyHistory": "No scans yet. Upload your first photo above.",
+    "emptyText": "(Empty)",
+    "delete": "Delete",
+    "errors": {
+      "premium": "OCR Pro is a Premium feature. See /credits to upgrade.",
+      "rateLimit": "Daily scan limit reached. See you tomorrow.",
+      "generic": "Couldn't scan right now. Please retry."
+    }
+  },
+  "lectures": {
+    "heading": "Lecture recordings",
+    "subheading": "Upload an audio file — I'll produce a transcript + key topics + \"this will show up on the exam\" hints.",
+    "uploadHeading": "Upload a new recording",
+    "uploadHelper": "Up to 200MB. MP3, M4A, WAV accepted. Expect ~5 min processing for 60 min of audio.",
+    "upload": "Upload & process",
+    "uploading": "Uploading…",
+    "historyHeading": "My recordings",
+    "loading": "Loading…",
+    "empty": "No recordings yet. Upload one above.",
+    "pickHelper": "Select a recording from the left to see the details.",
+    "processing": "Processing",
+    "examHints": "Exam hints",
+    "keyTopics": "Key topics",
+    "transcriptHeading": "Full transcript",
+    "transcriptPending": "Transcript isn't ready yet — processing may take a few minutes.",
+    "duplicateNotice": "This audio has already been processed — see the existing transcript.",
+    "errors": {
+      "premium": "Lecture transcription is a Premium feature.",
+      "rateLimit": "Daily upload limit reached. Try again tomorrow.",
+      "generic": "Upload failed. Check the file format and retry."
+    }
+  },
+  "multimodal": {
+    "heading": "Find similar questions by image",
+    "subheading": "Photograph a formula or question — I'll surface the closest matches across past exams and mock exams.",
+    "pickLabel": "Pick / take a photo",
+    "pickHelper": "Clear photo = clear results.",
+    "search": "Find similar questions",
+    "searching": "Searching…",
+    "resultsHeading": "{{count}} matches",
+    "emptyHeading": "No similar questions found",
+    "emptyHelper": "Try a clearer photo or a different angle.",
+    "detectedKeywords": "Detected topics: {{list}}",
+    "sourceExam": "Exam archive",
+    "sourceMock": "Mock exam",
+    "disclaimer": "Results are based on keyword overlap — not strict similarity.",
+    "errors": {
+      "premium": "Image search is a Premium feature.",
+      "rateLimit": "Daily search limit reached. Try again tomorrow.",
+      "generic": "Search failed. Please retry."
+    }
+  },
+  "pushNotifications": {
+    "title": "Daily review notifications",
+    "helper": "Turn this on and we'll ping you at 9 AM with today's reviews — only. Turn it off anytime.",
+    "enable": "Enable notifications",
+    "enabling": "Enabling…",
+    "close": "Turn off",
+    "active": "Active",
+    "unsupported": "Your browser doesn't support push notifications. Chrome, Firefox, or Safari 17+ recommended.",
+    "notConfigured": "Notification infrastructure isn't configured right now. Please check back later.",
+    "blocked": "Browser permission blocked. Grant it from the lock icon in the address bar and reload."
+  },
+  "privacy": {
+    "title": "Privacy & KVKK",
+    "voiceTranscripts": "Live voice tutor transcripts are retained for 30 days and then auto-deleted. Audio is never stored — only text transcripts.",
+    "ocrImages": "Notebook photos you upload stay tied to your account only and you can delete them anytime.",
+    "lectureAudio": "Lecture recordings may capture third parties — keep them private; use only for your own study.",
+    "multimodalSearch": "Images uploaded for image search are not persisted to disk after analysis.",
+    "deleteAll": "Delete all my data",
+    "contact": "Questions? Email kvkk@profai.local."
   }
 }
