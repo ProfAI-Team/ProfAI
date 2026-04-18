@@ -1,4 +1,5 @@
 import { countDueByUser } from "../services/spacedRepetitionService";
+import { sendPush } from "../services/pushNotificationService";
 import prisma from "../lib/prisma";
 import { registerWorker, scheduleRepeating } from "../lib/queue";
 import { featureLogger } from "../lib/logger";
@@ -33,6 +34,7 @@ export function registerSpacedRepetitionWorker(): void {
     );
 
     let notified = 0;
+    let delivered = 0;
     for (const row of dueCounts) {
       const pref = prefMap.get(row.userId) ?? "daily";
       if (pref === "off") continue;
@@ -49,9 +51,24 @@ export function registerSpacedRepetitionWorker(): void {
         "review digest queued"
       );
       notified += 1;
+
+      try {
+        const result = await sendPush(row.userId, {
+          title: "Bugün tekrarın var",
+          body: `${row.dueCount} konuyu pekiştirmek için 5 dakika ayır.`,
+          url: "/me/reviews",
+          tag: "spacedRepetition",
+        });
+        delivered += result.delivered;
+      } catch (err) {
+        log.error({ err, userId: row.userId }, "push delivery failed inside digest");
+      }
     }
 
-    log.info({ notified, total: dueCounts.length }, "daily digest complete");
+    log.info(
+      { notified, delivered, total: dueCounts.length },
+      "daily digest complete"
+    );
   });
 }
 
