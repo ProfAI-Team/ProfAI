@@ -30,7 +30,7 @@ Phase 3+4+5 retro düzeni korundu: **borçlar önce** (8), backend core ortada (
 | 6.16 | Backend tests — voice + OCR + lecture + multimodal + push + provider fallback (70+ unit, 10+ integration) | 5 saat | 6.15 | ✅ Tamam | `21664ef` |
 | 6.17 | Client types + 5 services + shared components (`VoiceRecorder` + `AudioStreamer` + `TranscriptView` + `CameraCapture` + `LatexRenderer` + `PushPermissionCard`) | 5 saat | 6.15 | ✅ Tamam | `e1dc0f8` |
 | 6.18 | Voice tutor sayfası `/tutor` — WebRTC/WebSocket state machine + mic + waveform + canlı transcript + interruption | 6 saat | 6.17 | ✅ Tamam | `85f8e03` |
-| 6.19 | OCR upload sayfası `/me/ocr` — camera capture + file picker + LaTeX preview + "notlarıma ekle" + study pack input | 4 saat | 6.17 | ⬜ | — |
+| 6.19 | OCR upload sayfası `/me/ocr` — camera capture + file picker + LaTeX preview + "notlarıma ekle" + study pack input | 4 saat | 6.17 | ✅ Tamam | `1c3d573` |
 | 6.20 | Lecture audio sayfası `/me/lectures` — upload + progress + transcript view + key topic list | 4 saat | 6.17 | ⬜ | — |
 | 6.21 | Multimodal search sayfası `/search/multimodal` — formül fotoğrafla benzer soru bul | 3 saat | 6.17 | ⬜ | — |
 | 6.22 | Navbar + Dashboard entegrasyonu — voice quick action + OCR notlar linki + lectures + multimodal | 2 saat | 6.18–6.21 | ⬜ | — |
