@@ -34,17 +34,19 @@ async function makeProfessor(suffix: string) {
 
 describeIfDb("postExamReportService", () => {
   beforeEach(async () => {
+    // `startsWith` anchors cleanup to this suite's prefix so a parallel
+    // worker running a different suite can't see its test users swept.
     await prisma.postExamReport.deleteMany({
-      where: { user: { email: { contains: "report-" } } },
+      where: { user: { email: { startsWith: "report-" } } },
     });
     await prisma.userCredit.deleteMany({
-      where: { user: { email: { contains: "report-" } } },
+      where: { user: { email: { startsWith: "report-" } } },
     });
     await prisma.user.deleteMany({
-      where: { email: { contains: "report-" } },
+      where: { email: { startsWith: "report-" } },
     });
     await prisma.professor.deleteMany({
-      where: { name: { contains: "Prof Report" } },
+      where: { name: { startsWith: "Prof Report" } },
     });
   });
 

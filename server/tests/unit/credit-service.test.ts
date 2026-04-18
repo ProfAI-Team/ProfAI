@@ -23,12 +23,17 @@ async function makeUser(suffix: string) {
 
 describeIfDb("creditService", () => {
   beforeEach(async () => {
-    // Clean slate — only our test users' rows.
+    // Clean slate — only our test users' rows. `startsWith` not `contains`:
+    // another suite (e.g. post-exam-report) writes users with emails like
+    // `report-credit-<ts>@test.local` whose `contains: "credit-"` match would
+    // cascade their user rows in parallel runs, leaving its userCredit.create
+    // with a dangling FK target. Anchoring on the prefix scopes cleanup to
+    // this suite's own fixtures.
     await prisma.userCredit.deleteMany({
-      where: { user: { email: { contains: "credit-" } } },
+      where: { user: { email: { startsWith: "credit-" } } },
     });
     await prisma.user.deleteMany({
-      where: { email: { contains: "credit-" } },
+      where: { email: { startsWith: "credit-" } },
     });
   });
 
