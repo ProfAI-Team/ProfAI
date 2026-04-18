@@ -7,6 +7,16 @@ import {
   scheduleSpacedRepetitionDaily,
 } from "./spacedRepetitionScheduler";
 import { registerLectureWorker } from "../services/lectureAudioService";
+import { registerPaymentWebhookWorker } from "./paymentWebhookRetry";
+import {
+  registerMarketplaceIndexingWorker,
+  scheduleMarketplaceIndexing,
+} from "./marketplaceIndexing";
+import { registerHocaVerificationWorker } from "./hocaVerification";
+import {
+  registerStorageGcWorker,
+  scheduleStorageGc,
+} from "./storageGc";
 import { closeAll } from "../lib/queue";
 import { featureLogger } from "../lib/logger";
 
@@ -27,8 +37,16 @@ export async function bootJobs(): Promise<void> {
   registerStudyGroupMaintenanceWorker();
   registerSpacedRepetitionWorker();
   registerLectureWorker();
+  // Phase 7 (7.18).
+  registerPaymentWebhookWorker();
+  registerMarketplaceIndexingWorker();
+  registerHocaVerificationWorker();
+  registerStorageGcWorker();
+
   await scheduleStudyGroupMaintenance();
   await scheduleSpacedRepetitionDaily();
+  await scheduleMarketplaceIndexing();
+  await scheduleStorageGc();
 
   const shutdown = async () => {
     log.info("shutting down workers");
