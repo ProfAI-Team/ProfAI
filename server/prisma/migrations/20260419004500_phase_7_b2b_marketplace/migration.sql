@@ -171,7 +171,15 @@ ALTER TABLE "payments" ADD CONSTRAINT "payments_userId_fkey" FOREIGN KEY ("userI
 -- distance give the matching + search queries O(log n) scan behaviour
 -- at Phase 7 scale; lists = 100 is the pgvector default sweet-spot
 -- below ~100k rows.
-ALTER TABLE "tutors" ADD COLUMN "embedding" vector(768);
-ALTER TABLE "marketplace_items" ADD COLUMN "embedding" vector(768);
-CREATE INDEX "tutors_embedding_idx" ON "tutors" USING ivfflat ("embedding" vector_cosine_ops) WITH (lists = 100);
-CREATE INDEX "marketplace_items_embedding_idx" ON "marketplace_items" USING ivfflat ("embedding" vector_cosine_ops) WITH (lists = 100);
+--
+-- Types + operator classes are fully qualified against `public` because
+-- the pgvector extension installs into whichever schema holds it first
+-- (DB-wide singleton) and Prisma's `?schema=X` connection param sets
+-- `search_path` to X only — without `public` in the path, the vector
+-- type is invisible inside per-worker test schemas. Qualifying here
+-- keeps migrations portable across test_worker_N, CI ephemeral DBs,
+-- and any future multi-tenant schema layout.
+ALTER TABLE "tutors" ADD COLUMN "embedding" public.vector(768);
+ALTER TABLE "marketplace_items" ADD COLUMN "embedding" public.vector(768);
+CREATE INDEX "tutors_embedding_idx" ON "tutors" USING ivfflat ("embedding" public.vector_cosine_ops) WITH (lists = 100);
+CREATE INDEX "marketplace_items_embedding_idx" ON "marketplace_items" USING ivfflat ("embedding" public.vector_cosine_ops) WITH (lists = 100);
