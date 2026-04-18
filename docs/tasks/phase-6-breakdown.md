@@ -28,7 +28,7 @@ Phase 3+4+5 retro düzeni korundu: **borçlar önce** (8), backend core ortada (
 | 6.14 | Push notification altyapısı — FCM web push + `PushDevice` registration + spaced rep delivery | 4 saat | 6.8 | ✅ Tamam | `5ea22c4` |
 | 6.15 | REST endpoints — voice/ocr/lecture/multimodal/push (14+ route) + Zod + premium gate + 4 yeni limiter | 4 saat | 6.10–6.14 | ✅ Tamam | `68d0fae` |
 | 6.16 | Backend tests — voice + OCR + lecture + multimodal + push + provider fallback (70+ unit, 10+ integration) | 5 saat | 6.15 | ✅ Tamam | `21664ef` |
-| 6.17 | Client types + 5 services + shared components (`VoiceRecorder` + `AudioStreamer` + `TranscriptView` + `CameraCapture` + `LatexRenderer` + `PushPermissionCard`) | 5 saat | 6.15 | ⬜ | — |
+| 6.17 | Client types + 5 services + shared components (`VoiceRecorder` + `AudioStreamer` + `TranscriptView` + `CameraCapture` + `LatexRenderer` + `PushPermissionCard`) | 5 saat | 6.15 | ✅ Tamam | `e1dc0f8` |
 | 6.18 | Voice tutor sayfası `/tutor` — WebRTC/WebSocket state machine + mic + waveform + canlı transcript + interruption | 6 saat | 6.17 | ⬜ | — |
 | 6.19 | OCR upload sayfası `/me/ocr` — camera capture + file picker + LaTeX preview + "notlarıma ekle" + study pack input | 4 saat | 6.17 | ⬜ | — |
 | 6.20 | Lecture audio sayfası `/me/lectures` — upload + progress + transcript view + key topic list | 4 saat | 6.17 | ⬜ | — |
