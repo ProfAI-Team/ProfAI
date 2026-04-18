@@ -126,16 +126,15 @@ d("GET /api/professors/:id/style-profile", () => {
     expect(typeof profile.geminiVersion).toBe("string");
   });
 
-  // TODO (phase-5+): cache hit assertion relied on the main seed having a
-  // pre-warmed `Zehra Tan` profile row. Under per-worker schema isolation
-  // we build the fixture from scratch, and the first Gemini call persists
-  // with `isStale: true` in some paths — a second request re-triggers the
-  // summary generation (~8s) instead of returning the cached value. The
-  // cache-hit assertion stops being meaningful until we either pre-warm
-  // the cache in `beforeAll` or assert on the second call being strictly
-  // faster than the first. Revisit during Phase 5 test pass (5.16).
-  it.skip("is fast on cache hit (<1s) for a profile that was just built", async () => {
-    await request(app).get(`/api/professors/${readyProfessorId}/style-profile`);
+  // Phase 6 task 6.6 — reopens the cache-hit assertion by pre-warming
+  // the row via `warmupCache`, which writes an isStale:false profile
+  // without a Gemini roundtrip. The endpoint then serves straight from
+  // cache and the timer becomes meaningful again.
+  it("is fast on cache hit (<1s) for a warmed profile", async () => {
+    const { warmupCache } = await import(
+      "../../src/services/professorStyleService"
+    );
+    await warmupCache(readyProfessorId);
 
     const started = Date.now();
     const res = await request(app).get(
@@ -144,6 +143,7 @@ d("GET /api/professors/:id/style-profile", () => {
     const elapsed = Date.now() - started;
 
     expect(res.status).toBe(200);
+    expect(res.body.status).toBe("ready");
     expect(elapsed).toBeLessThan(1000);
   });
 });

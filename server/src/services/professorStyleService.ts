@@ -400,3 +400,40 @@ export async function invalidateStyleProfile(
     data: { isStale: true },
   });
 }
+
+/**
+ * Phase 6 task 6.6 — pre-populates a ready (non-stale) profile row
+ * for a professor, skipping the Gemini summary call. Used by the
+ * style-profile cache-hit integration test (and any future scheduled
+ * warmup job) so the first user request can serve from cache
+ * deterministically. Requires the professor to already have the
+ * minimum analyzed exams (`MIN_EXAMS_FOR_PROFILE`); otherwise returns
+ * `null` so the caller knows the warmup wasn't applicable.
+ */
+export async function warmupCache(
+  professorId: string
+): Promise<ProfessorStyleProfile | null> {
+  const aggregation = await aggregateFromExams(professorId);
+  if (!aggregation || aggregation.examSourceCount < MIN_EXAMS_FOR_PROFILE) {
+    return null;
+  }
+
+  const data = {
+    aggregatedData: aggregation.aggregated as object,
+    geminiSummary: FALLBACK_SUMMARY,
+    topTopics: aggregation.topTopics as object,
+    evolution: aggregation.evolution as object,
+    metrics: aggregation.metrics as object,
+    examSourceCount: aggregation.examSourceCount,
+    geminiVersion: `${STYLE_SUMMARY_VERSION}:warmup`,
+    isStale: false,
+    regenerationStartedAt: null,
+    generatedAt: new Date(),
+  };
+
+  return prisma.professorStyleProfile.upsert({
+    where: { professorId },
+    update: data,
+    create: { professorId, ...data },
+  });
+}
