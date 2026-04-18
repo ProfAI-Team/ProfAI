@@ -33,7 +33,12 @@ export function createApp(): express.Express {
     max: 100,
     standardHeaders: true,
     legacyHeaders: false,
-    message: { error: "Too many requests, please try again later." },
+    message: {
+      error: {
+        code: "RATE_LIMITED",
+        message: "Too many requests, please try again later.",
+      },
+    },
   });
   app.use(limiter);
 

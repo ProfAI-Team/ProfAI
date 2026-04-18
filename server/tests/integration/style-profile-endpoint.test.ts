@@ -84,7 +84,9 @@ d("GET /api/professors/:id/style-profile", () => {
       "/api/professors/00000000-0000-0000-0000-000000000000/style-profile"
     );
     expect(res.status).toBe(404);
-    expect(res.body).toEqual({ error: "Professor not found." });
+    expect(res.body).toEqual({
+      error: { code: "NOT_FOUND", message: "Professor not found." },
+    });
   });
 
   it("returns insufficient_data for a professor with < 3 analyzed exams", async () => {

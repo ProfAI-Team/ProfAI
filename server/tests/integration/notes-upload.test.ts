@@ -86,7 +86,8 @@ d("POST /api/notes/upload", () => {
         contentType: "image/png",
       });
     expect(res.status).toBe(400);
-    expect(res.body.error).toContain("PDF, DOCX, and TXT");
+    expect(res.body.error.code).toBe("VALIDATION_FAILED");
+    expect(res.body.error.message).toContain("PDF, DOCX, and TXT");
   });
 
   it("returns 400 when no file is sent", async () => {

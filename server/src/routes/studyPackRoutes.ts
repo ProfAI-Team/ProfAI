@@ -7,11 +7,12 @@ import {
 } from "../controllers/studyPackController";
 import { authenticate } from "../middleware/authMiddleware";
 import { studyPackHourlyLimiter } from "../middleware/rateLimitMiddleware";
+import { asyncHandler } from "../lib/asyncHandler";
 
 const router = Router();
 
-router.post("/generate", authenticate, studyPackHourlyLimiter, generate);
-router.get("/mine", authenticate, listMine);
-router.get("/:id", authenticate, getById);
+router.post("/generate", authenticate, studyPackHourlyLimiter, asyncHandler(generate));
+router.get("/mine", authenticate, asyncHandler(listMine));
+router.get("/:id", authenticate, asyncHandler(getById));
 
 export default router;

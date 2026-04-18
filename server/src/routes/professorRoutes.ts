@@ -9,15 +9,16 @@ import {
   getDiscovery,
 } from "../controllers/professorController";
 import { authenticate } from "../middleware/authMiddleware";
+import { asyncHandler } from "../lib/asyncHandler";
 
 const router = Router();
 
-router.get("/", listProfessors);
-router.get("/filters", getFilterOptions);
-router.get("/discovery", getDiscovery);
-router.get("/:id", getProfessor);
-router.post("/", authenticate, createProfessor);
-router.get("/:id/analysis", getProfessorAnalysis);
-router.get("/:id/style-profile", getStyleProfile);
+router.get("/", asyncHandler(listProfessors));
+router.get("/filters", asyncHandler(getFilterOptions));
+router.get("/discovery", asyncHandler(getDiscovery));
+router.get("/:id", asyncHandler(getProfessor));
+router.post("/", authenticate, asyncHandler(createProfessor));
+router.get("/:id/analysis", asyncHandler(getProfessorAnalysis));
+router.get("/:id/style-profile", asyncHandler(getStyleProfile));
 
 export default router;
