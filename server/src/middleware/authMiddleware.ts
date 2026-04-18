@@ -34,7 +34,7 @@ export const authenticate = (
       id: decoded.id,
       email: decoded.email,
       name: decoded.name,
-      role: decoded.role ?? UserRole.STUDENT,
+      role: decoded.role ?? "STUDENT",
       universityAccountId: decoded.universityAccountId ?? null,
     };
 

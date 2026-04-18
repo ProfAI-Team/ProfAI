@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { UserRole } from "@prisma/client";
+import type { UserRole } from "@prisma/client";
 
 import { AppError, forbidden, unauthorized } from "../lib/AppError";
 
@@ -28,7 +28,7 @@ import { AppError, forbidden, unauthorized } from "../lib/AppError";
 
 export type AllowedRole = UserRole | "SUPER_ADMIN";
 
-const SUPER_ADMIN: UserRole = UserRole.SUPER_ADMIN;
+const SUPER_ADMIN: UserRole = "SUPER_ADMIN";
 
 export function requireRole(allowed: readonly UserRole[]) {
   const allowSet = new Set<UserRole>(allowed);

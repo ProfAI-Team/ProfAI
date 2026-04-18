@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { UserRole } from "@prisma/client";
 
 import { authenticate } from "../middleware/authMiddleware";
 import { requireRole } from "../middleware/rbacMiddleware";
@@ -91,7 +90,7 @@ router.get("/payments/me", authenticate, asyncHandler(myPayments));
 router.post(
   "/payments/:id/refund",
   authenticate,
-  requireRole([UserRole.SUPER_ADMIN]),
+  requireRole(["SUPER_ADMIN"]),
   asyncHandler(refund)
 );
 
@@ -99,25 +98,25 @@ router.post(
 router.get(
   "/university/dashboard",
   authenticate,
-  requireRole([UserRole.UNIVERSITY_ADMIN]),
+  requireRole(["UNIVERSITY_ADMIN"]),
   asyncHandler(uniDashboard)
 );
 router.post(
   "/university/seats",
   authenticate,
-  requireRole([UserRole.UNIVERSITY_ADMIN]),
+  requireRole(["UNIVERSITY_ADMIN"]),
   asyncHandler(addSeatController)
 );
 router.delete(
   "/university/seats/:userId",
   authenticate,
-  requireRole([UserRole.UNIVERSITY_ADMIN]),
+  requireRole(["UNIVERSITY_ADMIN"]),
   asyncHandler(removeSeatController)
 );
 router.post(
   "/university/sso",
   authenticate,
-  requireRole([UserRole.UNIVERSITY_ADMIN]),
+  requireRole(["UNIVERSITY_ADMIN"]),
   asyncHandler(ssoController)
 );
 
@@ -126,19 +125,19 @@ router.post("/hoca/verify", authenticate, asyncHandler(hocaVerifyCtrl));
 router.get(
   "/hoca/dashboard",
   authenticate,
-  requireRole([UserRole.HOCA]),
+  requireRole(["HOCA"]),
   asyncHandler(hocaDashboard)
 );
 router.get(
   "/hoca/feedback",
   authenticate,
-  requireRole([UserRole.HOCA]),
+  requireRole(["HOCA"]),
   asyncHandler(hocaFeedback)
 );
 router.get(
   "/hoca/profile",
   authenticate,
-  requireRole([UserRole.HOCA]),
+  requireRole(["HOCA"]),
   asyncHandler(hocaProfile)
 );
 
