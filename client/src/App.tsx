@@ -34,6 +34,9 @@ const ReviewsPage = lazy(() => import('./pages/ReviewsPage'));
 const VoiceTutorPage = lazy(() => import('./pages/VoiceTutorPage'));
 const OCRPage = lazy(() => import('./pages/OCRPage'));
 const LecturesPage = lazy(() => import('./pages/LecturesPage'));
+const MultimodalSearchPage = lazy(
+  () => import('./pages/MultimodalSearchPage')
+);
 
 const App: React.FC = () => {
   return (
@@ -207,6 +210,14 @@ const App: React.FC = () => {
                     element={
                       <ProtectedRoute>
                         <LecturesPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/search/multimodal"
+                    element={
+                      <ProtectedRoute>
+                        <MultimodalSearchPage />
                       </ProtectedRoute>
                     }
                   />
