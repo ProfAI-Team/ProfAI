@@ -40,6 +40,9 @@ const MultimodalSearchPage = lazy(
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const TutorListPage = lazy(() => import('./pages/TutorListPage'));
 const TutorDetailPage = lazy(() => import('./pages/TutorDetailPage'));
+const TutoringSessionPage = lazy(
+  () => import('./pages/TutoringSessionPage')
+);
 
 const App: React.FC = () => {
   return (
@@ -227,6 +230,14 @@ const App: React.FC = () => {
                   <Route path="/privacy" element={<PrivacyPage />} />
                   <Route path="/tutors" element={<TutorListPage />} />
                   <Route path="/tutors/:id" element={<TutorDetailPage />} />
+                  <Route
+                    path="/tutoring/sessions/:id"
+                    element={
+                      <ProtectedRoute>
+                        <TutoringSessionPage />
+                      </ProtectedRoute>
+                    }
+                  />
                 </Routes>
               </RouteSuspense>
             </main>
