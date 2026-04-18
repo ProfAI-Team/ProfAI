@@ -1,0 +1,22 @@
+# server/.dockerignore — applied when the build context is ./server.
+# Host node_modules caused the Phase 5 BullMQ drift (5.24 retro); this
+# guarantees the container builds against the lockfile alone.
+
+node_modules
+dist
+coverage
+.turbo
+*.log
+.env
+.env.*
+!.env.example
+
+uploads
+prisma/*.db
+prisma/*.sqlite
+
+tests
+scripts/*.local.ts
+
+.vscode
+.idea

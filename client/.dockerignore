@@ -1,0 +1,17 @@
+# client/.dockerignore — applied when the build context is ./client.
+
+node_modules
+dist
+build
+coverage
+.turbo
+*.log
+.env
+.env.*
+!.env.example
+
+playwright-report
+test-results
+
+.vscode
+.idea

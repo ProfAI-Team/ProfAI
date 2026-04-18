@@ -77,6 +77,10 @@ docker compose up -d
 # Servisleri yeniden build et (code değişikliği sonrası)
 docker compose build server client && docker compose up -d --force-recreate server client
 
+# Native dep drift'i (BullMQ, ioredis gibi) ya da bind-mount node_modules inatçı kaldığında:
+./scripts/rebuild-volumes.sh          # DB'yi korur; server + client volume'larını siler, --no-cache rebuild
+./scripts/rebuild-volumes.sh --with-db  # Postgres'i de sıfırlar (dikkat: local veri kaybolur)
+
 # DB'yi sıfırla ve seed'i yeniden çalıştır
 cd server && npm run seed    # ~30 sn; 200 üni, 4500 hoca, ~17K sınav
 ```

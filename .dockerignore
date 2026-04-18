@@ -1,0 +1,28 @@
+# Root .dockerignore — applied when building from the repository root.
+# Keeps host-only artifacts out of every build context so native deps
+# resolved on the host (e.g. bcrypt, ioredis) don't leak into the
+# container image.
+
+**/node_modules
+**/dist
+**/build
+**/.turbo
+**/coverage
+**/*.log
+**/.env
+**/.env.*
+!**/.env.example
+
+.git
+.github
+.vscode
+.idea
+.claude
+
+docs
+docs/**
+SCRATCHPAD.md
+**/SCRATCHPAD.md
+
+**/Thumbs.db
+**/.DS_Store
