@@ -37,6 +37,7 @@ const LecturesPage = lazy(() => import('./pages/LecturesPage'));
 const MultimodalSearchPage = lazy(
   () => import('./pages/MultimodalSearchPage')
 );
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 
 const App: React.FC = () => {
   return (
@@ -221,6 +222,7 @@ const App: React.FC = () => {
                       </ProtectedRoute>
                     }
                   />
+                  <Route path="/privacy" element={<PrivacyPage />} />
                 </Routes>
               </RouteSuspense>
             </main>
