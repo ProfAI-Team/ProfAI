@@ -2,8 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import MarkdownRenderer from '../components/MarkdownRenderer';
 import {
   Trophy,
   Loader2,
@@ -302,21 +301,19 @@ const MockExamResultPage: React.FC = () => {
                       {score100}/100
                     </span>
                   </div>
-                  <div className="prose prose-sm dark:prose-invert max-w-none">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {q.q}
-                    </ReactMarkdown>
-                  </div>
+                  <MarkdownRenderer
+                    className="prose prose-sm dark:prose-invert max-w-none"
+                    markdown={q.q}
+                  />
                   {f?.feedback && (
                     <div className="rounded-lg bg-secondary/60 border border-border p-3">
                       <p className="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold mb-1">
                         {t('mockExam.result.questions.feedbackLabel')}
                       </p>
-                      <div className="prose prose-sm dark:prose-invert max-w-none">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                          {f.feedback}
-                        </ReactMarkdown>
-                      </div>
+                      <MarkdownRenderer
+                        className="prose prose-sm dark:prose-invert max-w-none"
+                        markdown={f.feedback}
+                      />
                     </div>
                   )}
                   {f?.rubricHits && f.rubricHits.length > 0 && (

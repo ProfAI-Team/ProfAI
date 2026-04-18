@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Gauge, BookMarked } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import MarkdownRenderer from './MarkdownRenderer';
 import type { PracticeQuestion } from '../types/studyPack';
 import { cn } from '../lib/utils';
 import VoteButtons from './VoteButtons';
@@ -78,11 +77,10 @@ const PracticeQuestionCard: React.FC<Props> = ({
         </span>
       </div>
 
-      <div className="prose prose-sm max-w-none dark:prose-invert text-foreground">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-          {question.question}
-        </ReactMarkdown>
-      </div>
+      <MarkdownRenderer
+        className="prose prose-sm max-w-none dark:prose-invert text-foreground"
+        markdown={question.question}
+      />
 
       <button
         type="button"
@@ -112,11 +110,10 @@ const PracticeQuestionCard: React.FC<Props> = ({
           >
             <div className="mt-3 pt-3 border-t border-border space-y-3">
               <div>
-                <div className="prose prose-sm max-w-none dark:prose-invert text-foreground">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {question.answer}
-                  </ReactMarkdown>
-                </div>
+                <MarkdownRenderer
+                  className="prose prose-sm max-w-none dark:prose-invert text-foreground"
+                  markdown={question.answer}
+                />
               </div>
               {question.rationale && (
                 <div>

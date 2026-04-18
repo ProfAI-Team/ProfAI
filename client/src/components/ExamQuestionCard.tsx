@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flag } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import MarkdownRenderer from './MarkdownRenderer';
 import { cn } from '../lib/utils';
 import type { MockExamClientQuestion } from '../types/mockExam';
 
@@ -108,9 +107,10 @@ export const ExamQuestionCard: React.FC<ExamQuestionCardProps> = ({
         </button>
       </div>
 
-      <div className="prose prose-sm dark:prose-invert max-w-none text-foreground">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{question.q}</ReactMarkdown>
-      </div>
+      <MarkdownRenderer
+        className="prose prose-sm dark:prose-invert max-w-none text-foreground"
+        markdown={question.q}
+      />
 
       {question.type === 'MC' && question.options && (
         <div className="space-y-2">

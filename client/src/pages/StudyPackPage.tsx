@@ -12,8 +12,7 @@ import {
   AlertTriangle,
   ShieldCheck,
 } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import MarkdownRenderer from '../components/MarkdownRenderer';
 
 import { Tabs, TabPanel, useTabListId } from '../components/Tabs';
 import PracticeQuestionCard from '../components/PracticeQuestionCard';
@@ -209,11 +208,10 @@ const StudyPackPage: React.FC = () => {
                 <h2 className="font-display text-lg font-bold text-foreground mb-3">
                   {s.topic}
                 </h2>
-                <div className="prose prose-sm sm:prose max-w-none dark:prose-invert text-foreground">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {s.content}
-                  </ReactMarkdown>
-                </div>
+                <MarkdownRenderer
+                  className="prose prose-sm sm:prose max-w-none dark:prose-invert text-foreground"
+                  markdown={s.content}
+                />
               </motion.article>
             ))}
           </div>
