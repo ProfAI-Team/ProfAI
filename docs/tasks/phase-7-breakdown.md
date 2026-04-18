@@ -42,7 +42,7 @@ Phase 3+4+5+6 retro düzeni korundu: **borçlar önce** (9), backend core ortada
 | 7.28 | i18n TR + EN copy sweep — `tutoring.*` / `marketplace.*` / `payment.*` / `university.*` / `hoca.*` / `roles.*` namespace | 3 saat | 7.21–7.27 | ✅ Tamam | `a3e61c7` |
 | 7.29 | KVKK v2 + `/privacy` update — B2B veri akışı (üniversite × öğrenci) + account deletion full wire + avukat review tur 2 placeholder | 2 saat | 7.4, 7.16 | ✅ Tamam | `0f03d56` |
 | 7.30 | Account deletion UI — settings tab + confirm dialog (çifte onay, parola re-entry) + cascade toast | 2 saat | 7.4 | ✅ Tamam | `ba8ff17` |
-| 7.31 | Playwright MCP visual smoke + `scripts/seed-phase-7-fixture.ts` — tutor/marketplace/payment/hoca/university senaryoları; light mode toggle click (7.6) kullan | 3 saat | 7.28 | ⬜ | — |
+| 7.31 | Playwright MCP visual smoke + `scripts/seed-phase-7-fixture.ts` — tutor/marketplace/payment/hoca/university senaryoları; light mode toggle click (7.6) kullan | 3 saat | 7.28 | ✅ Tamam | `a4a8166` |
 | 7.32 | Phase 7 kapanışı — phase-7 retro + roadmap README + scratchpad archive + open-questions (T1/T2/İ1/H2/H3 kapanışları) | 1 saat | Hepsi | ⬜ | — |
 
 **Toplam:** ~105 saat tahmin · Hedef: 2 tam oturum içinde kapanış (Phase 6 ritmi korunursa). **İlerleme:** 0/32.
