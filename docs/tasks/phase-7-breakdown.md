@@ -34,10 +34,10 @@ Phase 3+4+5+6 retro düzeni korundu: **borçlar önce** (9), backend core ortada
 | 7.20 | Client types + 5 services + shared components (`TutorCard`, `PriceTag`, `RatingStars`, `CompatibilityScore`, `PaymentBadge`, `ApprovalBanner`, `SeatCounter`, `RoleGuard`) | 4 saat | 7.17 | ✅ Tamam | `957b2da` |
 | 7.21 | Tutor marketplace `/tutors` + `/tutors/:id` — grid + filter + pagination + detay + booking CTA + compatibility badge | 5 saat | 7.20 | ✅ Tamam | `057ac59` |
 | 7.22 | Tutoring session flow `/tutoring/sessions/:id` — session page + in-app mesajlaşma placeholder + Google Meet link wire + rating form | 4 saat | 7.20 | ✅ Tamam | `f90df88` |
-| 7.23 | Notes marketplace `/marketplace` + `/marketplace/:id` — grid + filter + detay + "satın al" + signed download (7.2) | 4 saat | 7.20 | ⬜ | — |
-| 7.24 | Hoca portal `/hoca/dashboard` + `/hoca/profile` + `/hoca/feedback` — verified badge + student performance + profil edit + anonim feedback liste | 4 saat | 7.20 | ⬜ | — |
-| 7.25 | Üniversite admin `/admin/university` — dashboard + seats + subscription tier + SSO stub (SAML metadata upload placeholder) + aggregate insights grafiği | 4 saat | 7.20 | ⬜ | — |
-| 7.26 | Payment checkout `/checkout` — iyzico 3DS iframe + success/fail callback route + e-Fatura indir placeholder + Stripe fallback shim | 4 saat | 7.20, 7.13 | ⬜ | — |
+| 7.23 | Notes marketplace `/marketplace` + `/marketplace/:id` — grid + filter + detay + "satın al" + signed download (7.2) | 4 saat | 7.20 | ✅ Tamam | `018a6c3` |
+| 7.24 | Hoca portal `/hoca/dashboard` + `/hoca/profile` + `/hoca/feedback` — verified badge + student performance + profil edit + anonim feedback liste | 4 saat | 7.20 | ✅ Tamam | `018a6c3` |
+| 7.25 | Üniversite admin `/admin/university` — dashboard + seats + subscription tier + SSO stub (SAML metadata upload placeholder) + aggregate insights grafiği | 4 saat | 7.20 | ✅ Tamam | `018a6c3` |
+| 7.26 | Payment checkout `/checkout` — iyzico 3DS iframe + success/fail callback route + e-Fatura indir placeholder + Stripe fallback shim | 4 saat | 7.20, 7.13 | ✅ Tamam | `018a6c3` |
 | 7.27 | Navbar + Dashboard + role-aware navigation — HOCA/UNIVERSITY_ADMIN/TUTOR/STUDENT rollerine göre menu; B2B entry points | 2 saat | 7.21–7.26 | ⬜ | — |
 | 7.28 | i18n TR + EN copy sweep — `tutoring.*` / `marketplace.*` / `payment.*` / `university.*` / `hoca.*` / `roles.*` namespace | 3 saat | 7.21–7.27 | ⬜ | — |
 | 7.29 | KVKK v2 + `/privacy` update — B2B veri akışı (üniversite × öğrenci) + account deletion full wire + avukat review tur 2 placeholder | 2 saat | 7.4, 7.16 | ⬜ | — |
