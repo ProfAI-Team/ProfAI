@@ -21,7 +21,7 @@ Phase 3+4+5+6 retro düzeni korundu: **borçlar önce** (9), backend core ortada
 | 7.7 | `VoteButtons` 47KB react-markdown shrink — remark-gfm lazy import + code block render opsiyonel; mock exam explain popover'ı küçült | 2 saat | — | ✅ Tamam | `a0f7fb5` |
 | 7.8 | Multi-provider registry genişletme — `reconstructExamSummary` + DNA + course advisor call site'larını `withFallback` wrapper'ına geçir (T4 kapanış genişleme) | 3 saat | — | ✅ Tamam | `e445103` |
 | 7.9 | VAPID key production runbook + env docs — `scripts/generate-vapid.ts` + `server/.env.example` + `docs/operations/runbooks/push-vapid.md` | 1 saat | — | ✅ Tamam | `31f977e` |
-| 7.10 | Prisma schema — `Tutor` + `TutoringSession` + `MarketplaceItem` + `Payment` + `UniversityAccount` + `UserRole` enum + `User.role` + `User.universityAccountId` + migration | 4 saat | 7.3 | ⬜ | — |
+| 7.10 | Prisma schema — `Tutor` + `TutoringSession` + `MarketplaceItem` + `Payment` + `UniversityAccount` + `UserRole` enum + `User.role` + `User.universityAccountId` + migration | 4 saat | 7.3 | ✅ Tamam | `c0c853a` |
 | 7.11 | RBAC middleware — `requireRole(["HOCA", "TUTOR", "UNIVERSITY_ADMIN", "SUPER_ADMIN"])` + hierarchy + authentikator'a role yüklemesi | 2 saat | 7.10 | ⬜ | — |
 | 7.12 | Premium + feature flag registry extend — `TUTOR_MATCHING` / `MARKETPLACE_PRO` / `UNIVERSITY_ADMIN` / `HOCA_PORTAL` flag'leri + iyzico sandbox kill switch | 1 saat | 7.10 | ⬜ | — |
 | 7.13 | Payment gateway servisi — iyzico primary + Stripe fallback abstraction + webhook handler + retry queue + 3DS flow + e-Fatura stub | 6 saat | 7.10, 7.12 | ⬜ | — |
