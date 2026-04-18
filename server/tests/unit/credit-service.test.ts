@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 
 import prisma from "../../src/lib/prisma";
 import {
@@ -100,5 +100,67 @@ describeIfDb("creditService", () => {
     expect(rejections.length).toBeGreaterThanOrEqual(1);
     const balance = await getBalance(user.id);
     expect(balance.balance).toBeGreaterThanOrEqual(0);
+  });
+});
+
+// DB-free: exercises the retry wrapper in applyDelta. This is why the
+// parallel-spend integration test used to flake — Postgres Serializable
+// isolation would raise P2034 on one of the three concurrent debits and
+// the service rethrew it instead of retrying.
+describe("creditService applyDelta retry on P2034", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  function makeSerializationError() {
+    return Object.assign(new Error("could not serialize access"), {
+      code: "P2034",
+    });
+  }
+
+  it("retries on P2034 and resolves on the second attempt", async () => {
+    const spy = vi
+      .spyOn(prisma, "$transaction")
+      .mockRejectedValueOnce(makeSerializationError())
+      .mockResolvedValueOnce({ balance: 10 } as never);
+
+    const res = await earn({ userId: "mock-user", reason: "ExamApproved" });
+    expect(res.balance).toBe(10);
+    expect(spy).toHaveBeenCalledTimes(2);
+  });
+
+  it("gives up after three attempts and rethrows the P2034 error", async () => {
+    const spy = vi
+      .spyOn(prisma, "$transaction")
+      .mockRejectedValue(makeSerializationError());
+
+    await expect(
+      earn({ userId: "mock-user", reason: "ExamApproved" })
+    ).rejects.toMatchObject({ code: "P2034" });
+    expect(spy).toHaveBeenCalledTimes(3);
+  });
+
+  it("does not retry on non-serialization failures", async () => {
+    const otherErr = new Error("boom");
+    const spy = vi
+      .spyOn(prisma, "$transaction")
+      .mockRejectedValue(otherErr);
+
+    await expect(
+      earn({ userId: "mock-user", reason: "ExamApproved" })
+    ).rejects.toThrow("boom");
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  it("surfaces InsufficientCreditError without retrying (it's not P2034)", async () => {
+    const insufficient = new InsufficientCreditError(5, 0);
+    const spy = vi
+      .spyOn(prisma, "$transaction")
+      .mockRejectedValue(insufficient);
+
+    await expect(
+      spend({ userId: "mock-user", reason: "MockExamGenerate" })
+    ).rejects.toBeInstanceOf(InsufficientCreditError);
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 });

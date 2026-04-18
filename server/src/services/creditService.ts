@@ -76,6 +76,24 @@ export async function spend(params: {
   });
 }
 
+// Postgres raises `P2034` (serialization_failure, SQLSTATE 40001) when a
+// Serializable transaction's read set is invalidated by a concurrent
+// writer. Our parallel-spend path hits this: three simultaneous debits
+// on the same row-level lock are exactly the pattern SSI watches for.
+// Retrying the whole transaction — a fresh snapshot, fresh `FOR UPDATE` —
+// is the documented recovery path and matches the "retry on deadlock"
+// pattern Prisma's own docs recommend.
+function isSerializationFailure(err: unknown): boolean {
+  return (
+    typeof err === "object" &&
+    err !== null &&
+    "code" in err &&
+    (err as { code?: unknown }).code === "P2034"
+  );
+}
+
+const APPLY_DELTA_MAX_ATTEMPTS = 3;
+
 async function applyDelta(params: {
   userId: string;
   amount: number; // positive for earn, negative for spend
@@ -131,7 +149,28 @@ async function applyDelta(params: {
   };
 
   if (params.tx) return run(params.tx);
-  return prisma.$transaction(run, { isolationLevel: "Serializable" });
+
+  let lastErr: unknown;
+  for (let attempt = 1; attempt <= APPLY_DELTA_MAX_ATTEMPTS; attempt++) {
+    try {
+      return await prisma.$transaction(run, {
+        isolationLevel: "Serializable",
+      });
+    } catch (err) {
+      lastErr = err;
+      if (
+        isSerializationFailure(err) &&
+        attempt < APPLY_DELTA_MAX_ATTEMPTS
+      ) {
+        // 20ms, 40ms — keeps hot-path latency bounded while giving the
+        // conflicting writer enough breathing room to commit.
+        await new Promise((r) => setTimeout(r, 20 * attempt));
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw lastErr ?? new Error("credit applyDelta exhausted retries");
 }
 
 export async function getBalance(userId: string): Promise<{
