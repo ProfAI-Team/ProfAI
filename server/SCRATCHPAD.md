@@ -30,7 +30,7 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 - ~~**Docker server Prisma generate drift**~~ ✅ 2026-04-19 `b7be394` — docker-compose server command'a `npx prisma generate &&` prepend; container restart fresh client üretiyor. Prod runner Dockerfile zaten immutable image'a baked generate içeriyor, değişmedi.
 - ~~**App.tsx route mount order**~~ ✅ 2026-04-19 `35fc827` — dnaRoutes 16 endpoint'ine explicit `authenticate` prepend, global router.use kaldırıldı (multimodalRoutes zaten per-route). Mount order load-bearing değil artık. Express 5 inference için `String(req.params.X)` cast'leri eklendi iki yerde.
 - ~~**Parallel test flake**~~ ✅ 2026-04-19 üç katman (`14a536d` + `0e94ab1` + `8a14f82`): P2034 retry wrapper + cleanup `contains` → `startsWith` (cross-worker email prefix collision fix — gerçek root cause) + pgvector migration'da `public.vector(768)` / `WITH SCHEMA public` (future-proof). 5x paralel run 14/14 yeşil.
-- **Worker schema isolation silent no-op** (YENİ retro borç) — `tests/globalSetup.ts`'in `migrate deploy` loop'u her worker için `?schema=test_worker_N` URL'i yaratıp execSync'le çağırıyor ama gerçekte schema'lar oluşmuyor (drop → vitest run → `\dn` 0 test_worker_ schema). Testler de facto public schema'da paralel koşuyor; cross-worker pollution riskini sadece cleanup prefix anchoring engelledi. Doğru fix: execSync env'i Prisma'nın `.env` override etmesin (stdin env pass yerine `--schema-path` + programmatic call), veya globalSetup'ı Prisma Migrate programmatic API ile değiştir. Phase 8 başı ~1 saat investigation.
+- ~~**Worker schema isolation silent no-op**~~ ✅ 2026-04-19 — root cause üçlü: (a) vitest `.env`'i `process.env`'e auto-load etmiyor → globalSetup `DATABASE_URL` undefined görüp bail ediyordu; (b) setup.ts aynı sebeple URL mutation yapmıyordu; (c) PrismaClient constructor kendi `tryLoadEnvs`'i ile `.env`'i lazy yüklüyor → test file `import prisma` satırı `describeIfDb` hesaplamasından önce side-effect'le env'i dolduruyor, `describeIfDb` skip olmak yerine public schema'da koşuyordu. Fix: globalSetup + setup.ts başına `import "dotenv/config"`; globalSetup explicit `CREATE SCHEMA IF NOT EXISTS` (admin PrismaClient `$executeRawUnsafe`) + migrate deploy execSync stderr capture. Doğrulama: drop → npm test → `\dn` test_worker_1..4 mevcut + her biri 11 migration + 33 tablo; public seed intakt; credit-service + post-exam-report 5/5 paralel yeşil; full suite 319/319 passed (Phase 7 kapanışında 266 + 47 skipped → artık skipped yok, hepsi gerçekten koşuyor).
 - **reconstructExamSummary dışı AI call site'lar** — DNA narrative, course advisor, study pack, mock exam, grading hâlâ Gemini-only. Claude structured output API olgunlaşınca Phase 8'de migrate.
 - **`enableOfflineQueue: false`** (`lib/cache.ts`) — Redis bağlantı kopmasında cache write'ları silent drop; get hatası logla + null dön (implicit miss). Production'da Redis uptime monitoring ile birleşik Phase 8'de değerlendirmeli.
 - **Multer memory storage** — upload middleware disk storage'a yazıyor, R2 provider'a stream etmiyor; `lib/storage.ts` abstraction var ama existing controller'lar local path kullanıyor. Phase 8'de Multer → memory storage → storage.put(buffer) pipeline'ı aktifleştir.
@@ -40,6 +40,7 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 - 266 passed / 47 skipped / 1 pre-existing flake (credit-service) / 0 new failure.
 - Phase 7 eklemeleri: 58 unit + 9 integration = 67 yeni test (7.19 hedef 95; yetersiz ama kapsam geniş).
 - 4 worker paralel suite ~3s; Phase 8'de 350+ test'e çıkarken pattern korunabilir.
+- **2026-04-19 güncellemesi:** worker schema isolation fix'inden (üstteki retro kapanışı) sonra 319/319 passed — skipped yok. 4 worker test_worker_1..4 schema'sında gerçekten koşuyor, public seed intakt. Full suite ~20s.
 
 ---
 
@@ -68,9 +69,9 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 ## Bir Sonraki Session İçin (Backend)
 
 1. Phase 8 spec taslağı.
-2. Worker schema isolation silent no-op — globalSetup migrate deploy gerçekten worker schema'larını yaratsın (Prisma programmatic API veya explicit schema precreate + migrate). Güvenlik net artar.
-3. Multer → storage.put() pipeline (Phase 7 retro borç).
-4. reconstructExamSummary dışındaki AI call site'lar için multi-provider migration (Phase 7 retro borç).
+2. Multer → storage.put() pipeline (Phase 7 retro borç).
+3. reconstructExamSummary dışındaki AI call site'lar için multi-provider migration (Phase 7 retro borç).
+4. `enableOfflineQueue: false` Redis davranışı — Phase 8 prod monitoring kararıyla birleşik.
 
 ---
 
@@ -84,3 +85,4 @@ Backend'e özel yaşayan çalışma defteri. API, servis, Prisma, AI pipeline, m
 | 2026-04-19 | Phase 7 retro: Docker Prisma drift (`b7be394`) + credit P2034 retry (`14a536d`) kapandı; yeni retro borç pgvector test-schema drift dokümante edildi. |
 | 2026-04-19 | Parallel test flake gerçek root cause bulundu (email prefix collision) ve kapandı — cleanup `startsWith` (`0e94ab1`) + migration public qualification (`8a14f82`). Yeni retro: worker schema isolation silent no-op. |
 | 2026-04-19 | App.tsx mount order retro borç kapandı (`35fc827`) — dnaRoutes global auth kaldırıldı, per-route `authenticate` eklendi; mount order artık load-bearing değil. |
+| 2026-04-19 | Worker schema isolation silent no-op retro borç kapandı — globalSetup + setup.ts başına `dotenv/config`, explicit CREATE SCHEMA + migrate deploy loud-fail. Test suite 266+47skipped → 319 passed (skipped yok), testler gerçekten test_worker_1..4'te koşuyor. |
