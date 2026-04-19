@@ -253,6 +253,7 @@ RBAC middleware güncelleme.
 - **Phase 7 fixture seeder template'i** Phase 6'dan kopya; 4 farklı rol + 3 marketplace item + 2 payment + tenant tek passinde düştü. Smoke'ta hemen görünür veri.
 - **i18n manuel sweep** — 7. faz, 104 yeni key tek geçişte (Phase 6'da 104, Phase 5'te 74). Agent paralel denemeye gerek kalmadı.
 - **Playwright MCP smoke bug yakaladı** (Docker server UserRole enum + /tutors auth gate) — 2 gerçek sorun, 2'si de aynı smoke run içinde fix edildi (Phase 6'da 1'di).
+- **Navbar overflow** — 16+ link 1440 viewport'ta cramped; Phase 7 smoke'ta "Tekrar" link'i cut off. Menu grouping Phase 8 öngörülmüştü. ✅ 2026-04-19 `9acee03` — 5 top-level link + 2 click-to-toggle dropdown (Hazırlık 9 item, Araçlar 4 item); NavDropdown component outside-click + ESC close + active highlight ile; mobile menu section başlıklarıyla aynı gruplandırma. Wrap'siz 1440 + 375 smoke yeşil, i18n 759↔759.
 
 **Zor / sorunlu:**
 - **Docker server Prisma generate drift** — migration uyguladıktan sonra container içindeki `@prisma/client` otomatik güncellemedi; `docker compose exec server npx prisma generate` + restart şart. CI'da da aynı sorun; Phase 8'de Dockerfile'a `prisma generate` eklemek lazım. ✅ 2026-04-19, `b7be394` — docker-compose server command'a `npx prisma generate &&` prepend; restart tek başına yeterli. Prod runner zaten immutable image ile baked generate; dev tarafı çözüldü.
