@@ -27,7 +27,11 @@
     "signIn": "Giriş Yap",
     "signUp": "Üye ol",
     "signOut": "Çıkış Yap",
-    "menu": "Menü"
+    "menu": "Menü",
+    "groups": {
+      "study": "Hazırlık",
+      "tools": "Araçlar"
+    }
   },
   "tutoring": {
     "list": {
