@@ -58,7 +58,7 @@ Açık kalanlar: Q1 (AI tone), Q2 (free tier), Q3 (hoca opt-out), Q4 (answer key
 ## Bir Sonraki Session İçin
 
 1. Phase 8 spec taslağı (`docs/roadmap/phase-8-*.md`) — kapsam + süreç + acceptance criteria.
-2. Phase 7 retro'sundan kalan teknik borçlar — **Docker Prisma ✅, /tutors auth gate ✅, credit P2034 retry ✅, parallel test flake ✅, App.tsx mount order ✅, Navbar overflow ✅, worker schema isolation ✅** (2026-04-19, `b7be394` + `2755ce1` + `14a536d` + `0e94ab1` + `8a14f82` + `35fc827` + `9acee03` + worker schema isolation commit); hâlâ açık: Multer → storage.put() pipeline, reconstructExamSummary dışı AI migrations, in-app messaging.
+2. Phase 7 retro'sundan kalan teknik borçlar — **Docker Prisma ✅, /tutors auth gate ✅, credit P2034 retry ✅, parallel test flake ✅, App.tsx mount order ✅, Navbar overflow ✅, worker schema isolation ✅** (2026-04-19, `b7be394` + `2755ce1` + `14a536d` + `0e94ab1` + `8a14f82` + `35fc827` + `9acee03` + `a4a6d1d`); hâlâ açık: Multer → storage.put() pipeline, reconstructExamSummary dışı AI migrations, in-app messaging.
 3. Go-to-market hazırlığı düşünülürse: demo video + pitch deck + first 100 user outreach.
 
 ---
@@ -74,4 +74,4 @@ Açık kalanlar: Q1 (AI tone), Q2 (free tier), Q3 (hoca opt-out), Q4 (answer key
 | 2026-04-19 | Parallel test flake gerçek root cause (email prefix collision) bulundu ve kapandı — `0e94ab1` (cleanup startsWith) + `8a14f82` (pgvector public qualification). Yeni retro: worker schema isolation silent no-op. |
 | 2026-04-19 | App.tsx mount order retro borç kapandı (`35fc827`) — dnaRoutes per-route auth, mount order artık load-bearing değil. |
 | 2026-04-19 | Navbar overflow retro borç kapandı (`9acee03`) — 5 top-level + 2 dropdown (Hazırlık/Araçlar) gruplaması; 1440 + 375 viewport smoke yeşil. |
-| 2026-04-19 | Worker schema isolation silent no-op retro borç kapandı — root cause vitest `.env` auto-load yoktu; `dotenv/config` + explicit CREATE SCHEMA + migrate deploy loud-fail; 319/319 passed, skipped yok, test_worker_1..4 gerçekten kullanılıyor. |
+| 2026-04-19 | Worker schema isolation silent no-op retro borç kapandı (`a4a6d1d`) — root cause vitest `.env` auto-load yoktu; `dotenv/config` + explicit CREATE SCHEMA + migrate deploy loud-fail; 319/319 passed, skipped yok, test_worker_1..4 gerçekten kullanılıyor. |
