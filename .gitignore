@@ -22,3 +22,6 @@ uploads/*
 !server/public/**/*.png
 !docs/operations/phase-*-smoke/*.png
 !docs/HW05/*.png
+
+# Submission bundles — derived artifacts, regenerate from sources
+docs/HW05/*.zip
