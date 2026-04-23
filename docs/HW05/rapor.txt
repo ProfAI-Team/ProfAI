@@ -1,84 +1,85 @@
 ================================================================================
- İSTANBUL AYDIN ÜNİVERSİTESİ
- Ders:   UYG338 — Yazılım Proje Yönetimi (Software Project Management)
- Hoca:   Dr. Öğr. Üyesi Peri Güneş
- Dönem:  2025-2026 Bahar
- Ödev:   HW05 — Source Code (Git Repository)
- Tarih:  23 Nisan 2026
+ ISTANBUL AYDIN UNIVERSITY
+ Course:   UYG338 — Software Project Management
+ Lecturer: Dr. Peri Gunes
+ Term:     2025-2026 Spring
+ Homework: HW05 — Source Code (Git Repository)
+ Date:     April 23, 2026
 ================================================================================
 
-TAKIM (Team)
+TEAM
 --------------------------------------------------------------------------------
   * Erdem Acar       — Full-Stack Developer
-                       Sorumluluk: Authentication, Professor/Course API,
-                       Dashboard sayfası
-  * Enes Albaş       — Full-Stack Developer
-                       Sorumluluk: Exam Upload, Analysis Engine, Exam Upload
-                       sayfası
+                       Responsibilities: Authentication, Professor/Course API,
+                       Dashboard page
+  * Enes Albas       — Full-Stack Developer
+                       Responsibilities: Exam Upload, Analysis Engine, Exam
+                       Upload page
   * Ali Emir Erten   — Full-Stack Developer
-                       Sorumluluk: DB Design, Docker, Rating System,
-                       Professor Detail sayfası
+                       Responsibilities: DB Design, Docker, Rating System,
+                       Professor Detail page
 
-GitHub deposu: https://github.com/ProfAI-Team/ProfAI
-Jira board:    https://devmeet-app.atlassian.net/jira/software/projects/SCRUM/boards/1
+GitHub repository: https://github.com/ProfAI-Team/ProfAI
+Jira board:        https://devmeet-app.atlassian.net/jira/software/projects/SCRUM/boards/1
 
 
-1. PROJE TANITIMI
+1. PROJECT OVERVIEW
 --------------------------------------------------------------------------------
-ProfAI, üniversite öğrencilerinin profesörlerinin sınav stillerini analiz
-edebildiği bir web platformudur. Öğrenciler geçmiş sınav dosyalarını yükler;
-sistem soru tipi dağılımı, konu bazlı analiz ve zorluk skoru üretir. Amaç şu
-soruya net cevap vermektir: "Bu hoca nasıl soru soruyor?"
+ProfAI is a web platform that enables university students to analyze their
+professors' exam styles. Students upload past exam files; the system produces
+question-type distribution, topic-based analysis, and a difficulty score.
+The platform answers a single, focused question: "How does this professor
+ask questions?"
 
-Platformun sunduğu çekirdek fonksiyonlar:
-  - Geçmiş sınav dosyası yükleme (PDF, JPG, PNG)
-  - Soru tipi dağılımı (çoktan seçmeli, klasik, doğru-yanlış)
-  - Konu bazlı dağılım analizi
-  - Zorluk skoru hesaplama
-  - Profesör puanlama (zorluk + adillik, 1-5 ölçekte)
-  - Profesör arama + filtreleme (ad, bölüm, üniversite)
-  - Kişisel dashboard (yüklemeler + katkı istatistikleri)
-  - Responsive tasarım (mobil dostu)
+Core features:
+  - Past exam file upload (PDF, JPG, PNG)
+  - Question-type distribution (multiple choice, classic, true-false)
+  - Topic-based distribution analysis
+  - Difficulty score calculation
+  - Professor rating (difficulty + fairness on a 1-5 scale)
+  - Professor search + filter (name, department, university)
+  - Personal dashboard (uploads + contribution statistics)
+  - Responsive design (mobile-friendly)
 
 
-2. TEKNOLOJİ YIĞINI
+2. TECHNOLOGY STACK
 --------------------------------------------------------------------------------
-  Frontend      | React 18 + TypeScript + Tailwind CSS
-  Backend       | Node.js + Express + TypeScript
-  ORM           | Prisma
-  Veritabanı    | PostgreSQL 15
-  Dosya upload  | Multer
-  Konteyner     | Docker + Docker Compose
-  CI/CD         | GitHub Actions
+  Frontend       | React 18 + TypeScript + Tailwind CSS
+  Backend        | Node.js + Express + TypeScript
+  ORM            | Prisma
+  Database       | PostgreSQL 15
+  File upload    | Multer
+  Containerizing | Docker + Docker Compose
+  CI/CD          | GitHub Actions
 
 
-3. PROJE YAPISI (MONOREPO)
+3. PROJECT STRUCTURE (MONOREPO)
 --------------------------------------------------------------------------------
 ProfAI/
 ├── client/                 # React + TypeScript frontend
 │   ├── src/
-│   │   ├── components/     # Yeniden kullanılabilir UI bileşenleri
-│   │   ├── pages/          # Sayfa bileşenleri
-│   │   ├── services/       # API service fonksiyonları
-│   │   └── types/          # TypeScript tip tanımları
+│   │   ├── components/     # Reusable UI components
+│   │   ├── pages/          # Page components
+│   │   ├── services/       # API service functions
+│   │   └── types/          # TypeScript type definitions
 │   └── package.json
 ├── server/                 # Node.js + TypeScript backend
 │   ├── src/
-│   │   ├── controllers/    # HTTP katmanı (request parse, response format)
-│   │   ├── routes/         # Express router tanımları
-│   │   ├── services/       # İş mantığı (business logic)
+│   │   ├── controllers/    # HTTP layer (request parse, response format)
+│   │   ├── routes/         # Express router definitions
+│   │   ├── services/       # Business logic
 │   │   ├── middleware/     # Auth, validation, upload middleware
-│   │   └── lib/            # Prisma client, helper'lar
+│   │   └── lib/            # Prisma client, helpers
 │   ├── prisma/
-│   │   └── schema.prisma   # Veritabanı şeması
+│   │   └── schema.prisma   # Database schema
 │   └── package.json
-├── docs/                   # Tüm ödev ve doküman arşivi
-│   ├── HW05/               # Bu ödev için üretilen dosyalar
+├── docs/                   # All homework and documentation archive
+│   ├── HW05/               # Files produced for this homework
 │   │   ├── class-diagram.mmd / class-diagram.png     (MVP)
 │   │   ├── storage-diagram.mmd / storage-diagram.png
 │   │   ├── payment-diagram.mmd / payment-diagram.png
 │   │   ├── ai-provider-diagram.mmd / ai-provider-diagram.png
-│   │   └── rapor.txt                                  (BU DOSYA)
+│   │   └── rapor.txt                                  (THIS FILE)
 │   ├── ProfAI_UML_Diagrams.drawio
 │   ├── ProfAI_Product_Documentation.md
 │   ├── ProfAI_Risk_Analysis_v2.md
@@ -90,164 +91,170 @@ ProfAI/
 └── README.md
 
 
-4. UML SINIF DİYAGRAMI (MVP)
+4. UML CLASS DIAGRAM (MVP)
 --------------------------------------------------------------------------------
-Projenin çekirdek domain model'i 7 sınıf + 1 enum'dan oluşur:
-class-diagram.png dosyasına bakınız.
+The project's core domain model consists of 7 classes + 1 enum. See the
+file class-diagram.png for the full diagram.
 
-  - User              : Platforma kayıtlı öğrenci
-  - Professor         : Analizi yapılan hoca
-  - Course            : Professor'a bağlı ders
-  - Exam              : Course'a ait yüklenen sınav dosyası
-  - ExamAnalysis      : Exam'a 1:1 bağlı analiz çıktısı (soru tipi + konu +
-                        zorluk skoru)
-  - ProfessorRating   : User'ın Professor'a verdiği oylama
+  - User              : Registered student on the platform
+  - Professor         : The professor whose style is analyzed
+  - Course            : A course owned by a Professor
+  - Exam              : An uploaded exam file belonging to a Course
+  - ExamAnalysis      : 1:1 analysis output for an Exam (question types +
+                        topics + difficulty score)
+  - ProfessorRating   : A rating a User gives to a Professor
   - ExamType (enum)   : MIDTERM | FINAL | MAKEUP
 
-İlişkiler:
-  Professor   1 --->  *   Course               (bir hocanın birden çok dersi)
-  Course      1 --->  *   Exam                 (bir dersin birden çok sınavı)
-  Exam        1 --->  1   ExamAnalysis         (her sınavın tek analizi)
-  Professor   1 --->  *   ProfessorRating      (bir hocanın aldığı oylar)
-  User        1 --->  *   ProfessorRating      (bir kullanıcının verdiği oylar)
-  User        1 --->  *   Exam                 (bir kullanıcının yüklediği
-                                                sınavlar)
-  Exam          --->      ExamType             (enum kullanımı)
+Relationships:
+  Professor   1 --->  *   Course               (one professor, many courses)
+  Course      1 --->  *   Exam                 (one course, many exams)
+  Exam        1 --->  1   ExamAnalysis         (each exam has one analysis)
+  Professor   1 --->  *   ProfessorRating      (ratings a professor receives)
+  User        1 --->  *   ProfessorRating      (ratings a user submits)
+  User        1 --->  *   Exam                 (exams a user uploads)
+  Exam          --->      ExamType             (enum usage)
 
 
-5. NESNE YÖNELİMLİ (OOP) PRENSİPLER
+5. OBJECT-ORIENTED (OOP) PRINCIPLES
 --------------------------------------------------------------------------------
 
-5.1. ENCAPSULATION — Kapsülleme
---------------------------------
-Her domain sınıfı kendi verisini korur ve dışarıya yalnızca anlamlı metotlar
-sunar. Veritabanına doğrudan erişim Prisma katmanına izole edilmiştir;
-controller'lar ve UI bu katmana doğrudan temas etmez.
+5.1. ENCAPSULATION
+-------------------
+Every domain class guards its own data and exposes only meaningful methods.
+Direct database access is isolated to the Prisma layer; controllers and the
+UI never touch that layer directly.
 
-Örnekler:
-  - User.password alanı hash'lenmiş şekilde saklanır; login() metodu
-    parolayı dışarıya çıkarmadan doğrular.
-    Dosya: server/src/controllers/authController.ts
-  - Exam.fileUrl lokal/R2 backend'e göre hesaplanan bir değerdir; bu
-    hesaplama upload() metodunun içinde kapsüllüdür.
-    Dosya: server/src/services/analysisService.ts
-  - ExamAnalysis.analyze() AI sağlayıcısının detayını dışarı sızdırmadan
-    sonucu üretir.
-    Dosya: server/src/services/analysisService.ts
+Examples:
+  - User.password is stored hashed; the login() flow verifies the password
+    without exposing it to the outside.
+    File: server/src/controllers/authController.ts
+  - Exam.fileUrl is a value computed based on the local or R2 backend;
+    this computation is encapsulated inside the upload() method.
+    File: server/src/services/analysisService.ts
+  - ExamAnalysis.analyze() produces the result without leaking the AI
+    provider details to callers.
+    File: server/src/services/analysisService.ts
 
-5.2. INHERITANCE — Kalıtım / Interface Implementation
-------------------------------------------------------
-TypeScript'te sınıf hiyerarşisi ve interface implementasyonu kalıtımın iki
-yüzüdür. Projede domain katmanında "extends" zinciri yerine arayüz sözleşmesi
-tercih edilmiştir; bu "composition over inheritance" ilkesiyle uyumludur.
+5.2. INHERITANCE / INTERFACE IMPLEMENTATION
+--------------------------------------------
+In TypeScript, class hierarchies and interface implementation are two faces
+of inheritance. The project favours interface contracts at the domain layer
+over "extends" chains, aligning with the "composition over inheritance"
+principle.
 
-Örnek:
-  - ExamType enum'u Exam sınıfı tarafından kullanılır; sınav türüne özgü
-    davranışlar polymorphic olarak ExamAnalysis içinde dağıtılır.
-  - Servis katmanında Provider Pattern uygulanır — ortak arayüzler:
+Examples:
+  - The ExamType enum is used by the Exam class; behaviour specific to the
+    exam type is dispatched polymorphically inside ExamAnalysis.
+  - The service layer uses the Provider Pattern — shared interfaces:
       * StorageProvider  (put, publicUrl, delete, listOlderThan)
       * PaymentProvider  (init, parseWebhook, refund)
       * AIProvider       (generate, generateStructured)
-    Somut implementasyonlar bu arayüzlere bağlıdır; runtime'da hangisinin
-    seçileceği factory fonksiyonu veya kayıt defteri belirler.
-    (Detay: bölüm 6 — gelişmiş mimari, provider pattern diagramları)
+    Concrete implementations conform to these interfaces; a factory
+    function or a registry decides at runtime which one to use.
+    (Details: section 6 — advanced architecture, provider pattern diagrams)
 
-5.3. POLYMORPHISM — Çok Biçimlilik
------------------------------------
-Aynı arayüz farklı implementasyonlarla değiştirilebilir. Servis katmanı
-hangi somut implementasyonun çalıştığını bilmez; sadece arayüzü kullanır.
+5.3. POLYMORPHISM
+------------------
+The same interface can be swapped with different implementations. The
+service layer does not know which concrete implementation is active; it
+only calls through the interface.
 
-Örnekler:
-  - getStorage() — R2_BUCKET env değişkeni set ise R2StorageProvider,
-    değilse LocalStorageProvider döner. upload controller'ı sadece
-    storage.put() çağırır.
-    Dosya: server/src/lib/storage.ts
-  - Professor.getAnalysisSummary() altta birden fazla ExamAnalysis nesnesini
-    toplar ve agregasyon yapar; farklı sınav türleri (MIDTERM/FINAL/MAKEUP)
-    aynı metot üzerinden polymorphic olarak işlenir.
-  - paymentService.init() — PaymentProvider arayüzünün init() metoduna
-    delege eder. iyzico ve (rezerve) Stripe aynı interface üzerinden akar.
-    Dosya: server/src/services/payment/iyzicoProvider.ts
+Examples:
+  - getStorage() — returns an R2StorageProvider when the R2_BUCKET env var
+    is set, otherwise a LocalStorageProvider. The upload controller only
+    calls storage.put().
+    File: server/src/lib/storage.ts
+  - Professor.getAnalysisSummary() aggregates multiple underlying
+    ExamAnalysis objects; different exam kinds (MIDTERM/FINAL/MAKEUP) flow
+    through the same method polymorphically.
+  - paymentService.init() delegates to the PaymentProvider interface's
+    init() method. iyzico and (reserved) Stripe both flow through the
+    same interface.
+    File: server/src/services/payment/iyzicoProvider.ts
 
-5.4. COMPOSITION — Bileşim
----------------------------
-Sınıflar arası "has-a" ilişkileri ile büyük davranışlar kurulur. Örneğin
-ExamAnalysis bir Exam'a aittir, Exam bir Course'a aittir, Course bir
-Professor'a aittir; her katman alt katmanın detayını saklar.
+5.4. COMPOSITION
+-----------------
+Larger behaviours are built out of "has-a" relationships between classes.
+ExamAnalysis belongs to an Exam, an Exam belongs to a Course, a Course
+belongs to a Professor; each layer keeps the details of the one below it
+to itself.
 
 
-6. GELİŞMİŞ MİMARİ (Ek Diagramlar)
+6. ADVANCED ARCHITECTURE (Additional Diagrams)
 --------------------------------------------------------------------------------
-MVP ötesinde projemiz 3 kritik alt sistemi provider pattern ile
-soyutlamıştır. Bu alt sistemler OOP prensiplerini production kodu üzerinde
-somut şekilde gösterir:
+Beyond the MVP, the project abstracts three critical subsystems behind the
+Provider Pattern. These subsystems demonstrate OOP principles concretely on
+production code:
 
-6.1. Depolama Soyutlaması       — storage-diagram.png
+6.1. Storage abstraction         — storage-diagram.png
      (server/src/lib/storage.ts)
-     Arayüz: StorageProvider
-     Implementasyonlar: LocalStorageProvider, R2StorageProvider
+     Interface: StorageProvider
+     Implementations: LocalStorageProvider, R2StorageProvider
      Factory: getStorage()
 
-6.2. Ödeme Sağlayıcı            — payment-diagram.png
+6.2. Payment providers           — payment-diagram.png
      (server/src/services/payment/)
-     Arayüz: PaymentProvider
-     Implementasyonlar: IyzicoProvider, StripeProvider (rezerve)
-     HMAC imza doğrulama provider içinde kapsüllü.
+     Interface: PaymentProvider
+     Implementations: IyzicoProvider, StripeProvider (reserved)
+     HMAC signature verification is encapsulated inside the provider.
 
-6.3. AI Sağlayıcı Kayıt Defteri — ai-provider-diagram.png
+6.3. AI provider registry        — ai-provider-diagram.png
      (server/src/services/llm/)
-     Arayüz: AIProvider
-     Implementasyonlar: GeminiProvider, ClaudeProvider,
-                        OpenAIRealtimeProvider (rezerve)
-     Facade: ProviderRegistry — withFallback() ile otomatik fallback.
+     Interface: AIProvider
+     Implementations: GeminiProvider, ClaudeProvider,
+                      OpenAIRealtimeProvider (reserved)
+     Facade: ProviderRegistry — supports automatic fallback via
+     withFallback().
 
-Bu 3 alt sistem hep aynı reçeteyi takip eder:
-  1. Ortak bir arayüz (sözleşme) tanımlanır.
-  2. En az iki somut implementasyon vardır (dev/local + prod).
-  3. Bir factory / registry runtime'da doğru provider'ı seçer.
-  4. Tüketici servisler sadece arayüzü bilir.
+These three subsystems all follow the same recipe:
+  1. A single interface (the contract) is defined.
+  2. At least two concrete implementations exist (dev/local + prod).
+  3. A factory / registry picks the right provider at runtime.
+  4. Consumer services only know the interface.
 
-Liskov Substitution Principle (LSP) birebir desteklenir: kodun hiçbir
-yerinde `if (provider === "r2") ...` tarzı ayrıştırma yoktur.
+The Liskov Substitution Principle (LSP) is strictly honoured: nowhere in
+the code is there a branch like `if (provider === "r2") ...`.
 
 
-7. TEMİZ KOD VE MODÜLERLİK
+7. CLEAN CODE AND MODULARITY
 --------------------------------------------------------------------------------
 
-7.1. Katmanlı mimari
+7.1. Layered architecture
     Backend: route -> controller -> service -> prisma -> PostgreSQL
-    Controller'lar iş mantığı barındırmaz; sadece HTTP sınırında doğrulama
-    ve serileştirme yapar. Tüm iş mantığı servis katmanındadır.
+    Controllers hold no business logic; they only validate and serialize
+    at the HTTP boundary. All business logic lives in the service layer.
 
-7.2. Tek sorumluluk
-    Her servis dosyası tek bir domain'i kapsar (analysisService,
-    authController, professorService, ...). Servisler birbirinden bağımsız
-    test edilebilir.
+7.2. Single responsibility
+    Each service file covers a single domain (analysisService,
+    authController, professorService, ...). Services can be tested
+    independently of one another.
 
-7.3. Feature flag ve konfigürasyon
-    Storage backend (R2_BUCKET), Payment sandbox (PAYMENT_SANDBOX), AI tier
-    (GEMINI_FREE_TIER) gibi tüm toggle'lar env değişkeni ile yönetilir. Kod
-    değişmeden farklı ortamlarda çalışır.
+7.3. Feature flags and configuration
+    Storage backend (R2_BUCKET), payment sandbox (PAYMENT_SANDBOX), AI
+    tier (GEMINI_FREE_TIER) — every toggle is managed via env vars. The
+    code runs unchanged across different environments.
 
-7.4. Async/await ve hata sınırları
-    Tüm asenkron kod async/await ile yazılmıştır; Promise zinciri
-    kullanılmaz. Controller'lar try/catch ile hata yakalar ve global error
-    middleware'e delege eder. Silent fail (exception yutma) yasaktır.
+7.4. Async/await and error boundaries
+    All async code is written using async/await; Promise chains are not
+    used. Controllers catch errors with try/catch and delegate to the
+    global error middleware. Silent fail (swallowing exceptions) is
+    forbidden.
 
-7.5. Test altyapısı
-    Vitest 4 ile 4-worker paralel test suite. Her worker kendi PostgreSQL
-    şemasında koşar. 319 birim + entegrasyon testi, tüm suite ~20 saniyede
-    yeşil.
+7.5. Test infrastructure
+    Vitest 4 with a 4-worker parallel test suite. Each worker runs
+    against its own PostgreSQL schema. 319 unit + integration tests;
+    the entire suite passes green in ~20 seconds.
 
 7.6. CI/CD pipeline
-    GitHub Actions üç paralel stage: backend lint+build, frontend lint+build,
-    Docker image build. Her push ve PR'da otomatik koşar.
+    GitHub Actions runs three parallel stages: backend lint+build,
+    frontend lint+build, Docker image build. It triggers automatically
+    on every push and pull request.
 
 
-8. KURULUM VE ÇALIŞTIRMA
+8. INSTALLATION AND EXECUTION
 --------------------------------------------------------------------------------
 
-8.1. Docker ile (önerilir)
+8.1. With Docker (recommended)
     git clone https://github.com/ProfAI-Team/ProfAI.git
     cd ProfAI
     docker compose up -d
@@ -255,72 +262,74 @@ yerinde `if (provider === "r2") ...` tarzı ayrıştırma yoktur.
     Frontend:  http://localhost:3001
     Backend:   http://localhost:5000
     Database:  localhost:5432
-    Demo:      erdemacar1@stu.aydin.edu.tr / password123
+    Demo user: erdemacar1@stu.aydin.edu.tr / password123
 
-8.2. Lokal geliştirme (Node 20+ gerekli)
+8.2. Local development (Node 20+ required)
     cd server && npm install && npm run seed && npm run dev   # :5000
     cd client && npm install && npm run dev                    # :3001
 
-8.3. Test koşturmak
-    cd server && npm test            # 319 test, ~20 saniye
+8.3. Running tests
+    cd server && npm test            # 319 tests, ~20 seconds
     cd client && npm run build       # Vite bundle build
 
 
-9. PROJE YÖNETİMİ (UYG338 KAPSAMI)
+9. PROJECT MANAGEMENT (UYG338 SCOPE)
 --------------------------------------------------------------------------------
-Bu proje boyunca dersin her ödev çıktısı teslim edildi:
+Every homework deliverable of the course was submitted throughout this
+project:
 
-  Ödev 1: Proje Planlama
-          - Jira Scrum Board (4 sprint, 30 görev, story point)
-          - ProfAI_Project_Plan.xlsx (Overview, Team, Timeline, Budget,
-            Risk, SWOT)
-          - UML diyagramları (Class + Use Case)
-          - GitHub repo + CI/CD pipeline
+  Homework 1: Project Planning
+              - Jira Scrum Board (4 sprints, 30 tasks, story points)
+              - ProfAI_Project_Plan.xlsx (Overview, Team, Timeline, Budget,
+                Risk, SWOT)
+              - UML diagrams (Class + Use Case)
+              - GitHub repo + CI/CD pipeline
 
-  Ödev 2: Ürün Dokümantasyonu (14 bölüm)
-          ProfAI_Product_Documentation.md
+  Homework 2: Product Documentation (14 sections)
+              ProfAI_Product_Documentation.md
 
-  Ödev 3: Risk Analizi + Test Planı
-          ProfAI_Risk_Analysis_v2.md
-          ProfAI_Testing_and_Success_Criteria.md
+  Homework 3: Risk Analysis + Test Plan
+              ProfAI_Risk_Analysis_v2.md
+              ProfAI_Testing_and_Success_Criteria.md
 
-  Ödev 4: MVP + Çalışan Sistem
-          - 3 Docker container, 7 React sayfa, 30 Jira task, 4 sprint
-          - 15 dakikalık canlı demo planı (ProfAI_Demo_Plan.md)
+  Homework 4: MVP + Working System
+              - 3 Docker containers, 7 React pages, 30 Jira tasks,
+                4 sprints
+              - 15-minute live demo plan (ProfAI_Demo_Plan.md)
 
-  Ödev 5: Source Code (BU ÖDEV) — Git repository teslimi + UML +
-          OOP prensipleri + rapor.
+  Homework 5: Source Code (THIS HOMEWORK) — Git repository delivery +
+              UML + OOP principles + report.
 
 
-10. UML DİYAGRAMLARI (Teslim Paketindeki Görseller)
+10. UML DIAGRAMS (Images in the Submission Package)
 --------------------------------------------------------------------------------
-Tüm diyagramlar Mermaid kaynak kodundan üretildi; her .mmd dosyası .png
-dosyasının yanında teslim edilmektedir. Yeniden render için:
+All diagrams were generated from Mermaid source; each .mmd file ships
+alongside its .png output. Re-rendering:
 
     cd docs/HW05
     npx -y -p @mermaid-js/mermaid-cli mmdc \
       -i class-diagram.mmd -o class-diagram.png -b white --scale 2
 
-Teslim paketi içeriği:
-  rapor.txt                    — Bu dosya
-  class-diagram.png            — MVP sınıf diyagramı (ana UML)
-  class-diagram.mmd            — MVP diyagramın Mermaid kaynağı
-  storage-diagram.png          — Depolama provider pattern
-  storage-diagram.mmd          — Kaynak
-  payment-diagram.png          — Ödeme provider pattern
-  payment-diagram.mmd          — Kaynak
+Submission package contents:
+  rapor.txt                    — This file
+  class-diagram.png            — MVP class diagram (main UML)
+  class-diagram.mmd            — Mermaid source of the MVP diagram
+  storage-diagram.png          — Storage provider pattern
+  storage-diagram.mmd          — Source
+  payment-diagram.png          — Payment provider pattern
+  payment-diagram.mmd          — Source
   ai-provider-diagram.png      — AI provider registry
-  ai-provider-diagram.mmd      — Kaynak
+  ai-provider-diagram.mmd      — Source
 
 
-11. KAYNAK DEPO VE SUNUMLAR
+11. SOURCE REPOSITORY AND PRESENTATIONS
 --------------------------------------------------------------------------------
   GitHub:        https://github.com/ProfAI-Team/ProfAI
   Jira:          https://devmeet-app.atlassian.net
-  Ana branch:    main
-  Son commit:    Teslim anında HEAD — README.md'de canlı
+  Main branch:   main
+  Latest commit: HEAD at submission time — live in README.md
 
 ================================================================================
-                              RAPOR SONU
-                   Erdem Acar • Enes Albaş • Ali Emir Erten
+                              END OF REPORT
+                   Erdem Acar • Enes Albas • Ali Emir Erten
 ================================================================================
