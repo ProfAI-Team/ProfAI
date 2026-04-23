@@ -1,0 +1,68 @@
+%% ProfAI — HW05 AI Provider Subsystem (server/src/services/llm/)
+classDiagram
+    direction TB
+
+    class AIProvider {
+        <<interface>>
+        +name AIProviderName
+        +available boolean
+        +model string
+        +generate(prompt, opts) Promise~Result~
+    }
+
+    class GeminiProvider {
+        -apiKey string
+        -model string
+        -freeTier boolean
+        +name "gemini"
+        +generate(prompt, opts) Promise~Result~
+        +generateStructured(prompt, schema) Promise~Object~
+        +embedText(text) Promise~number[]~
+    }
+
+    class ClaudeProvider {
+        -apiKey string
+        -model string
+        -cachedClient AnthropicClient
+        +name "claude"
+        +generateText(opts) Promise~Result~
+        +generateStructured(opts) Promise~Object~
+        -getClaudeClient() Promise~AnthropicClient~
+        -stripJsonFence(text) string
+    }
+
+    class OpenAIRealtimeProvider {
+        <<reserved Phase 8>>
+        -apiKey string
+        +name "openai-realtime"
+        +generate(prompt, opts) Promise~Result~
+    }
+
+    class ProviderRegistry {
+        <<facade>>
+        +getConfiguredProviders() AIProviderStatus[]
+        +withFallback(primaryFn, fallbackFn, ctx) Promise~Result~
+        +isProviderRetryable(error) boolean
+    }
+
+    class AICallTracker {
+        -prisma PrismaClient
+        +recordAICall(entry) Promise~void~
+    }
+
+    class WithFallbackContext {
+        +feature string
+        +userId string
+        +primary AIProviderName
+        +fallback AIProviderName
+        +primaryTimeoutMs number
+    }
+
+    AIProvider <|.. GeminiProvider : implements
+    AIProvider <|.. ClaudeProvider : implements
+    AIProvider <|.. OpenAIRealtimeProvider : implements
+    ProviderRegistry --> AIProvider : orchestrates
+    ProviderRegistry ..> WithFallbackContext : uses
+    ProviderRegistry --> AICallTracker : logs via
+    GeminiProvider --> AICallTracker : logs via
+    ClaudeProvider --> AICallTracker : logs via

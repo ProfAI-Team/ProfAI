@@ -21,3 +21,4 @@ uploads/*
 !client/public/**/*.png
 !server/public/**/*.png
 !docs/operations/phase-*-smoke/*.png
+!docs/HW05/*.png

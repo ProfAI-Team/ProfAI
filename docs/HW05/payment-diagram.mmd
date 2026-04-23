@@ -1,0 +1,58 @@
+%% ProfAI — HW05 Payment Subsystem (server/src/services/payment/)
+classDiagram
+    direction TB
+
+    class PaymentProvider {
+        <<interface>>
+        +name "iyzico"|"stripe"
+        +init(input) Promise~InitResult~
+        +parseWebhook(input) Promise~WebhookResult~
+        +refund(externalId) Promise~PaymentStatus~
+    }
+
+    class IyzicoProvider {
+        -apiKey string
+        -secretKey string
+        -baseUrl string
+        +name "iyzico"
+        +init(input) Promise~InitResult~
+        +parseWebhook(input) Promise~WebhookResult~
+        +refund(externalId) Promise~PaymentStatus~
+        -isSandbox() boolean
+        -hmacSign(secret, payload) string
+    }
+
+    class StripeProvider {
+        <<reserved Phase 8>>
+        +name "stripe"
+        +init(input) Promise~InitResult~
+        +parseWebhook(input) Promise~WebhookResult~
+        +refund(externalId) Promise~PaymentStatus~
+    }
+
+    class InitPaymentInput {
+        +userId string
+        +kind PaymentKind
+        +amountKurus number
+        +currency "TRY"
+        +metadata PaymentMetadata
+        +callbackUrl string
+    }
+
+    class WebhookInput {
+        +body string
+        +headers Record~string,string~
+    }
+
+    class PaymentMetadata {
+        +marketplaceItemId string
+        +tutoringSessionId string
+        +subscriptionPlan string
+        +threeDsStatus string
+    }
+
+    PaymentProvider <|.. IyzicoProvider : implements
+    PaymentProvider <|.. StripeProvider : implements
+    PaymentProvider ..> InitPaymentInput : consumes
+    PaymentProvider ..> WebhookInput : consumes
+    InitPaymentInput --> PaymentMetadata : uses

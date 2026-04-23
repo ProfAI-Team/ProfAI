@@ -1,0 +1,63 @@
+%% ProfAI — HW05 Storage Subsystem (server/src/lib/storage.ts)
+classDiagram
+    direction TB
+
+    class StorageProvider {
+        <<interface>>
+        +kind StorageKind
+        +put(buffer, options) Promise~StoredFile~
+        +publicUrl(key) Promise~string~
+        +delete(key) Promise~void~
+        +listOlderThan(prefix, olderThan) Promise~string[]~
+    }
+
+    class LocalStorageProvider {
+        -baseDir string
+        +kind "local"
+        +put(buffer, options) Promise~StoredFile~
+        +publicUrl(key) Promise~string~
+        +delete(key) Promise~void~
+        +listOlderThan(prefix, olderThan) Promise~string[]~
+    }
+
+    class R2StorageProvider {
+        -accountId string
+        -accessKeyId string
+        -secretAccessKey string
+        -bucket string
+        -publicBase string
+        -signedTtlSec number
+        -clientPromise Promise~S3Client~
+        +kind "r2"
+        +put(buffer, options) Promise~StoredFile~
+        +publicUrl(key) Promise~string~
+        +delete(key) Promise~void~
+        +listOlderThan(prefix, olderThan) Promise~string[]~
+        -getClient() Promise~S3Client~
+    }
+
+    class StorageFactory {
+        <<factory>>
+        -provider StorageProvider
+        +getStorage() StorageProvider
+    }
+
+    class StoredFile {
+        +key string
+        +publicUrl string
+        +kind StorageKind
+        +bytes number
+    }
+
+    class StorageUploadOptions {
+        +prefix string
+        +contentType string
+        +extension string
+        +filename string
+    }
+
+    StorageProvider <|.. LocalStorageProvider : implements
+    StorageProvider <|.. R2StorageProvider : implements
+    StorageFactory --> StorageProvider : returns
+    StorageProvider ..> StoredFile : produces
+    StorageProvider ..> StorageUploadOptions : consumes

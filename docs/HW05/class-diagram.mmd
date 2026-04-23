@@ -1,0 +1,94 @@
+%% ProfAI — HW05 MVP Class Diagram
+%% Matches the canonical class diagram in README.md and the architecture
+%% presented in ProfAI_Presentation.pptx (UYG338 Yazılım Proje Yönetimi).
+%% Team: Erdem Acar, Enes Albaş, Ali Emir Erten
+
+classDiagram
+    direction TB
+
+    class User {
+        +Int id
+        +String email
+        +String password
+        +String name
+        +String university
+        +String department
+        +DateTime createdAt
+        +register() void
+        +login() Token
+        +getProfile() User
+    }
+
+    class Professor {
+        +Int id
+        +String name
+        +String department
+        +String university
+        +DateTime createdAt
+        +getCourses() Course[]
+        +getAnalysisSummary() AnalysisSummary
+        +getAverageRating() Float
+    }
+
+    class Course {
+        +Int id
+        +String name
+        +String code
+        +Int professorId
+        +DateTime createdAt
+        +getExams() Exam[]
+        +getProfessor() Professor
+    }
+
+    class Exam {
+        +Int id
+        +Int courseId
+        +ExamType examType
+        +Int year
+        +String semester
+        +String fileUrl
+        +Int uploadedById
+        +DateTime createdAt
+        +upload(file) void
+        +getAnalysis() ExamAnalysis
+    }
+
+    class ExamAnalysis {
+        +Int id
+        +Int examId
+        +Int questionCount
+        +JSON questionTypes
+        +JSON topicDistribution
+        +Float difficultyScore
+        +String summary
+        +DateTime createdAt
+        +analyze() void
+        +generateSummary() String
+    }
+
+    class ProfessorRating {
+        +Int id
+        +Int professorId
+        +Int userId
+        +Int difficultyScore
+        +Int fairnessScore
+        +String comment
+        +DateTime createdAt
+        +create() void
+        +update() void
+    }
+
+    class ExamType {
+        <<enumeration>>
+        MIDTERM
+        FINAL
+        MAKEUP
+    }
+
+    Professor "1" --> "*" Course : has
+    Course "1" --> "*" Exam : contains
+    Exam "1" --> "1" ExamAnalysis : analyzed by
+    Professor "1" --> "*" ProfessorRating : rated by
+    User "1" --> "*" ProfessorRating : gives
+    User "1" --> "*" Exam : uploads
+    Exam --> ExamType : uses
